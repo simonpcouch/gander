@@ -65,12 +65,8 @@ assistant with a keyboard shortcut.
 
 ## Example
 
-<figure>
-<img
-src="https://raw.githubusercontent.com/simonpcouch/quickly/refs/heads/main/inst/figs/quickly.gif"
-alt="A screencast demonstrating usage. In an RStudio session, I select some ggplot code, trigger the addin and type ‘add axis labels’, and then the model adds the needed code in-place." />
-<figcaption aria-hidden="true">A screencast demonstrating usage. In an
-RStudio session, I select some ggplot code, trigger the addin and type
-‘add axis labels’, and then the model adds the needed code
-in-place.</figcaption>
-</figure>
+``` r
+knitr::include_graphics("https://raw.githubusercontent.com/simonpcouch/quickly/refs/heads/main/inst/figs/quickly.gif")
+```
+
+<img src="https://raw.githubusercontent.com/simonpcouch/quickly/refs/heads/main/inst/figs/quickly.gif" alt="A screencast demonstrating usage. In an RStudio session, I select some ggplot code, trigger the addin and type 'add axis labels', and then the model adds the needed code in-place." width="100%" />

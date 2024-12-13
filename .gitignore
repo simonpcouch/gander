@@ -1,0 +1,10 @@
+.Rproj.user
+.Rhistory
+.Rdata
+.httr-oauth
+.DS_Store
+.quarto
+.env
+docs
+inst/slides/
+inst/doc

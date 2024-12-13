@@ -1,0 +1,4 @@
+Name: Quickly LLM assistant
+Description: LLM assistant
+Binding: quickly_addin
+Interactive: false

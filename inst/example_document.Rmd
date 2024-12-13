@@ -1,0 +1,15 @@
+---
+title: "An example document"
+output: html_document
+---
+
+## Plotting mtcars
+
+```{r}
+library(tidyverse)
+
+ggplot(mtcars) + 
+  aes(x = factor(cyl), y = mpg) +
+  geom_boxplot()
+```
+

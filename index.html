@@ -5,7 +5,7 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>LLMs at the tooltip • quickly</title>
+<title>LLMs at the tooltip • gander</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
@@ -20,7 +20,7 @@
 
     <nav class="navbar navbar-expand-lg fixed-top bg-light" data-bs-theme="light" aria-label="Site navigation"><div class="container">
 
-    <a class="navbar-brand me-2" href="index.html">quickly</a>
+    <a class="navbar-brand me-2" href="index.html">gander</a>
 
     <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
 
@@ -37,7 +37,7 @@
 <li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="search.json">
 </form></li>
-<li class="nav-item"><a class="external-link nav-link" href="https://github.com/simonpcouch/quickly/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
+<li class="nav-item"><a class="external-link nav-link" href="https://github.com/simonpcouch/gander/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
       </ul>
 </div>
 
@@ -46,20 +46,20 @@
 </nav><div class="container template-home">
 <div class="row">
   <main id="main" class="col-md-9"><div class="section level1">
-<div class="page-header"><h1 id="quickly">quickly<a class="anchor" aria-label="anchor" href="#quickly"></a>
+<div class="page-header"><h1 id="gander">gander<a class="anchor" aria-label="anchor" href="#gander"></a>
 </h1></div>
 <!-- badges: start -->
 
-<p>The quickly package allows <a href="https://elmer.tidyverse.org" class="external-link">elmer</a> chats to interface directly with your RStudio and Positron sessions. After (optionally) selecting some code, press the keyboard shortcut you’ve chosen to trigger the assistant (we suggest <code>Ctrl+Cmd+H</code>, as in “help”) and write your request.</p>
+<p>The gander package allows <a href="https://elmer.tidyverse.org" class="external-link">elmer</a> chats to interface directly with your RStudio and Positron sessions. After (optionally) selecting some code, press the keyboard shortcut you’ve chosen to trigger the assistant (we suggest <code>Ctrl+Cmd+H</code>, as in “help”) and write your request.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
-<p>You can install quickly like so:</p>
+<p>You can install gander like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"simonpcouch/quickly"</span><span class="op">)</span></span></code></pre></div>
-<p>Then, ensure that you have an <a href="https://console.anthropic.com/" class="external-link"><code>ANTHROPIC_API_KEY</code></a> environment variable set, and you’re ready to go. If you’d like to use an LLM other than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s ChatGPT or a local ollama model—to power the quickly see <code><a href="reference/quickly_options.html">?quickly_options</a></code>.</p>
-<p>The quickly assistant is interfaced with the via the quickly addin. For easiest access, we recommend registering the quickly addin to a keyboard shortcut.</p>
-<p><strong>In RStudio</strong>, navigate to <code>Tools &gt; Modify Keyboard Shortcuts &gt; Search "quickly"</code>—we suggest <code>Ctrl+Alt+H</code> (or <code>Ctrl+Cmd+H</code> on macOS).</p>
+<code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"simonpcouch/gander"</span><span class="op">)</span></span></code></pre></div>
+<p>Then, ensure that you have an <a href="https://console.anthropic.com/" class="external-link"><code>ANTHROPIC_API_KEY</code></a> environment variable set, and you’re ready to go. If you’d like to use an LLM other than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s ChatGPT or a local ollama model—to power the gander see <code><a href="reference/quickly_options.html">?gander_options</a></code>.</p>
+<p>The gander assistant is interfaced with the via the gander addin. For easiest access, we recommend registering the gander addin to a keyboard shortcut.</p>
+<p><strong>In RStudio</strong>, navigate to <code>Tools &gt; Modify Keyboard Shortcuts &gt; Search "gander"</code>—we suggest <code>Ctrl+Alt+H</code> (or <code>Ctrl+Cmd+H</code> on macOS).</p>
 <p><strong>In Positron</strong>, you’ll need to open the command palette, run “Open Keyboard Shortcuts (JSON)”, and paste the following into your <code>keybindings.json</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>    <span class="fu">{</span></span>
 <span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>        <span class="dt">"key"</span><span class="fu">:</span> <span class="st">"Ctrl+Cmd+H"</span><span class="fu">,</span></span>
@@ -67,24 +67,24 @@
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>        <span class="dt">"when"</span><span class="fu">:</span> <span class="st">"editorTextFocus"</span><span class="fu">,</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>        <span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span></span>
 <span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>            <span class="dt">"langId"</span><span class="fu">:</span> <span class="st">"r"</span><span class="fu">,</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>            <span class="dt">"code"</span><span class="fu">:</span> <span class="st">"quickly::quickly_addin()"</span><span class="fu">,</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>            <span class="dt">"code"</span><span class="fu">:</span> <span class="st">"gander::gander_addin()"</span><span class="fu">,</span></span>
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>            <span class="dt">"focus"</span><span class="fu">:</span> <span class="kw">true</span></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>        <span class="fu">}</span></span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="fu">}</span></span></code></pre></div>
 <p>The analogous keybinding on non-macOS is <code>Ctrl+Alt+H</code>. That said, change the <code>"key"</code> entry to any keybinding you wish!</p>
-<p>Once those steps are completed, you’re ready to use the quickly assistant with a keyboard shortcut.</p>
+<p>Once those steps are completed, you’re ready to use the gander assistant with a keyboard shortcut.</p>
 </div>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<p><img src="https://raw.githubusercontent.com/simonpcouch/quickly/refs/heads/main/inst/figs/quickly.gif" alt="A screencast demonstrating usage. In an RStudio session, I select some ggplot code, trigger the addin and type 'add axis labels', and then the model adds the needed code in-place." width="100%"></p>
+<p><img src="https://raw.githubusercontent.com/simonpcouch/gander/refs/heads/main/inst/figs/gander.gif" alt="A screencast demonstrating usage. In an RStudio session, I select some ggplot code, trigger the addin and type 'add axis labels', and then the model adds the needed code in-place." width="100%"></p>
 </div>
 </div>
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
-<li><a href="https://github.com/simonpcouch/quickly/" class="external-link">Browse source code</a></li>
-<li><a href="https://github.com/simonpcouch/quickly/issues" class="external-link">Report a bug</a></li>
+<li><a href="https://github.com/simonpcouch/gander/" class="external-link">Browse source code</a></li>
+<li><a href="https://github.com/simonpcouch/gander/issues" class="external-link">Report a bug</a></li>
 </ul>
 </div>
 
@@ -108,7 +108,7 @@
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
 <ul class="list-unstyled">
-<li><a href="authors.html#citation">Citing quickly</a></li>
+<li><a href="authors.html#citation">Citing gander</a></li>
 </ul>
 </div>
 
@@ -123,8 +123,8 @@
 <h2 data-toc-skip>Dev status</h2>
 <ul class="list-unstyled">
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#experimental" class="external-link"><img src="https://img.shields.io/badge/lifecycle-experimental-orange.svg" alt="Lifecycle: experimental"></a></li>
-<li><a href="https://CRAN.R-project.org/package=quickly" class="external-link"><img src="https://www.r-pkg.org/badges/version/quickly" alt="CRAN status"></a></li>
-<li><a href="https://github.com/simonpcouch/quickly/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/simonpcouch/quickly/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
+<li><a href="https://CRAN.R-project.org/package=gander" class="external-link"><img src="https://www.r-pkg.org/badges/version/gander" alt="CRAN status"></a></li>
+<li><a href="https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 </ul>
 </div>
 

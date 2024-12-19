@@ -15,7 +15,7 @@ status](https://www.r-pkg.org/badges/version/gander)](https://CRAN.R-project.org
 The gander package allows [elmer](https://elmer.tidyverse.org) chats to
 interface directly with your RStudio and Positron sessions. After
 (optionally) selecting some code, press the keyboard shortcut you’ve
-chosen to trigger the assistant (we suggest `Ctrl+Cmd+H`, as in “help”)
+chosen to trigger the assistant (we suggest `Ctrl+Cmd+G`, as in “help”)
 and write your request.
 
 ## Installation
@@ -38,7 +38,7 @@ shortcut.
 
 **In RStudio**, navigate to
 `Tools > Modify Keyboard Shortcuts > Search "gander"`—we suggest
-`Ctrl+Alt+H` (or `Ctrl+Cmd+H` on macOS).
+`Ctrl+Alt+G` (or `Ctrl+Cmd+G` on macOS).
 
 **In Positron**, you’ll need to open the command palette, run “Open
 Keyboard Shortcuts (JSON)”, and paste the following into your
@@ -46,7 +46,7 @@ Keyboard Shortcuts (JSON)”, and paste the following into your
 
 ``` json
     {
-        "key": "Ctrl+Cmd+H",
+        "key": "Ctrl+Cmd+G",
         "command": "workbench.action.executeCode.console",
         "when": "editorTextFocus",
         "args": {
@@ -57,7 +57,7 @@ Keyboard Shortcuts (JSON)”, and paste the following into your
     }
 ```
 
-The analogous keybinding on non-macOS is `Ctrl+Alt+H`. That said, change
+The analogous keybinding on non-macOS is `Ctrl+Alt+G`. That said, change
 the `"key"` entry to any keybinding you wish!
 
 Once those steps are completed, you’re ready to use the gander

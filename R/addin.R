@@ -1,16 +1,16 @@
-#' Run the quickly addin
+#' Run the gander addin
 #'
 #' @returns
 #' Nothing. Called for its side effects, modifying the current RStudio editor
 #' based on user input. Will error if no text is entered in the dialog.
 #'
 #' @export
-quickly_addin <- function() {
+gander_addin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
 
   # suppress "Listening on..." message and rethrow errors with new context
   try_fetch(
-    suppressMessages(res <- quickly_addin_impl(
+    suppressMessages(res <- gander_addin_impl(
       has_selection = !identical(rstudioapi::primary_selection(context)$text, "")
     )),
     error = function(cnd) {cli::cli_abort(conditionMessage(cnd), call = NULL)}
@@ -32,7 +32,7 @@ quickly_addin <- function() {
   invisible()
 }
 
-quickly_addin_impl <- function(has_selection) {
+gander_addin_impl <- function(has_selection) {
   minimum_context <- ifelse(has_selection, "Selection", "None")
   ui_elements <- list(
     shiny::textInput("text", "Enter text:",

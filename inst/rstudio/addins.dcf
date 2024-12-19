@@ -1,4 +1,4 @@
-Name: Quickly LLM assistant
+Name: gander LLM assistant
 Description: LLM assistant
-Binding: quickly_addin
+Binding: gander_addin
 Interactive: false

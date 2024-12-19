@@ -7,6 +7,6 @@
 # * https://testthat.r-lib.org/articles/special-files.html
 
 library(testthat)
-library(quickly)
+library(gander)
 
-test_check("quickly")
+test_check("gander")

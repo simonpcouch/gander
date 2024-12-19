@@ -1,7 +1,7 @@
 test_that("new_chat() uses claude by default", {
   withr::local_options(
-    .quickly_fn = NULL,
-    .quickly_args = NULL
+    .gander_fn = NULL,
+    .gander_args = NULL
   )
 
   testthat::with_mocked_bindings(
@@ -16,8 +16,8 @@ test_that("new_chat() uses claude by default", {
 
 test_that("new_chat() uses custom function and args", {
   withr::local_options(
-    .quickly_fn = "chat_openai",
-    .quickly_args = list(model = "gpt-4o")
+    .gander_fn = "chat_openai",
+    .gander_args = list(model = "gpt-4o")
   )
 
   testthat::with_mocked_bindings(
@@ -35,7 +35,7 @@ test_that("new_chat() uses custom function and args", {
 
 test_that("new_chat() supplied args override default args", {
   withr::local_options(
-    .quickly_args = list(temperature = 0.7)
+    .gander_args = list(temperature = 0.7)
   )
 
   testthat::with_mocked_bindings(

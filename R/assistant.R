@@ -1,12 +1,12 @@
-#' Options used by the quickly package
+#' Options used by the gander package
 #'
 #' @description
-#' The quickly package makes use of two notable user-facing options:
+#' The gander package makes use of two notable user-facing options:
 #'
-#' * `.quickly_fn` and `.quickly_args` determine the underlying LLM powering the
+#' * `.gander_fn` and `.gander_args` determine the underlying LLM powering the
 #'   assistant.
 #'
-#' @name quickly_options
+#' @name gander_options
 NULL
 
 initialize_assistant <- function(context, input) {
@@ -20,12 +20,12 @@ initialize_assistant <- function(context, input) {
 }
 
 new_chat <- function(
-    fn = getOption(".quickly_fn", default = "chat_claude"),
+    fn = getOption(".gander_fn", default = "chat_claude"),
     ...,
     .ns = "elmer"
 ) {
   args <- list(...)
-  default_args <- getOption(".quickly_args", default = list())
+  default_args <- getOption(".gander_args", default = list())
   args <- modifyList(default_args, args)
 
   rlang::eval_bare(rlang::call2(fn, !!!args, .ns = .ns))

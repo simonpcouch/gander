@@ -10,23 +10,27 @@ gander_addin <- function() {
 
   # suppress "Listening on..." message and rethrow errors with new context
   try_fetch(
-    suppressMessages(res <- gander_addin_impl(
+    suppressMessages(input <- gander_addin_impl(
       has_selection = !identical(rstudioapi::primary_selection(context)$text, "")
     )),
     error = function(cnd) {cli::cli_abort(conditionMessage(cnd), call = NULL)}
   )
 
-  if (is.null(res)) {
+  if (is.null(input)) {
     return()
   }
 
-  if (identical(res$text, "")) {
+  if (identical(input$text, "")) {
     cli::cli_abort("Please type something to receive a response.", call = NULL)
   }
 
-  do.call(
-    paste0("rs_", tolower(res$interface), "_selection"),
-    args = list(context = context, input = res)
+  assistant <- initialize_assistant(context = context, input = input)
+  turn <- construct_turn(input = input, context = context)
+
+  streamy::stream(
+    generator = assistant$stream(turn),
+    context = context,
+    interface = tolower(input$interface)
   )
 
   invisible()
@@ -52,10 +56,15 @@ gander_addin_impl <- function(has_selection) {
   )
 
   if (has_selection) {
-    ui_elements <- append(ui_elements,
-                          list(shiny::selectInput("interface", "Interface:",
-                                                  choices = c("Prefix", "Replace", "Suffix"),
-                                                  selected = "Replace")))
+    ui_elements <- append(
+      ui_elements,
+      list(shiny::selectInput(
+        "interface",
+        "Interface:",
+        choices = c("Prefix", "Replace", "Suffix"),
+        selected = "Replace"
+      ))
+    )
   }
 
   ui <- miniUI::miniPage(

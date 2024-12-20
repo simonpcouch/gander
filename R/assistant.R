@@ -16,6 +16,8 @@ initialize_assistant <- function(context, input) {
 
   chat$set_system_prompt(system_prompt)
 
+  chat <- register_tools(chat)
+
   chat
 }
 
@@ -45,13 +47,21 @@ construct_system_prompt <- function(context, input) {
     res,
     paste0(
       "When asked for code, provide only the requested code, no exposition nor ",
-      "backticks, unless explicitly asked. Always provide a minimal solution and",
-      "refrain from unnecessary additions."
+      "backticks, unless explicitly asked. Always provide a minimal solution and ",
+      "refrain from unnecessary additions. "
     ),
     paste0(
       "Use tidyverse style and, when relevant, tidyverse packages. For example, ",
       "when asked to plot something, use ggplot2, or when asked to transform ",
-      "data, using dplyr and/or tidyr unless explicitly instructed otherwise."
+      "data, using dplyr and/or tidyr unless explicitly instructed otherwise. "
+    ),
+    paste0(
+      "When asked to transform data that you don't know much about, use the ",
+      "`glimpse_data` tool. "
+    ),
+    paste0(
+      "When calling a tool, don't tell the user that you're going to call a ",
+      "tool; just call it and then work with what's returned to you. "
     )
   )
 
@@ -99,6 +109,14 @@ construct_turn <- function(input, context) {
     ),
     collapse = "\n"
   )
+}
+
+register_tools <- function(chat) {
+  for (tool in tools) {
+    chat$register_tool(tool)
+  }
+
+  chat
 }
 
 file_extension <- function(file_path) {

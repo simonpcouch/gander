@@ -4,7 +4,7 @@ Version: 0.0.0.9000
 Authors@R: 
     person("Simon", "Couch", , "simon.couch@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5676-5107"))
-Description: The package brings elmer chats into your RStudio and Positron
+Description: The package brings ellmer chats into your RStudio and Positron
     sessions, editing files directly. After triggering the package addin, type
     your request and the assistant will stream its response directly into your
     documents, optionally incorporating context from the active file and
@@ -20,7 +20,7 @@ Imports:
     cli (>= 3.6.3),
     coro (>= 1.1.0),
     glue (>= 1.8.0),
-    elmer,
+    ellmer,
     miniUI (>= 0.1.1.1),
     rlang (>= 1.1.4),
     rstudioapi (>= 0.17.1),

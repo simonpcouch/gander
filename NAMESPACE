@@ -2,5 +2,5 @@
 
 export(gander_addin)
 import(rlang)
-importFrom(elmer,content_image_file)
+importFrom(ellmer,content_image_file)
 importFrom(glue,glue)

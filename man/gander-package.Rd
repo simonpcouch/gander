@@ -6,7 +6,7 @@
 \alias{gander-package}
 \title{gander: LLMs at the tooltip}
 \description{
-The package brings elmer chats into your RStudio and Positron sessions, editing files directly. After triggering the package addin, type your request and the assistant will stream its response directly into your documents, optionally incorporating context from the active file and its neighboring files.
+The package brings ellmer chats into your RStudio and Positron sessions, editing files directly. After triggering the package addin, type your request and the assistant will stream its response directly into your documents, optionally incorporating context from the active file and its neighboring files.
 }
 \seealso{
 Useful links:

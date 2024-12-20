@@ -11,7 +11,7 @@ test_that("new_chat() uses claude by default", {
   )
 
   expect_equal(call_name(result), "chat_claude")
-  expect_equal(call_ns(result), "elmer")
+  expect_equal(call_ns(result), "ellmer")
 })
 
 test_that("new_chat() uses custom function and args", {
@@ -30,7 +30,7 @@ test_that("new_chat() uses custom function and args", {
   expect_equal(result_args$model, "gpt-4o")
   expect_equal(result_args$api_args$temperature, 0.7)
   expect_equal(call_name(result), "chat_openai")
-  expect_equal(call_ns(result), "elmer")
+  expect_equal(call_ns(result), "ellmer")
 })
 
 test_that("new_chat() supplied args override default args", {

@@ -21,7 +21,7 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The gander package allows [elmer](https://elmer.tidyverse.org) chats to interface directly with your RStudio and Positron sessions. After (optionally) selecting some code, press the keyboard shortcut you've chosen to trigger the assistant (we suggest `Ctrl+Cmd+G`, as in "help") and write your request.
+The gander package allows [ellmer](https://ellmer.tidyverse.org) chats to interface directly with your RStudio and Positron sessions. After (optionally) selecting some code, press the keyboard shortcut you've chosen to trigger the assistant (we suggest `Ctrl+Cmd+G`, as in "help") and write your request.
 
 ## Installation
 

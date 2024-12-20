@@ -22,7 +22,7 @@ initialize_assistant <- function(context, input) {
 new_chat <- function(
     fn = getOption(".gander_fn", default = "chat_claude"),
     ...,
-    .ns = "elmer"
+    .ns = "ellmer"
 ) {
   args <- list(...)
   default_args <- getOption(".gander_args", default = list())

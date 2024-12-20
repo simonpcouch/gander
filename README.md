@@ -78,4 +78,7 @@ with a keyboard shortcut.
 
 ## Example
 
-<img src="https://github.com/user-attachments/assets/563f4670-860a-4f8f-a087-41c28381b977" alt="A screencast demonstrating usage. In an RStudio session, I iteratively build a plot based on the mtcars dataset by typing plain-english instructions." width="100%" />
+[![A screencast demonstrating usage. In an RStudio session, I
+iteratively build a plot based on the mtcars dataset by typing
+plain-english
+instructions.](https://github.com/user-attachments/assets/845b4410-bce8-4e2d-90b7-59dbf6728b68)](https://github.com/user-attachments/assets/563f4670-860a-4f8f-a087-41c28381b977)

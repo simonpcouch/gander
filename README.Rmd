@@ -64,8 +64,4 @@ Once those steps are completed, you're ready to use the gander assistant with a 
 
 ## Example
 
-```{r}
-#| echo: false
-#| fig.alt: "A screencast demonstrating usage. In an RStudio session, I iteratively build a plot based on the mtcars dataset by typing plain-english instructions."
-knitr::include_graphics("https://github.com/user-attachments/assets/563f4670-860a-4f8f-a087-41c28381b977")
-```
+[![A screencast demonstrating usage. In an RStudio session, I iteratively build a plot based on the mtcars dataset by typing plain-english instructions.](https://github.com/user-attachments/assets/845b4410-bce8-4e2d-90b7-59dbf6728b68)](https://github.com/user-attachments/assets/563f4670-860a-4f8f-a087-41c28381b977)

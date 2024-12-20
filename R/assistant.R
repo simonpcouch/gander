@@ -74,11 +74,14 @@ construct_turn <- function(input, context) {
       ""
     )
   } else {
-    res <- c(
-      paste0(res, ":", collapse = ""),
-      "",
-      rstudioapi::primary_selection(context)[["text"]]
-    )
+    selection <- rstudioapi::primary_selection(context)[["text"]]
+    if (!identical(selection, "")) {
+      res <- c(
+        paste0(res, ":", collapse = ""),
+        "",
+        selection
+      )
+    }
   }
 
   if (identical(context_text, character(0))) {

@@ -100,17 +100,10 @@ test_that("file_extension works", {
 
 test_that("constructs turns correctly with context", {
   input <- list(context = "Selection", text = "my input")
-  context <- list(selection = list(list(text = "some context")))
-
-  result <- construct_turn(input, context)
-  expect_equal(
-    result,
-    "my input\n\nHere's some additional context: \n\nsome context"
-  )
+  expect_snapshot(construct_turn(input, mocked_selection()))
 })
 
 test_that("returns input as-is when None is chosen", {
   input <- list(text = "hey there", context = "None")
-
-  expect_equal(construct_turn(input, list()), "hey there")
+  expect_snapshot(construct_turn(input, mocked_empty_selection()))
 })

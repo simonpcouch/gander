@@ -5,14 +5,14 @@
 <meta charset="utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<title>LLMs at the tooltip • gander</title>
+<title>Context-rich LLM chats at the tooltip • gander</title>
 <script src="deps/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <link href="deps/bootstrap-5.3.1/bootstrap.min.css" rel="stylesheet">
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
-<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="LLMs at the tooltip">
-<meta name="description" content="The package brings ellmer chats into your RStudio and Positron sessions, editing files directly. After triggering the package addin, type your request and the assistant will stream its response directly into your documents, optionally incorporating context from the active file and its neighboring files.">
-<meta property="og:description" content="The package brings ellmer chats into your RStudio and Positron sessions, editing files directly. After triggering the package addin, type your request and the assistant will stream its response directly into your documents, optionally incorporating context from the active file and its neighboring files.">
+<script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Context-rich LLM chats at the tooltip">
+<meta name="description" content="The package introduces a higher-performance and lower-friction chat experience for data scientists. ellmer chats are integrated directly into your RStudio and Positron sessions, automatically incorporating relevant context such as surrounding lines of code, variable summaries (like data frame columns and types), function documentation, and images. After triggering the package addin, type your request and the assistant will stream its response directly into your documents.">
+<meta property="og:description" content="The package introduces a higher-performance and lower-friction chat experience for data scientists. ellmer chats are integrated directly into your RStudio and Positron sessions, automatically incorporating relevant context such as surrounding lines of code, variable summaries (like data frame columns and types), function documentation, and images. After triggering the package addin, type your request and the assistant will stream its response directly into your documents.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -50,7 +50,13 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The gander package allows <a href="https://ellmer.tidyverse.org" class="external-link">ellmer</a> chats to interface directly with your RStudio and Positron sessions. After (optionally) selecting some code, press the keyboard shortcut you’ve chosen to trigger the assistant (we suggest <code>Ctrl+Cmd+G</code>, as in “help”) and write your request.</p>
+<p>gander is a higher-performance and lower-friction chat experience for data scientists in RStudio and Positron. The package brings <a href="https://ellmer.tidyverse.org" class="external-link">ellmer</a> chats into your project sessions, automatically incorporating relevant context and streaming their responses directly into your documents.</p>
+<p><strong>Why not just chat?</strong> In many ways, working with gander is just like using a chat interface online or via <a href="https://github.com/jcheng5/shinychat" class="external-link">shinychat</a>. The gander assistant will automatically find the context it needs, though:</p>
+<ul>
+<li>File contents from elsewhere in the project you’re working on (e.g. the lines in your source file)</li>
+<li>Variables, allowing the assistant to locate the column names and types in data frames you’re working with, images linked to in your documents, and function definitions</li>
+<li>Function documentation, either defined in your project or from common R packages</li>
+</ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>

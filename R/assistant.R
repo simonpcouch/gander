@@ -45,7 +45,8 @@ construct_system_prompt <- function(context, input) {
     res,
     paste0(
       "When asked for code, provide only the requested code, no exposition nor ",
-      "backticks, unless explicitly asked."
+      "backticks, unless explicitly asked. Always provide a minimal solution and",
+      "refrain from unnecessary additions."
     ),
     paste0(
       "Use tidyverse style and, when relevant, tidyverse packages. For example, ",

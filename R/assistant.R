@@ -46,8 +46,12 @@ construct_system_prompt <- function(context, input) {
     paste0(
       "When asked for code, provide only the requested code, no exposition nor ",
       "backticks, unless explicitly asked."
+    ),
+    paste0(
+      "Use tidyverse style and, when relevant, tidyverse packages. For example, ",
+      "when asked to plot something, use ggplot2, or when asked to transform ",
+      "data, using dplyr and/or tidyr unless explicitly instructed otherwise."
     )
-
   )
 
   paste(res, collapse = "")

@@ -12,8 +12,8 @@ status](https://www.r-pkg.org/badges/version/gander)](https://CRAN.R-project.org
 [![R-CMD-check](https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The gander package allows [elmer](https://elmer.tidyverse.org) chats to
-interface directly with your RStudio and Positron sessions. After
+The gander package allows [ellmer](https://ellmer.tidyverse.org) chats
+to interface directly with your RStudio and Positron sessions. After
 (optionally) selecting some code, press the keyboard shortcut you’ve
 chosen to trigger the assistant (we suggest `Ctrl+Cmd+G`, as in “help”)
 and write your request.
@@ -60,8 +60,8 @@ Keyboard Shortcuts (JSON)”, and paste the following into your
 The analogous keybinding on non-macOS is `Ctrl+Alt+G`. That said, change
 the `"key"` entry to any keybinding you wish!
 
-Once those steps are completed, you’re ready to use the gander
-assistant with a keyboard shortcut.
+Once those steps are completed, you’re ready to use the gander assistant
+with a keyboard shortcut.
 
 ## Example
 

@@ -82,7 +82,7 @@ construct_turn <- function(input, context) {
   }
 
   if (identical(context_text, character(0))) {
-    return(paste0(res), collapse = "\n")
+    return(paste0(res, collapse = "\n"))
   }
 
   paste0(

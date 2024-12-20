@@ -33,4 +33,4 @@ Suggests:
     tibble,
     withr
 Remotes:
-    tidyverse/elmer
+    tidyverse/ellmer

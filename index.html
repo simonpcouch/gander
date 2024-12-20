@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.1/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="LLMs at the tooltip">
-<meta name="description" content="The package brings elmer chats into your RStudio and Positron sessions, editing files directly. After triggering the package addin, type your request and the assistant will stream its response directly into your documents, optionally incorporating context from the active file and its neighboring files.">
-<meta property="og:description" content="The package brings elmer chats into your RStudio and Positron sessions, editing files directly. After triggering the package addin, type your request and the assistant will stream its response directly into your documents, optionally incorporating context from the active file and its neighboring files.">
+<meta name="description" content="The package brings ellmer chats into your RStudio and Positron sessions, editing files directly. After triggering the package addin, type your request and the assistant will stream its response directly into your documents, optionally incorporating context from the active file and its neighboring files.">
+<meta property="og:description" content="The package brings ellmer chats into your RStudio and Positron sessions, editing files directly. After triggering the package addin, type your request and the assistant will stream its response directly into your documents, optionally incorporating context from the active file and its neighboring files.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -50,19 +50,19 @@
 </h1></div>
 <!-- badges: start -->
 
-<p>The gander package allows <a href="https://elmer.tidyverse.org" class="external-link">elmer</a> chats to interface directly with your RStudio and Positron sessions. After (optionally) selecting some code, press the keyboard shortcut you’ve chosen to trigger the assistant (we suggest <code>Ctrl+Cmd+H</code>, as in “help”) and write your request.</p>
+<p>The gander package allows <a href="https://elmer.tidyverse.org" class="external-link">elmer</a> chats to interface directly with your RStudio and Positron sessions. After (optionally) selecting some code, press the keyboard shortcut you’ve chosen to trigger the assistant (we suggest <code>Ctrl+Cmd+G</code>, as in “help”) and write your request.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <p>You can install gander like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"simonpcouch/gander"</span><span class="op">)</span></span></code></pre></div>
-<p>Then, ensure that you have an <a href="https://console.anthropic.com/" class="external-link"><code>ANTHROPIC_API_KEY</code></a> environment variable set, and you’re ready to go. If you’d like to use an LLM other than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s ChatGPT or a local ollama model—to power the gander see <code><a href="reference/quickly_options.html">?gander_options</a></code>.</p>
+<p>Then, ensure that you have an <a href="https://console.anthropic.com/" class="external-link"><code>ANTHROPIC_API_KEY</code></a> environment variable set, and you’re ready to go. If you’d like to use an LLM other than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s ChatGPT or a local ollama model—to power the gander see <code><a href="reference/gander_options.html">?gander_options</a></code>.</p>
 <p>The gander assistant is interfaced with the via the gander addin. For easiest access, we recommend registering the gander addin to a keyboard shortcut.</p>
-<p><strong>In RStudio</strong>, navigate to <code>Tools &gt; Modify Keyboard Shortcuts &gt; Search "gander"</code>—we suggest <code>Ctrl+Alt+H</code> (or <code>Ctrl+Cmd+H</code> on macOS).</p>
+<p><strong>In RStudio</strong>, navigate to <code>Tools &gt; Modify Keyboard Shortcuts &gt; Search "gander"</code>—we suggest <code>Ctrl+Alt+G</code> (or <code>Ctrl+Cmd+G</code> on macOS).</p>
 <p><strong>In Positron</strong>, you’ll need to open the command palette, run “Open Keyboard Shortcuts (JSON)”, and paste the following into your <code>keybindings.json</code>:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>    <span class="fu">{</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>        <span class="dt">"key"</span><span class="fu">:</span> <span class="st">"Ctrl+Cmd+H"</span><span class="fu">,</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>        <span class="dt">"key"</span><span class="fu">:</span> <span class="st">"Ctrl+Cmd+G"</span><span class="fu">,</span></span>
 <span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>        <span class="dt">"command"</span><span class="fu">:</span> <span class="st">"workbench.action.executeCode.console"</span><span class="fu">,</span></span>
 <span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>        <span class="dt">"when"</span><span class="fu">:</span> <span class="st">"editorTextFocus"</span><span class="fu">,</span></span>
 <span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>        <span class="dt">"args"</span><span class="fu">:</span> <span class="fu">{</span></span>
@@ -71,7 +71,7 @@
 <span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a>            <span class="dt">"focus"</span><span class="fu">:</span> <span class="kw">true</span></span>
 <span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>        <span class="fu">}</span></span>
 <span id="cb2-10"><a href="#cb2-10" tabindex="-1"></a>    <span class="fu">}</span></span></code></pre></div>
-<p>The analogous keybinding on non-macOS is <code>Ctrl+Alt+H</code>. That said, change the <code>"key"</code> entry to any keybinding you wish!</p>
+<p>The analogous keybinding on non-macOS is <code>Ctrl+Alt+G</code>. That said, change the <code>"key"</code> entry to any keybinding you wish!</p>
 <p>Once those steps are completed, you’re ready to use the gander assistant with a keyboard shortcut.</p>
 </div>
 <div class="section level2">

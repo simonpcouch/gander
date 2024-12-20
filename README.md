@@ -78,4 +78,4 @@ with a keyboard shortcut.
 
 ## Example
 
-<img src="https://raw.githubusercontent.com/simonpcouch/gander/refs/heads/main/inst/figs/gander.gif" alt="A screencast demonstrating usage. In an RStudio session, I select some ggplot code, trigger the addin and type 'add axis labels', and then the model adds the needed code in-place." width="100%" />
+<img src="https://github.com/user-attachments/assets/563f4670-860a-4f8f-a087-41c28381b977" alt="A screencast demonstrating usage. In an RStudio session, I iteratively build a plot based on the mtcars dataset by typing plain-english instructions." width="100%" />

@@ -21,7 +21,13 @@ knitr::opts_chunk$set(
 [![R-CMD-check](https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
-The gander package allows [ellmer](https://ellmer.tidyverse.org) chats to interface directly with your RStudio and Positron sessions. After (optionally) selecting some code, press the keyboard shortcut you've chosen to trigger the assistant (we suggest `Ctrl+Cmd+G`, as in "help") and write your request.
+gander is a higher-performance and lower-friction chat experience for data scientists in RStudio and Positron. The package brings [ellmer](https://ellmer.tidyverse.org) chats into your project sessions, automatically incorporating relevant context and streaming their responses directly into your documents.
+
+**Why not just chat?** In many ways, working with gander is just like using a chat interface online or via [shinychat](https://github.com/jcheng5/shinychat). The gander assistant will  automatically find the context it needs, though: 
+
+* File contents from elsewhere in the project you're working on (e.g. the lines in your source file) 
+* Variables, allowing the assistant to locate the column names and types in data frames you're working with, images linked to in your documents, and function definitions
+* Function documentation, either defined in your project or from common R packages
 
 ## Installation
 

@@ -77,7 +77,7 @@ construct_turn <- function(input, context) {
     res <- c(
       paste0(res, ":", collapse = ""),
       "",
-      rstudioapi::primary_selection(context)
+      rstudioapi::primary_selection(context)[["text"]]
     )
   }
 

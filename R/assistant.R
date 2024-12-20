@@ -56,13 +56,34 @@ construct_system_prompt <- function(context, input) {
 construct_turn <- function(input, context) {
   context_text <- fetch_context(input$context, context)
 
+  res <- input$text
+
+  if (identical(input$interface, "Replace")) {
+    res <- c(
+      "Update the following: ",
+      "",
+      rstudioapi::primary_selection(context)[["text"]],
+      "",
+      "Per the following instructions: ",
+      "",
+      res,
+      ""
+    )
+  } else {
+    res <- c(
+      paste0(res, ":", collapse = ""),
+      "",
+      rstudioapi::primary_selection(context)
+    )
+  }
+
   if (identical(context_text, character(0))) {
-    return(input$text)
+    return(paste0(res), collapse = "\n")
   }
 
   paste0(
     c(
-      input$text,
+      res,
       "",
       "Here's some additional context: ",
       "",

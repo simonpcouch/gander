@@ -20,6 +20,7 @@ URL: https://github.com/simonpcouch/gander, https://simonpcouch.github.io/gander
 BugReports: https://github.com/simonpcouch/gander/issues
 Imports: 
     cli (>= 3.6.3),
+    dplyr,
     glue (>= 1.8.0),
     ellmer,
     miniUI (>= 0.1.1.1),

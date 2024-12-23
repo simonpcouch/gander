@@ -7,7 +7,7 @@
 NULL
 
 utils::globalVariables(
-  c("file.edit", "modifyList")
+  c("file.edit", "help", "modifyList")
 )
 
 # address "not imported from" R CMD check error

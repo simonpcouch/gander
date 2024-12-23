@@ -53,7 +53,7 @@ test_that("construct_system_prompt works", {
   context <- list(path = "script.r")
   res <- construct_system_prompt(context, input = list())
   expect_match(res, "You are a helpful but terse R data scientist")
-  expect_match(res, "When asked for code")
+  expect_match(res, "valid R code")
   expect_length(res, 1)
 
   # case insensitive
@@ -66,7 +66,7 @@ test_that("construct_system_prompt works", {
   context <- list(path = "script.py")
   res <- construct_system_prompt(context, input = list())
   expect_match(res, "You are a helpful but terse Python data scientist")
-  expect_match(res, "When asked for code")
+  expect_match(res, "valid Python code")
   expect_length(res, 1)
 
   # other extension

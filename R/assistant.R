@@ -36,28 +36,29 @@ new_chat <- function(
 construct_system_prompt <- function(context, input) {
   ext <- file_extension(context$path)
 
-  res <- switch(
-    ext,
-    r = "You are a helpful but terse R data scientist.",
-    py = "You are a helpful but terse Python data scientist.",
-    character(0)
-  )
+  if (ext %in% c("r", "py")) {
+    lang_str <- ext_to_language(ext)
+    res <-
+      glue::glue(
+        "You are a helpful but terse {lang_str} data scientist. ",
+        "Respond only with valid {lang_str} code—no exposition, no backticks. "
+      )
+  } else {
+    res <-
+      paste0(
+        "You are a helpful but terse data scientist. ",
+        "When asked for code, provide only the requested code, no exposition nor ",
+        "backticks, unless explicitly asked. "
+      )
+  }
 
   res <- c(
     res,
-    paste0(
-      "When asked for code, provide only the requested code, no exposition nor ",
-      "backticks, unless explicitly asked. Always provide a minimal solution and ",
-      "refrain from unnecessary additions. "
-    ),
+    "Always provide a minimal solution and refrain from unnecessary additions. ",
     paste0(
       "Use tidyverse style and, when relevant, tidyverse packages. For example, ",
       "when asked to plot something, use ggplot2, or when asked to transform ",
       "data, using dplyr and/or tidyr unless explicitly instructed otherwise. "
-    ),
-    paste0(
-      "When asked to transform data that you don't know much about, use the ",
-      "`glimpse_data` tool. "
     ),
     paste0(
       "When calling a tool, don't tell the user that you're going to call a ",

@@ -16,8 +16,6 @@ initialize_assistant <- function(context, input) {
 
   chat$set_system_prompt(system_prompt)
 
-  chat <- register_tools(chat)
-
   chat
 }
 
@@ -59,10 +57,6 @@ construct_system_prompt <- function(context, input) {
       "Use tidyverse style and, when relevant, tidyverse packages. For example, ",
       "when asked to plot something, use ggplot2, or when asked to transform ",
       "data, using dplyr and/or tidyr unless explicitly instructed otherwise. "
-    ),
-    paste0(
-      "When calling a tool, don't tell the user that you're going to call a ",
-      "tool; just call it and then work with what's returned to you. "
     )
   )
 
@@ -70,7 +64,8 @@ construct_system_prompt <- function(context, input) {
 }
 
 construct_turn <- function(input, context) {
-  context_text <- fetch_context(input$context, context)
+  code_context <- fetch_code_context(input$context, context)
+  selection <- rstudioapi::primary_selection(context)[["text"]]
 
   res <- input$text
 
@@ -86,7 +81,6 @@ construct_turn <- function(input, context) {
       ""
     )
   } else {
-    selection <- rstudioapi::primary_selection(context)[["text"]]
     if (!identical(selection, "")) {
       res <- c(
         paste0(res, ":", collapse = ""),
@@ -96,7 +90,10 @@ construct_turn <- function(input, context) {
     }
   }
 
-  if (identical(context_text, character(0))) {
+  res <- c(res, describe_relevant_variables(selection, env = global_env()))
+
+  if (identical(code_context, character(0)) ||
+      identical(code_context, selection)) {
     return(paste0(res, collapse = "\n"))
   }
 
@@ -104,20 +101,12 @@ construct_turn <- function(input, context) {
     c(
       res,
       "",
-      "Here's some additional context: ",
+      "Here's some additional context from source files: ",
       "",
-      context_text
+      code_context
     ),
     collapse = "\n"
   )
-}
-
-register_tools <- function(chat) {
-  for (tool in tools) {
-    chat$register_tool(tool)
-  }
-
-  chat
 }
 
 file_extension <- function(file_path) {

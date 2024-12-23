@@ -13,3 +13,7 @@ ext_to_language <- function(ext) {
     character(0)
   )
 }
+
+global_env <- function() {
+  .GlobalEnv
+}

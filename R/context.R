@@ -1,4 +1,4 @@
-fetch_context <- function(input_selection, context) {
+fetch_code_context <- function(input_selection, context) {
   switch(
     input_selection,
     None = character(0),
@@ -13,7 +13,7 @@ context_from_selection <- function(context) {
 }
 
 context_from_file <- function(context) {
-  paste0(context$contents, collapse = "\n")
+  paste0(c(paste0("##", context$path, ":"), "", context$contents), collapse = "\n")
 }
 
 context_from_file_and_neighbors <- function(context) {

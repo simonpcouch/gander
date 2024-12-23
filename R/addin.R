@@ -27,13 +27,24 @@ gander_addin <- function() {
   assistant <- initialize_assistant(context = context, input = input)
   turn <- construct_turn(input = input, context = context)
 
-  streamy::stream(
-    generator = assistant$stream(turn),
-    context = context,
-    interface = tolower(input$interface)
+  edits <-
+    streamy::stream(
+      generator = assistant$stream(turn),
+      context = context,
+      interface = tolower(input$interface)
+    )
+
+  contents <- list(before = context$selection, after = edits)
+
+  stash_last_gander(
+    input = input, assistant = assistant, contents = contents
   )
 
-  invisible()
+  cli::cli_inform(
+    "Use {.run gander::gander_undo()} or {.run gander::gander_retry()} if needed."
+  )
+
+  invisible(assistant)
 }
 
 gander_addin_impl <- function(has_selection) {

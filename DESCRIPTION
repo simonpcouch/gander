@@ -1,10 +1,10 @@
 Package: gander
-Title: Context-rich LLM chats at the tooltip
+Title: High performance, low friction LLM chat for data scientists
 Version: 0.0.0.9000
 Authors@R: 
     person("Simon", "Couch", , "simon.couch@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5676-5107"))
-Description: The package introduces a higher-performance and lower-friction 
+Description: The package introduces a high performance, low friction LLM
     chat experience for data scientists. ellmer chats are integrated directly 
     into your RStudio and Positron sessions, automatically incorporating 
     relevant context such as surrounding lines of code, variable summaries 

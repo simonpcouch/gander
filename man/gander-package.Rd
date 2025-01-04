@@ -4,9 +4,9 @@
 \name{gander-package}
 \alias{gander}
 \alias{gander-package}
-\title{gander: Context-rich LLM chats at the tooltip}
+\title{gander: High performance, low friction LLM chat for data scientists}
 \description{
-The package introduces a higher-performance and lower-friction chat experience for data scientists. ellmer chats are integrated directly into your RStudio and Positron sessions, automatically incorporating relevant context such as surrounding lines of code, variable summaries (like data frame columns and types), function documentation, and images. After triggering the package addin, type your request and the assistant will stream its response directly into your documents.
+The package introduces a high performance, low friction LLM chat experience for data scientists. ellmer chats are integrated directly into your RStudio and Positron sessions, automatically incorporating relevant context such as surrounding lines of code, variable summaries (like data frame columns and types), function documentation, and images. After triggering the package addin, type your request and the assistant will stream its response directly into your documents.
 }
 \seealso{
 Useful links:

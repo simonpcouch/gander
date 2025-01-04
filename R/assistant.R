@@ -39,7 +39,7 @@ construct_system_prompt <- function(context, input) {
     res <-
       glue::glue(
         "You are a helpful but terse {lang_str} data scientist. ",
-        "Respond only with valid {lang_str} code—no exposition, no backticks. "
+        "Respond only with valid {lang_str} code: no exposition, no backticks. "
       )
   } else {
     res <-

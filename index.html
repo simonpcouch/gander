@@ -53,9 +53,8 @@
 <p>gander is a higher-performance and lower-friction chat experience for data scientists in RStudio and Positron. The package brings <a href="https://ellmer.tidyverse.org" class="external-link">ellmer</a> chats into your project sessions, automatically incorporating relevant context and streaming their responses directly into your documents.</p>
 <p><strong>Why not just chat?</strong> In many ways, working with gander is just like using a chat interface online or via <a href="https://github.com/jcheng5/shinychat" class="external-link">shinychat</a>. The gander assistant will automatically find the context it needs, though:</p>
 <ul>
-<li>File contents from elsewhere in the project you’re working on (e.g. the lines in your source file)</li>
 <li>Variables, allowing the assistant to locate the column names and types in data frames you’re working with, images linked to in your documents, and function definitions</li>
-<li>Function documentation, either defined in your project or from common R packages</li>
+<li>File contents from elsewhere in the project you’re working on (e.g. the lines in your source file)</li>
 </ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -63,7 +62,7 @@
 <p>You can install gander like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"simonpcouch/gander"</span><span class="op">)</span></span></code></pre></div>
-<p>Then, ensure that you have an <a href="https://console.anthropic.com/" class="external-link"><code>ANTHROPIC_API_KEY</code></a> environment variable set, and you’re ready to go. If you’d like to use an LLM other than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s ChatGPT or a local ollama model—to power the gander see <code><a href="reference/gander_options.html">?gander_options</a></code>.</p>
+<p>Then, ensure that you have an <a href="https://console.anthropic.com/" class="external-link"><code>ANTHROPIC_API_KEY</code></a> environment variable set, and you’re ready to go. If you’d like to use an LLM other than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s GPT-4o or a local ollama model—and then set the <code>.gander_fn</code> and <code>.gander_args</code> options in your <code>.Rprofile</code>, like <code>options(.gander_fn = "chat_openai")</code> to use OpenAI’s GPT-4o or <code>options(.gander_fn = "chat_openai", .gander_args = list(model = "gpt-4o-mini"))</code> to use their GPT-4o-mini model.</p>
 <p>The gander assistant is interfaced with the via the gander addin. For easiest access, we recommend registering the gander addin to a keyboard shortcut.</p>
 <p><strong>In RStudio</strong>, navigate to <code>Tools &gt; Modify Keyboard Shortcuts &gt; Search "gander"</code>—we suggest <code>Ctrl+Alt+G</code> (or <code>Ctrl+Cmd+G</code> on macOS).</p>
 <p><strong>In Positron</strong>, you’ll need to open the command palette, run “Open Keyboard Shortcuts (JSON)”, and paste the following into your <code>keybindings.json</code>:</p>

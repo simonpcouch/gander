@@ -2,7 +2,7 @@ pandoc: 3.1.11
 pkgdown: 2.1.1
 pkgdown_sha: ~
 articles: {}
-last_built: 2025-01-06T16:42Z
+last_built: 2025-01-06T16:48Z
 urls:
   reference: https://simonpcouch.github.io/gander/reference
   article: https://simonpcouch.github.io/gander/articles

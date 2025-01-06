@@ -64,7 +64,10 @@ construct_system_prompt <- function(context, input) {
 }
 
 construct_turn <- function(input, context) {
-  code_context <- fetch_code_context(input$context, context)
+  code_context <- paste0(
+    c(paste0("##", context$path, ":"), "", context$contents),
+    collapse = "\n"
+  )
   selection <- rstudioapi::primary_selection(context)[["text"]]
 
   res <- input$text

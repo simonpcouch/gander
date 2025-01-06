@@ -52,8 +52,6 @@ gander_addin_impl <- function(has_selection) {
   ui_elements <- list(
     shiny::textInput("text", "Enter text:",
                      placeholder = "Type your text here"),
-    shiny::selectInput("context", "Context:",
-                       choices = c(minimum_context, "File", "File & Neighbors")),
     shiny::tags$script(shiny::HTML("
       $(document).on('keyup', function(e) {
         if(e.key == 'Enter'){
@@ -88,8 +86,7 @@ gander_addin_impl <- function(has_selection) {
     shiny::observeEvent(input$done, {
       result <- list(
         text = input$text,
-        interface = if (has_selection) input$interface else "Prefix",
-        context = input$context
+        interface = if (has_selection) input$interface else "Prefix"
       )
       shiny::stopApp(returnValue = result)
     })

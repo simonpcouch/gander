@@ -102,7 +102,7 @@ test_that("construct_turn_impl includes selection when present", {
   testthat::local_mocked_bindings(file_extension = function(x) "r")
 
   result <- construct_turn_impl(
-    input = "plot this",
+    input = list(text = "plot this"),
     selection = "mtcars",
     code_context = list(before = "x <- 1", after = character(0)),
     env_context = character(0),
@@ -116,7 +116,7 @@ test_that("construct_turn_impl includes after context when present", {
   testthat::local_mocked_bindings(file_extension = function(x) "r")
 
   result <- construct_turn_impl(
-    input = "plot this",
+    input = list(text = "plot this"),
     selection = "",
     code_context = list(before = "x <- 1", after = "z <- 3"),
     env_context = character(0),
@@ -130,7 +130,7 @@ test_that("construct_turn_impl includes env context when present", {
   testthat::local_mocked_bindings(file_extension = function(x) "r")
 
   result <- construct_turn_impl(
-    input = "plot this",
+    input = list(text = "plot this"),
     selection = "",
     code_context = list(before = "mtcars", after = character(0)),
     env_context = "obj details",

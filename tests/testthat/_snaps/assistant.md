@@ -29,7 +29,7 @@
       
       x <- 1
       
-      plot this: 
+      Now, plot this: 
       
       mtcars
 

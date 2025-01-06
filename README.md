@@ -23,13 +23,11 @@ using a chat interface online or via
 [shinychat](https://github.com/jcheng5/shinychat). The gander assistant
 will automatically find the context it needs, though:
 
-- File contents from elsewhere in the project you’re working on
-  (e.g. the lines in your source file)
 - Variables, allowing the assistant to locate the column names and types
   in data frames you’re working with, images linked to in your
   documents, and function definitions
-- Function documentation, either defined in your project or from common
-  R packages
+- File contents from elsewhere in the project you’re working on
+  (e.g. the lines in your source file)
 
 ## Installation
 
@@ -42,8 +40,12 @@ pak::pak("simonpcouch/gander")
 Then, ensure that you have an
 [`ANTHROPIC_API_KEY`](https://console.anthropic.com/) environment
 variable set, and you’re ready to go. If you’d like to use an LLM other
-than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s ChatGPT or a local
-ollama model—to power the gander see `?gander_options`.
+than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s GPT-4o or a local
+ollama model—and then set the `.gander_fn` and `.gander_args` options in
+your `.Rprofile`, like `options(.gander_fn = "chat_openai")` to use
+OpenAI’s GPT-4o or
+`options(.gander_fn = "chat_openai", .gander_args = list(model = "gpt-4o-mini"))`
+to use their GPT-4o-mini model.
 
 The gander assistant is interfaced with the via the gander addin. For
 easiest access, we recommend registering the gander addin to a keyboard

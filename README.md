@@ -80,5 +80,4 @@ with a keyboard shortcut.
 
 ## Example
 
-<iframe src="https://github.com/user-attachments/assets/8d28a2c8-9f8c-47eb-940d-9f1586d2e9bb" width="100%" height="400px" data-external="1">
-</iframe>
+<video src="https://github.com/user-attachments/assets/8d28a2c8-9f8c-47eb-940d-9f1586d2e9bb" width="100%" height="400px" />

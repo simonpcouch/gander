@@ -63,9 +63,4 @@ Once those steps are completed, you're ready to use the gander assistant with a 
 
 ## Example
 
-```{r}
-#| label: gander-demo
-#| echo: false
-#| fig-alt: "A screencast demonstrating usage. In an RStudio session, I iteratively build a plot based on the stackoverflow dataset from modeldata by typing plain-english instructions."
-knitr::include_url("https://github.com/user-attachments/assets/8d28a2c8-9f8c-47eb-940d-9f1586d2e9bb", height = "400px")
-```
+<video src="https://github.com/user-attachments/assets/8d28a2c8-9f8c-47eb-940d-9f1586d2e9bb" width="100%" height="400px" />

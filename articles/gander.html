@@ -134,9 +134,120 @@ share your data and are effectively free. To use an ollama model, run
 the model locally and then set
 <code>options(.gander_fn = "chat_ollama", .gander_args = list(model = "model-name"))</code>.</p></li>
 </ul>
-<!-- ## What is gander actually doing? --><!-- call out `gander_peek()` -->
 </div>
-  </main>
+<div class="section level2">
+<h2 id="what-is-gander-actually-doing">What is gander actually doing?<a class="anchor" aria-label="anchor" href="#what-is-gander-actually-doing"></a>
+</h2>
+<p>Imagine you’re working in a .R file that looks like this:</p>
+<pre><code><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"stackoverflow"</span>, package <span class="op">=</span> <span class="st">"modeldata"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">stackoverflow</span></span></code></pre>
+<p><a href="https://modeldata.tidymodels.org/reference/stackoverflow.html" class="external-link">stackoverflow</a>
+is a data set containing results from the annual Stack Overflow
+Developer Survey.</p>
+<p>You select <code>stackoverflow</code>, trigger the addin, and type
+<code>plot salary vs. years coded</code>. To effectively respond to this
+input, a model would need to know a few additional things:</p>
+<ol style="list-style-type: decimal">
+<li>What framework does this user want to use to plot this data?</li>
+<li>What does the data look like? Specifically, what are the column
+names related to the salary and number of years coded?</li>
+<li>In what style should the model respond? Notably, this is a
+<code>.R</code> file, so any exposition would need to live inside of
+comments.</li>
+</ol>
+<p>From the surrounding contents in the file, we can answer the first
+question; the user likely wants to use ggplot2 to do so. We can answer
+the second question using the user’s R environment; if they’ve run that
+<code>data("stackoverflow", package = "modeldata")</code> line, then the
+<code>stackoverflow</code> object will live in their environment and we
+can print it out to learn more about it. Finally, we can answer the
+third question by inspecting the file extension—since this is indeed an
+<code>.R</code> file, the model should respond only with code, omitting
+exposition and backticks.</p>
+<p>The gander addin will preemptively answer all of these questions for
+the model by including context from each of these three sources.</p>
+<p>To demonstrate, we can run this <code>stackoverflow</code> example
+ourselves and then call <code><a href="../reference/last_gander.html">gander::gander_peek()</a></code> to peek at
+everything gander actually sent to the model. When I do so:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">gander</span><span class="fu">::</span><span class="fu"><a href="../reference/last_gander.html">gander_peek</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;Chat turns=3 tokens=1077/52&gt;</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── system ─────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; You are a helpful but terse R data scientist. Respond only with valid R code:</span></span>
+<span><span class="co">#&gt; no exposition, no backticks. Always provide a minimal solution and refrain</span></span>
+<span><span class="co">#&gt; from unnecessary additions. Use tidyverse style and, when relevant, tidyverse</span></span>
+<span><span class="co">#&gt; packages. For example, when asked to plot something, use ggplot2, or when</span></span>
+<span><span class="co">#&gt; asked to transform data, using dplyr and/or tidyr unless explicitly instructed</span></span>
+<span><span class="co">#&gt; otherwise.</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── user ───────────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; Up to this point, the contents of my r file reads:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ``` </span></span>
+<span><span class="co">#&gt; library(ggplot2)</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; data("stackoverflow", package = "modeldata")</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; plot salary vs. years coded:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; stackoverflow</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; Here's some information about the objects in my R environment:</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ``` </span></span>
+<span><span class="co">#&gt; stackoverflow </span></span>
+<span><span class="co">#&gt; #&gt; tibble [5,594 × 21] (S3: tbl_df/tbl/data.frame) </span></span>
+<span><span class="co">#&gt; #&gt; $ Country : Factor w/ 5 levels "Canada","Germany",..: 4 5 5 2 3 5 5 2 5 2 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Salary : num [1:5594] 100000 130000 175000 64516 6636 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ YearsCodedJob: int [1:5594] 20 20 16 4 1 1 13 4 7 17 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ OpenSource : num [1:5594] 0 1 0 0 0 0 0 1 1 1 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Hobby : num [1:5594] 1 1 1 0 1 1 1 0 1 1 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ CompanySizeNumber : num [1:5594] 5000 1000 10000 1000 5000 20 20 5000 20 20 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Remote : Factor w/ 2 levels "Remote","Not remote": 1 1 2 2 2 2 2 2 2 2 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ CareerSatisfaction : int [1:5594] 8 9 7 9 5 8 7 7 8 9 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Data_scientist : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Database_administrator : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Desktop_applications_developer : num [1:5594] 0 0 0 0 0 0 0 0 1 1 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Developer_with_stats_math_background: num [1:5594] 0 0 0 0 0 0 0 0 0 1 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ DevOps : num [1:5594] 0 1 0 0 0 0 0 0 0 0 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Embedded_developer : num [1:5594] 1 1 0 0 0 0 0 0 0 0 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Graphic_designer : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Graphics_programming : num [1:5594] 0 0 0 0 0 0 0 0 0 0... </span></span>
+<span><span class="co">#&gt; #&gt; $ Machine_learning_specialist : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Mobile_developer : num [1:5594] 0 0 0 0 0 0 0 0 1 0 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Quality_assurance_engineer : num [1:5594] 0 1 0 0 0 0 0 0 0 0 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Systems_administrator : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... </span></span>
+<span><span class="co">#&gt; #&gt; $ Web_developer : num [1:5594] 0 1 1 1 1 1 1 1 0 0 ...</span></span>
+<span><span class="co">#&gt; ```</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt; ── assistant ──────────────────────────────────────────────────────────────────</span></span>
+<span><span class="co">#&gt; ggplot(stackoverflow, aes(x = YearsCodedJob, y = Salary)) + </span></span>
+<span><span class="co">#&gt;   geom_point() +</span></span>
+<span><span class="co">#&gt;   labs(x = "Years Coded", y = "Salary")</span></span></code></pre></div>
+<p>Even though the user selected only a variable name and typed 5 words,
+that request was automatically situated in enough context for the model
+to reply only in R code that uses ggplot2 and references column names
+that the user hasn’t supplied.</p>
+<p>First, gander knows the framework to use since the preceding lines in
+the file have been inlined into the user prompt. (By default, gander
+recommends that models lean on the tidyverse in their responses anyway.)
+Then, gander inspects the code selection and describes variables that
+are in both the selection and the global environment. In this case,
+that’s only the <code>stackoverflow</code> data. Finally, with respect
+to style, gander has detected that we’re working in a <code>.R</code>
+file and thus writes “Respond only with valid R code” in the system
+prompt. Altogether, this allows for the model to tailor its response to
+the user’s development environment without the user supplying any
+context themselves.</p>
+</div>
+  </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
+    </nav></aside>
 </div>
 
 

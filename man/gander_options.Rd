@@ -2,11 +2,44 @@
 % Please edit documentation in R/assistant.R
 \name{gander_options}
 \alias{gander_options}
+\alias{.gander_fn}
+\alias{.gander_args}
+\alias{.gander_style}
 \title{Options used by the gander package}
 \description{
-The gander package makes use of two notable user-facing options:
-\itemize{
-\item \code{.gander_fn} and \code{.gander_args} determine the underlying LLM powering the
-assistant.
+The gander package makes use of a few notable user-facing options.
 }
+\section{Choosing models}{
+
+
+gander uses the \code{.gander_fn} and \code{.gander_args} options to configure which
+model powers the addin. \code{.gander_fn} is the name of an ellmer \verb{chat_*()}
+function as a string, and \code{.gander_args} is a list of arguments to pass to
+that function. For example, to use OpenAI's GPT-4o-mini, you might write:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{options(
+  .gander_fn = "chat_openai",
+  .gander_args = list(model = "gpt-4o-mini")
+)
+}\if{html}{\out{</div>}}
+
+Paste that code in your \code{.Rprofile} via \code{usethis::edit_r_profile()} to always
+use the same model every time you start an R session.
 }
+
+\section{Style/taste}{
+
+
+By default, gander responses use the following style
+conventions: "Use tidyverse style and, when relevant, tidyverse packages. For example, when asked to plot something, use ggplot2, or when asked to transform data, using dplyr and/or tidyr unless explicitly instructed otherwise. " Set the \code{.gander_style} option to
+some other string to tailor responses to your own taste, e.g.:
+
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{options(.gander_style = "Use base R.")
+}\if{html}{\out{</div>}}
+
+Paste that code in your
+\code{.Rprofile} via \code{usethis::edit_r_profile()} to always use the same style (or
+even always begin with some base set of knowledge about frameworks you
+work with often) every time you start an R session.
+}
+

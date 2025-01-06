@@ -25,3 +25,30 @@ test_that("file_extension works", {
   expect_equal(file_extension("file with spaces.txt"), "txt")
   expect_equal(file_extension("path/with.dots/file.md"), "md")
 })
+
+test_that("default_gander_style returns expected text", {
+  expect_match(
+    default_gander_style(),
+    "Use tidyverse style and, when relevant, tidyverse packages",
+    fixed = TRUE
+  )
+})
+
+test_that("get_gander_style returns default when no option set", {
+  withr::local_options(.gander_style = NULL)
+  expect_equal(get_gander_style(), default_gander_style())
+})
+
+test_that("get_gander_style returns option when set", {
+  withr::local_options(.gander_style = "Use base R style.")
+  expect_equal(get_gander_style(), "Use base R style.")
+})
+
+test_that("get_gander_style validates option value", {
+  withr::local_options(.gander_style = 1)
+  expect_snapshot(get_gander_style(), error = TRUE)
+
+  withr::local_options(.gander_style = c("a", "b"))
+  expect_snapshot(get_gander_style(), error = TRUE)
+})
+

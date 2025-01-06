@@ -1,12 +1,44 @@
 #' Options used by the gander package
 #'
 #' @description
-#' The gander package makes use of two notable user-facing options:
+#' The gander package makes use of a few notable user-facing options.
 #'
-#' * `.gander_fn` and `.gander_args` determine the underlying LLM powering the
-#'   assistant.
+#' @section Choosing models:
+#'
+#' gander uses the `.gander_fn` and `.gander_args` options to configure which
+#' model powers the addin. `.gander_fn` is the name of an ellmer `chat_*()`
+#' function as a string, and `.gander_args` is a list of arguments to pass to
+#' that function. For example, to use OpenAI's GPT-4o-mini, you might write:
+#'
+#' ```r
+#' options(
+#'   .gander_fn = "chat_openai",
+#'   .gander_args = list(model = "gpt-4o-mini")
+#' )
+#' ```
+#'
+#' Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to always
+#' use the same model every time you start an R session.
+#'
+#' @section Style/taste:
+#'
+#' By default, gander responses use the following style
+#' conventions: "`r default_gander_style()`" Set the `.gander_style` option to
+#' some other string to tailor responses to your own taste, e.g.:
+#'
+#' ```r
+#' options(.gander_style = "Use base R.")
+#' ```
+#'
+#' Paste that code in your
+#' `.Rprofile` via `usethis::edit_r_profile()` to always use the same style (or
+#' even always begin with some base set of knowledge about frameworks you
+#' work with often) every time you start an R session.
 #'
 #' @name gander_options
+#' @aliases .gander_fn
+#' @aliases .gander_args
+#' @aliases .gander_style
 NULL
 
 initialize_assistant <- function(context, input) {
@@ -50,11 +82,7 @@ construct_system_prompt <- function(context, input) {
   res <- c(
     res,
     "Always provide a minimal solution and refrain from unnecessary additions. ",
-    paste0(
-      "Use tidyverse style and, when relevant, tidyverse packages. For example, ",
-      "when asked to plot something, use ggplot2, or when asked to transform ",
-      "data, using dplyr and/or tidyr unless explicitly instructed otherwise. "
-    )
+    get_gander_style()
   )
 
   paste(res, collapse = "")

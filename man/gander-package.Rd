@@ -6,6 +6,8 @@
 \alias{gander-package}
 \title{gander: High performance, low friction LLM chat for data scientists}
 \description{
+\if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
+
 The package introduces a high performance, low friction LLM chat experience for data scientists. ellmer chats are integrated directly into your RStudio and Positron sessions, automatically incorporating relevant context such as surrounding lines of code, variable summaries (like data frame columns and types), function documentation, and images. After triggering the package addin, type your request and the assistant will stream its response directly into your documents.
 }
 \seealso{

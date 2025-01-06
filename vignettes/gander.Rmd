@@ -43,6 +43,93 @@ If you're using ellmer inside a organization, you'll be limited to what your IT 
 
 - You can use a local model with `chat_ollama()`, which uses [Ollama](https://ollama.com) and allows you to run models on your own computer. While the biggest models you can run locally aren't as good as the state of the art hosted models, they don't share your data and are effectively free. To use an ollama model, run the model locally and then set `options(.gander_fn = "chat_ollama", .gander_args = list(model = "model-name"))`.
 
-<!-- ## What is gander actually doing? -->
+## What is gander actually doing?
 
-<!-- call out `gander_peek()` -->
+Imagine you're working in a .R file that looks like this:
+
+```
+library(ggplot2)
+
+data("stackoverflow", package = "modeldata")
+
+stackoverflow
+```
+
+[stackoverflow](https://modeldata.tidymodels.org/reference/stackoverflow.html) is a data set containing results from the annual Stack Overflow Developer Survey.
+
+You select `stackoverflow`, trigger the addin, and type `plot salary vs. years coded`. To effectively respond to this input, a model would need to know a few additional things:
+
+1) What framework does this user want to use to plot this data?
+2) What does the data look like? Specifically, what are the column names related to the salary and number of years coded?
+3) In what style should the model respond? Notably, this is a `.R` file, so any exposition would need to live inside of comments.
+
+From the surrounding contents in the file, we can answer the first question; the user likely wants to use ggplot2 to do so. We can answer the second question using the user's R environment; if they've run that `data("stackoverflow", package = "modeldata")` line, then the `stackoverflow` object will live in their environment and we can print it out to learn more about it. Finally, we can answer the third question by inspecting the file extension—since this is indeed an `.R` file, the model should respond only with code, omitting exposition and backticks.
+
+The gander addin will preemptively answer all of these questions for the model by including context from each of these three sources. 
+
+To demonstrate, we can run this `stackoverflow` example ourselves and then call `gander::gander_peek()` to peek at everything gander actually sent to the model. When I do so:
+
+```{r}
+#| eval: false
+gander::gander_peek()
+#> <Chat turns=3 tokens=1077/52>
+#> 
+#> ── system ─────────────────────────────────────────────────────────────────────
+#> You are a helpful but terse R data scientist. Respond only with valid R code:
+#> no exposition, no backticks. Always provide a minimal solution and refrain
+#> from unnecessary additions. Use tidyverse style and, when relevant, tidyverse
+#> packages. For example, when asked to plot something, use ggplot2, or when
+#> asked to transform data, using dplyr and/or tidyr unless explicitly instructed
+#> otherwise.
+#> 
+#> ── user ───────────────────────────────────────────────────────────────────────
+#> Up to this point, the contents of my r file reads:
+#> 
+#> ``` 
+#> library(ggplot2)
+#> 
+#> data("stackoverflow", package = "modeldata")
+#> 
+#> ```
+#> 
+#> plot salary vs. years coded:
+#> 
+#> stackoverflow
+#> 
+#> Here's some information about the objects in my R environment:
+#> 
+#> ``` 
+#> stackoverflow 
+#> #> tibble [5,594 × 21] (S3: tbl_df/tbl/data.frame) 
+#> #> $ Country : Factor w/ 5 levels "Canada","Germany",..: 4 5 5 2 3 5 5 2 5 2 ... 
+#> #> $ Salary : num [1:5594] 100000 130000 175000 64516 6636 ... 
+#> #> $ YearsCodedJob: int [1:5594] 20 20 16 4 1 1 13 4 7 17 ... 
+#> #> $ OpenSource : num [1:5594] 0 1 0 0 0 0 0 1 1 1 ... 
+#> #> $ Hobby : num [1:5594] 1 1 1 0 1 1 1 0 1 1 ... 
+#> #> $ CompanySizeNumber : num [1:5594] 5000 1000 10000 1000 5000 20 20 5000 20 20 ... 
+#> #> $ Remote : Factor w/ 2 levels "Remote","Not remote": 1 1 2 2 2 2 2 2 2 2 ... 
+#> #> $ CareerSatisfaction : int [1:5594] 8 9 7 9 5 8 7 7 8 9 ... 
+#> #> $ Data_scientist : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Database_administrator : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Desktop_applications_developer : num [1:5594] 0 0 0 0 0 0 0 0 1 1 ... 
+#> #> $ Developer_with_stats_math_background: num [1:5594] 0 0 0 0 0 0 0 0 0 1 ... 
+#> #> $ DevOps : num [1:5594] 0 1 0 0 0 0 0 0 0 0 ... 
+#> #> $ Embedded_developer : num [1:5594] 1 1 0 0 0 0 0 0 0 0 ... 
+#> #> $ Graphic_designer : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Graphics_programming : num [1:5594] 0 0 0 0 0 0 0 0 0 0... 
+#> #> $ Machine_learning_specialist : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Mobile_developer : num [1:5594] 0 0 0 0 0 0 0 0 1 0 ... 
+#> #> $ Quality_assurance_engineer : num [1:5594] 0 1 0 0 0 0 0 0 0 0 ... 
+#> #> $ Systems_administrator : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Web_developer : num [1:5594] 0 1 1 1 1 1 1 1 0 0 ...
+#> ```
+#> 
+#> ── assistant ──────────────────────────────────────────────────────────────────
+#> ggplot(stackoverflow, aes(x = YearsCodedJob, y = Salary)) + 
+#>   geom_point() +
+#>   labs(x = "Years Coded", y = "Salary")
+```
+
+Even though the user selected only a variable name and typed 5 words, that request was automatically situated in enough context for the model to reply only in R code that uses ggplot2 and references column names that the user hasn't supplied.
+
+First, gander knows the framework to use since the preceding lines in the file have been inlined into the user prompt. (By default, gander recommends that models lean on the tidyverse in their responses anyway.) Then, gander inspects the code selection and describes variables that are in both the selection and the global environment. In this case, that's only the `stackoverflow` data. Finally, with respect to style, gander has detected that we're working in a `.R` file and thus writes "Respond only with valid R code" in the system prompt. Altogether, this allows for the model to tailor its response to the user's development environment without the user supplying any context themselves.

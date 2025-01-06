@@ -80,7 +80,5 @@ with a keyboard shortcut.
 
 ## Example
 
-[![A screencast demonstrating usage. In an RStudio session, I
-iteratively build a plot based on the mtcars dataset by typing
-plain-english
-instructions.](https://github.com/user-attachments/assets/845b4410-bce8-4e2d-90b7-59dbf6728b68)](https://github.com/user-attachments/assets/563f4670-860a-4f8f-a087-41c28381b977)
+<iframe src="https://github.com/user-attachments/assets/8d28a2c8-9f8c-47eb-940d-9f1586d2e9bb" width="100%" height="400px" data-external="1">
+</iframe>

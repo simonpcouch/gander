@@ -40,3 +40,4 @@ Suggests:
 Remotes:
     simonpcouch/streamy,
     tidyverse/ellmer
+VignetteBuilder: knitr

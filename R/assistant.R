@@ -34,20 +34,17 @@ new_chat <- function(
 construct_system_prompt <- function(context, input) {
   ext <- file_extension(context$path)
 
-  if (ext %in% c("r", "py")) {
-    lang_str <- ext_to_language(ext)
-    res <-
-      glue::glue(
-        "You are a helpful but terse {lang_str} data scientist. ",
-        "Respond only with valid {lang_str} code: no exposition, no backticks. "
-      )
+  res <- "You are a helpful but terse R data scientist. "
+  if (identical(ext, "r")) {
+    res <- c(res, "Respond only with valid R code: no exposition, no backticks. ")
   } else {
-    res <-
+    res <- c(
+      res,
       paste0(
-        "You are a helpful but terse data scientist. ",
         "When asked for code, provide only the requested code, no exposition nor ",
         "backticks, unless explicitly asked. "
       )
+    )
   }
 
   res <- c(
@@ -104,7 +101,7 @@ construct_turn <- function(input, context) {
     c(
       res,
       "",
-      "Here's some additional context from source files: ",
+      "Here's some additional code context from the surrounding file: ",
       "",
       code_context
     ),

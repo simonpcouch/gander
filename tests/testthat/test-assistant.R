@@ -62,13 +62,6 @@ test_that("construct_system_prompt works", {
   expect_match(res, "You are a helpful but terse R data scientist")
   expect_length(res, 1)
 
-  # python
-  context <- list(path = "script.py")
-  res <- construct_system_prompt(context, input = list())
-  expect_match(res, "You are a helpful but terse Python data scientist")
-  expect_match(res, "valid Python code")
-  expect_length(res, 1)
-
   # other extension
   context <- list(path = "script.md")
   res <- construct_system_prompt(context, input = list())
@@ -99,11 +92,6 @@ test_that("file_extension works", {
 })
 
 test_that("constructs turns correctly with context", {
-  input <- list(context = "Selection", text = "my input")
+  input <- list(text = "my input")
   expect_snapshot(construct_turn(input, mocked_selection()))
-})
-
-test_that("returns input as-is when None is chosen", {
-  input <- list(text = "hey there", context = "None")
-  expect_snapshot(construct_turn(input, mocked_empty_selection()))
 })

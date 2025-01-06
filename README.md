@@ -80,4 +80,5 @@ with a keyboard shortcut.
 
 ## Example
 
-<video src="https://github.com/user-attachments/assets/8d28a2c8-9f8c-47eb-940d-9f1586d2e9bb" width="100%" height="400px" />
+<video src="https://github.com/user-attachments/assets/17b57310-290f-4fd7-9e00-759b8b9b76ae
+" width="100%" height="400px" />

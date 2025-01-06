@@ -19,7 +19,8 @@ gander is a high performance and low friction chat experience for data scientist
 ```{r}
 #| label: gander-demo
 #| echo: false
-knitr::include_url("https://github.com/user-attachments/assets/8d28a2c8-9f8c-47eb-940d-9f1586d2e9bb", height = "400px")
+knitr::include_url("https://github.com/user-attachments/assets/17b57310-290f-4fd7-9e00-759b8b9b76ae
+", height = "400px")
 ```
 
 This interface excels beyond a typical LLM chat in two notable ways:

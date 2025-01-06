@@ -71,7 +71,7 @@ gander_addin_impl <- function(has_selection) {
         "interface",
         "Interface:",
         choices = c("Prefix", "Replace", "Suffix"),
-        selected = "Replace"
+        selected = gander_env[["last_interface"]] %||% "Replace"
       ))
     )
   }
@@ -88,6 +88,7 @@ gander_addin_impl <- function(has_selection) {
         text = input$text,
         interface = if (has_selection) input$interface else "Prefix"
       )
+      gander_env[["last_interface"]] <- result$interface
       shiny::stopApp(returnValue = result)
     })
 

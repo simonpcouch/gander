@@ -7,9 +7,12 @@
 gander_addin()
 }
 \value{
-Nothing. Called for its side effects, modifying the current RStudio editor
-based on user input. Will error if no text is entered in the dialog.
+The underlying ellmer Chat, invisibly. Primarily called for its side effects,
+modifying the current RStudio editor based on user input. Will error if
+no text is entered in the dialog.
 }
 \description{
-Run the gander addin
+The gander addin is intended to be called using the RStudio addin rather
+than explicitly by the user. See \code{vignette("gander", package = "gander")}
+to learn more about using the gander addin.
 }

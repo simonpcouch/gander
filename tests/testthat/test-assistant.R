@@ -74,24 +74,69 @@ test_that("construct_system_prompt works", {
   expect_length(res, 1)
 })
 
-test_that("file_extension works", {
-  # returns empty string with no extension
-  expect_equal(file_extension("README"), "")
-  expect_equal(file_extension("file."), "")
-  expect_equal(file_extension("path/to/file"), "")
+test_that("construct_turn_impl formats message with file extension", {
+  result <- construct_turn_impl(
+    input = "plot it.",
+    selection = "",
+    code_context = list(before = "mtcars", after = character(0)),
+    env_context = character(0),
+    ext = "R"
+  )
 
-  # extracts extension correctly
-  expect_equal(file_extension("script.r"), "r")
-  expect_equal(file_extension("path/to/script.R"), "r")
-  expect_equal(file_extension("path.to/script.py"), "py")
-  expect_equal(file_extension("script.tar.gz"), "gz")
-
-  # handles special characters in path
-  expect_equal(file_extension("file with spaces.txt"), "txt")
-  expect_equal(file_extension("path/with.dots/file.md"), "md")
+  expect_snapshot(cat(result))
 })
 
-test_that("constructs turns correctly with context", {
-  input <- list(text = "my input")
-  expect_snapshot(construct_turn(input, mocked_selection()))
+test_that("construct_turn_impl formats input with punctuation", {
+  result <- construct_turn_impl(
+    input = "plot it",
+    selection = "",
+    code_context = list(before = "mtcars", after = character(0)),
+    env_context = character(0),
+    ext = "R"
+  )
+
+  expect_snapshot(cat(result))
 })
+
+test_that("construct_turn_impl includes selection when present", {
+  testthat::local_mocked_bindings(file_extension = function(x) "r")
+
+  result <- construct_turn_impl(
+    input = "plot this",
+    selection = "mtcars",
+    code_context = list(before = "x <- 1", after = character(0)),
+    env_context = character(0),
+    ext = "R"
+  )
+
+  expect_snapshot(cat(result))
+})
+
+test_that("construct_turn_impl includes after context when present", {
+  testthat::local_mocked_bindings(file_extension = function(x) "r")
+
+  result <- construct_turn_impl(
+    input = "plot this",
+    selection = "",
+    code_context = list(before = "x <- 1", after = "z <- 3"),
+    env_context = character(0),
+    ext = "R"
+  )
+
+  expect_snapshot(cat(result))
+})
+
+test_that("construct_turn_impl includes env context when present", {
+  testthat::local_mocked_bindings(file_extension = function(x) "r")
+
+  result <- construct_turn_impl(
+    input = "plot this",
+    selection = "",
+    code_context = list(before = "mtcars", after = character(0)),
+    env_context = "obj details",
+    ext = "R"
+  )
+
+  expect_snapshot(cat(result))
+})
+

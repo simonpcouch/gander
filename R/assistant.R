@@ -61,62 +61,41 @@ construct_system_prompt <- function(context, input) {
 }
 
 construct_turn <- function(input, context) {
-  code_context <- paste0(
-    c(paste0("##", context$path, ":"), "", context$contents),
-    collapse = "\n"
-  )
   selection <- rstudioapi::primary_selection(context)[["text"]]
 
-  res <- input$text
+  code_context <- fetch_code_context(context)
+  env_context <- fetch_env_context(selection, env = global_env())
 
-  if (identical(input$interface, "Replace")) {
-    res <- c(
-      "Update the following: ",
-      "",
-      rstudioapi::primary_selection(context)[["text"]],
-      "",
-      "Per the following instructions: ",
-      "",
-      res,
-      ""
-    )
-  } else {
-    if (!identical(selection, "")) {
-      res <- c(
-        paste0(res, ":", collapse = ""),
-        "",
-        selection
-      )
-    }
-  }
-
-  res <- c(res, describe_relevant_variables(selection, env = global_env()))
-
-  if (identical(code_context, character(0)) ||
-      identical(code_context, selection)) {
-    return(paste0(res, collapse = "\n"))
-  }
-
-  paste0(
-    c(
-      res,
-      "",
-      "Here's some additional code context from the surrounding file: ",
-      "",
-      code_context
-    ),
-    collapse = "\n"
+  construct_turn_impl(
+    input = input,
+    selection = selection,
+    code_context = code_context,
+    env_context = env_context,
+    ext = file_extension(context$path)
   )
 }
 
-file_extension <- function(file_path) {
-  check_character(file_path)
+# all inputs are just character vectors
+construct_turn_impl <- function(input, selection, code_context, env_context, ext) {
+  res <- paste0("Up to this point, the contents of my ", ext, " file reads: ")
+  res <- c(res, "", code_context[["before"]], "")
 
-  ext <- strsplit(basename(file_path), "\\.")[[1]]
-
-  if (length(ext) <= 1) {
-    return("")
+  if (!identical(selection, "")) {
+    res <- c(res, paste0(input, ": "))
+    res <- c(res, "", selection, "")
+  } else {
+    res <- c(res, paste0(gsub("\\.$", "", input), "."))
   }
 
-  tolower(ext[length(ext)])
+  if (!identical(code_context[["after"]], character(0))) {
+    res <- c(res, "", "For context, the rest of the file reads: ", "")
+    res <- c(res, code_context[["after"]])
+  }
+
+  if (!identical(env_context, character(0))) {
+    res <- c(res, "", "Here's some information about the objects in my R environment: ")
+    res <- c(res, "", env_context, "")
+  }
+
+  paste0(res, collapse = "\n")
 }

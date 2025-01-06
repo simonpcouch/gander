@@ -1,4 +1,24 @@
-describe_relevant_variables <- function(selection, env) {
+# code inspection --------------------------------------------------------------
+# context is rstudioapi::getActiveDocumentContext() or friends
+fetch_code_context <- function(context) {
+  contents <- context$contents
+  selection <- context$selection
+
+  before <- contents[seq_len(selection[[1]]$range$start[1] - 1)]
+  after <- contents[seq(selection[[1]]$range$end[1] + 1, length(contents))]
+  list(before = backtick_possibly(before), after = backtick_possibly(after))
+}
+
+backtick_possibly <- function(x) {
+  if (length(x) == 0) {
+    return(character(0))
+  } else {
+    c("```", x, "```")
+  }
+}
+
+# environment inspection -------------------------------------------------------
+fetch_env_context <- function(selection, env) {
   if (identical(selection, "")) {
     res <- describe_data_frames(env = env)
   } else {
@@ -9,7 +29,7 @@ describe_relevant_variables <- function(selection, env) {
     return(res)
   }
 
-  c("Here's some context on relevant variables: ", "", "```", res, "```")
+  c("```", res, "```")
 }
 
 describe_data_frames <- function(env) {
@@ -22,10 +42,14 @@ describe_data_frames <- function(env) {
 
   res <- character(0)
   for (i in seq_along(env_dfs)) {
-    res <- c(res, describe_variable(
-      env_get(env, env_dfs[[i]]),
-      env_dfs[[i]]
-    ))
+    res <- c(
+      res,
+      describe_variable(
+        env_get(env, env_dfs[[i]]),
+        env_dfs[[i]]
+      ),
+      ""
+    )
   }
 
   res
@@ -40,7 +64,7 @@ describe_selected_variables <- function(selection, env) {
 
   res <- character(0)
   for (variable in variables_to_describe) {
-    res <- c(res, describe_variable(env_get(env, variable), variable))
+    res <- c(res, describe_variable(env_get(env, variable), variable), "")
   }
 
   res
@@ -57,7 +81,7 @@ selected_variable_names_in_env <- function(selection, env) {
 describe_variable <- function(x, x_name) {
   c(
     x_name,
-    paste0("#> ", capture.output(str(x)))
+    paste0("#> ", gsub("\t", " ", capture.output(str(x))))
   )
 }
 

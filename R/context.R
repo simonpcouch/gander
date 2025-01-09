@@ -18,12 +18,16 @@ backtick_possibly <- function(x) {
 }
 
 # environment inspection -------------------------------------------------------
-fetch_env_context <- function(selection, env) {
-  if (identical(selection, "")) {
-    res <- describe_data_frames(env = env)
-  } else {
-    res <- describe_selected_variables(selection = selection, env = env)
-  }
+fetch_env_context <- function(selection, input, env) {
+  obj_names <- names(env)
+
+  # is the object name present in the selection or mentioned in the input?
+  mentioned <- obj_names[
+    obj_names %in% selected_variables(selection) |
+    unname(vapply(obj_names, grepl, logical(1), x = input))
+  ]
+
+  res <- describe_variables(mentioned, env)
 
   if (identical(res, character(0))) {
     return(res)
@@ -32,67 +36,68 @@ fetch_env_context <- function(selection, env) {
   c("```", res, "```")
 }
 
-describe_data_frames <- function(env) {
-  env_list <- as.list(env)
-  env_dfs <- names(env_list[purrr::map_lgl(env_list, is.data.frame)])
-
-  if (length(env_dfs) == 0) {
+describe_variables <- function(variables, env) {
+  if (length(variables) == 0) {
     return(character(0))
   }
 
   res <- character(0)
-  for (i in seq_along(env_dfs)) {
-    res <- c(
-      res,
-      describe_variable(
-        env_get(env, env_dfs[[i]]),
-        env_dfs[[i]]
-      ),
-      ""
-    )
-  }
-
-  res
-}
-
-describe_selected_variables <- function(selection, env) {
-  variables_to_describe <- selected_variable_names_in_env(selection = selection, env = env)
-
-  if (length(variables_to_describe) == 0) {
-    return(character(0))
-  }
-
-  res <- character(0)
-  for (variable in variables_to_describe) {
+  for (variable in variables) {
+    if (!env_has(env, variable)) next
     res <- c(res, describe_variable(env_get(env, variable), variable), "")
   }
 
   res
 }
 
-selected_variable_names_in_env <- function(selection, env) {
-  selected_variable_names <- selected_variable_names(selection = selection)
-
-  selected_variables_in_env <- env_has(env, selected_variable_names)
-
-  selected_variable_names[selected_variables_in_env]
-}
-
 describe_variable <- function(x, x_name) {
+  # to limit the number of tokens taken up by data frames, only print the
+  # first few rows and columns of data frames
+  if (inherits(x, "data.frame")) {
+    n_row <- min(5, nrow(x))
+    n_col <- min(20, ncol(x))
+    x <- x[seq_len(n_row), seq_len(n_col), drop = FALSE]
+    x_name <- c(
+      cli::format_inline("# Just the first {n_row} row{?s} and {n_col} column{?s}:"),
+      x_name
+    )
+  }
+
+  # todo: large lists may still take up quite a few tokens here. should we just
+  # subset this output to the first n entries?
   c(
     x_name,
-    paste0("#> ", gsub("\t", " ", capture.output(str(x))))
+    paste0("#> ", gsub("\t.*$", "", capture.output(str(x))))
   )
 }
 
-selected_variable_names <- function(selection) {
+selected_variables <- function(selection) {
   language <- treesitter.r::language()
   parser <- treesitter::parser(language)
   tree <- treesitter::parser_parse(parser, selection)
-  root_node <- treesitter::tree_root_node(tree)
-  query_source <- "(identifier) @id"
+  root <- treesitter::tree_root_node(tree)
+
+  if (!is_syntactically_valid(root)) {
+    # just split up by spaces and return---it's okay if this function's output
+    # is a superset since its results will be filtered by the names of objects
+    # in an environment
+    return(strsplit(selection, " ", fixed = TRUE)[[1]])
+  }
+
+  query_source <- '
+    (identifier) @id
+    (call function: (identifier) @func)
+  '
+
   query <- treesitter::query(language, query_source)
-  captures <- treesitter::query_captures(query, root_node)
-  variable_names <- vapply(captures$node, treesitter::node_text, character(1))
-  unique(variable_names)
+  captures <- treesitter::query_captures(query, root)
+  identifiers <- unique(vapply(captures$node, treesitter::node_text, character(1)))
+
+  unique(identifiers)
+}
+
+is_syntactically_valid <- function(root) {
+  !treesitter::node_has_error(root) &&
+  !treesitter::node_is_error(root) &&
+  !treesitter::node_is_missing(root)
 }

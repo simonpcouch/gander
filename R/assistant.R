@@ -92,7 +92,7 @@ construct_turn <- function(input, context) {
   selection <- rstudioapi::primary_selection(context)[["text"]]
 
   code_context <- fetch_code_context(context)
-  env_context <- fetch_env_context(selection, env = global_env())
+  env_context <- fetch_env_context(selection, input$text, env = global_env())
 
   construct_turn_impl(
     input = input,

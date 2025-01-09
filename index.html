@@ -58,8 +58,10 @@
 <p>gander is a higher-performance and lower-friction chat experience for data scientists in RStudio and Positron. The package brings <a href="https://ellmer.tidyverse.org" class="external-link">ellmer</a> chats into your project sessions, automatically incorporating relevant context and streaming their responses directly into your documents.</p>
 <p><strong>Why not just chat?</strong> In many ways, working with gander is just like using a chat interface online or via <a href="https://github.com/jcheng5/shinychat" class="external-link">shinychat</a>. The gander assistant will automatically find the context it needs, though:</p>
 <ul>
-<li>Variables, allowing the assistant to locate the column names and types in data frames you’re working with, images linked to in your documents, and function definitions</li>
-<li>File contents from elsewhere in the project you’re working on (e.g. the lines in your source file)</li>
+<li>
+<strong>Code context</strong>: File contents from elsewhere in the project you’re working on (e.g. the lines in your source file).</li>
+<li>
+<strong>Environment context</strong>: Variables, allowing the assistant to locate the column names and types in data frames you’re working with, images linked to in your documents, and function definitions. This is what differentiates gander from many other assistants out there; gander can interface with your R session to describe your computational environment.</li>
 </ul>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>

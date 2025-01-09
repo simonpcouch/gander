@@ -23,11 +23,14 @@ using a chat interface online or via
 [shinychat](https://github.com/jcheng5/shinychat). The gander assistant
 will automatically find the context it needs, though:
 
-- Variables, allowing the assistant to locate the column names and types
-  in data frames you’re working with, images linked to in your
-  documents, and function definitions
-- File contents from elsewhere in the project you’re working on
-  (e.g. the lines in your source file)
+- **Code context**: File contents from elsewhere in the project you’re
+  working on (e.g. the lines in your source file).
+- **Environment context**: Variables, allowing the assistant to locate
+  the column names and types in data frames you’re working with, images
+  linked to in your documents, and function definitions. This is what
+  differentiates gander from many other assistants out there; gander can
+  interface with your R session to describe your computational
+  environment.
 
 ## Installation
 

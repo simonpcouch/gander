@@ -37,17 +37,22 @@ gander uses the `.gander_fn` and `.gander_args` options to configure which model
 
 If you're using ellmer inside a organization, you'll be limited to what your IT department allows, which is likely to be one provided by a big cloud provider, e.g. `chat_azure()`, `chat_bedrock()`, `chat_databricks()`, or `chat_snowflake()`. If you're using ellmer for your own exploration, you'll have a lot more freedom, so we have a few recommendations to help you get started:
 
-- As of early 2025, Anthropic's Claude Sonnet 3.5 is a very powerful model for code assistance, and thus `chat_claude()` is the default model supported by gander. If you want to use Claude, you'll need to register an [API key](https://console.anthropic.com/) to the environment variable `ANTHROPIC_API_KEY`. No need to set the `.gander_*` options in this case.
+- As of early 2025, Anthropic's **Claude Sonnet 3.5** is a very powerful model for code assistance, and thus `chat_claude()` is the default model supported by gander. If you want to use Claude, you'll need to register an [API key](https://console.anthropic.com/) to the environment variable `ANTHROPIC_API_KEY`. No need to set the `.gander_*` options in this case.
 
 * Regarding OpenAI's models, `chat_openai()` defaults to **GPT-4o**, but you can use `model = "gpt-4o-mini"` for a cheaper, lower-quality model, or `model = "o1-mini"` for more complex reasoning; to use an OpenAI model, you'll need to set the options `options(.gander_fn = "chat_openai", .gander_args = list(model = "gpt-4o-mini"))` and register your OpenAI API key with the `OPENAI_API_KEY` environment variable.
 
-- You can use a local model with `chat_ollama()`, which uses [Ollama](https://ollama.com) and allows you to run models on your own computer. While the biggest models you can run locally aren't as good as the state of the art hosted models, they don't share your data and are effectively free. To use an ollama model, run the model locally and then set `options(.gander_fn = "chat_ollama", .gander_args = list(model = "model-name"))`.
+- You can use a **local model** with `chat_ollama()`, which uses [Ollama](https://ollama.com) and allows you to run models on your own computer. While the biggest models you can run locally aren't as good as the state of the art hosted models, they don't share your data and are effectively free. To use an ollama model, run the model locally and then set `options(.gander_fn = "chat_ollama", .gander_args = list(model = "model-name"))`.
 
 ## What is gander actually doing?
 
-Imagine you're working in a .R file that looks like this:
+gander automatically incorporates two kinds of context about your analyses under the hood:
 
-```
+* **Code context**: The assistant will automatically inform the model about the type of file you're working in and relevant lines of code surrounding your cursor.
+* **Environment context**: The assistant also interfaces directly with your global environment to describe the relevant data frames you have loaded, including their column names and type. This allows you to describe the analyses you'd like to carry out in plain language while gander takes care of describing your computational environment to the model.
+
+For example, imagine you're working in a .R file that looks like this:
+
+```r
 library(ggplot2)
 
 data("stackoverflow", package = "modeldata")
@@ -59,13 +64,12 @@ stackoverflow
 
 You select `stackoverflow`, trigger the addin, and type `plot salary vs. years coded`. To effectively respond to this input, a model would need to know a few additional things:
 
-1) What framework does this user want to use to plot this data?
+1) Code context:
+     a) What framework does this user want to use to plot this data?
+     b) In what style should the model respond? Notably, this is a `.R` file, so any exposition would need to live inside of comments.
 2) What does the data look like? Specifically, what are the column names related to the salary and number of years coded?
-3) In what style should the model respond? Notably, this is a `.R` file, so any exposition would need to live inside of comments.
 
-From the surrounding contents in the file, we can answer the first question; the user likely wants to use ggplot2 to do so. We can answer the second question using the user's R environment; if they've run that `data("stackoverflow", package = "modeldata")` line, then the `stackoverflow` object will live in their environment and we can print it out to learn more about it. Finally, we can answer the third question by inspecting the file extension—since this is indeed an `.R` file, the model should respond only with code, omitting exposition and backticks.
-
-The gander addin will preemptively answer all of these questions for the model by including context from each of these three sources. 
+From the surrounding contents in the file, we can answer **1a)**; the user likely wants to use ggplot2 to do so. We can answer **1b)** by inspecting the file extension—since this is an `.R` file, the model should respond only with code, omitting exposition and backticks. We can answer **2)** using the user's R environment; if they've run that `data("stackoverflow", package = "modeldata")` line, then the `stackoverflow` object will live in their environment and we can print it out to learn more about it. The gander addin will preemptively answer all of these questions for the model by including context from each of these sources. 
 
 To demonstrate, we can run this `stackoverflow` example ourselves and then call `gander::gander_peek()` to peek at everything gander actually sent to the model. When I do so:
 
@@ -92,7 +96,7 @@ gander::gander_peek()
 #> 
 #> ```
 #> 
-#> plot salary vs. years coded:
+#> Now, plot salary vs. years coded in the following:
 #> 
 #> stackoverflow
 #> 
@@ -132,4 +136,4 @@ gander::gander_peek()
 
 Even though the user selected only a variable name and typed 5 words, that request was automatically situated in enough context for the model to reply only in R code that uses ggplot2 and references column names that the user hasn't supplied.
 
-First, gander knows the framework to use since the preceding lines in the file have been inlined into the user prompt. (By default, gander recommends that models lean on the tidyverse in their responses anyway. You can adjust this with `?gander_options`.) Then, gander inspects the code selection and describes variables that are in both the selection and the global environment. In this case, that's only the `stackoverflow` data. Finally, with respect to style, gander has detected that we're working in a `.R` file and thus writes "Respond only with valid R code" in the system prompt. Altogether, this allows for the model to tailor its response to the user's development environment without the user supplying any context themselves.
+First, gander knows the framework to use since the preceding lines in the file have been inlined into the user prompt. (By default, gander recommends that models lean on the tidyverse in their responses anyway. You can adjust this with `?gander_options`.) Then, with respect to style, gander has detected that we're working in a `.R` file and thus writes "Respond only with valid R code" in the system prompt. Finally, gander inspects the code selection and describes variables that are in both the selection and the global environment. In this case, that's only the `stackoverflow` data. Altogether, this allows for the model to tailor its response to the user's development environment without the user needing to supply any context themselves.

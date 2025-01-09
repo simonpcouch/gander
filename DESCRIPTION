@@ -23,7 +23,7 @@ Depends:
 Imports: 
     cli (>= 3.6.3),
     glue (>= 1.8.0),
-    ellmer,
+    ellmer (>= 0.1.0),
     miniUI (>= 0.1.1.1),
     purrr,
     rlang (>= 1.1.4),
@@ -40,6 +40,5 @@ Suggests:
     tibble,
     withr
 Remotes:
-    simonpcouch/streamy,
-    tidyverse/ellmer
+    simonpcouch/streamy
 VignetteBuilder: knitr

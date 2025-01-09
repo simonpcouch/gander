@@ -112,7 +112,7 @@ construct_turn_impl <- function(input, selection, code_context, env_context, ext
     res <- c(res, paste0("Now, ", input$text, ": "))
     res <- c(res, "", selection, "")
   } else {
-    res <- c(res, paste0(gsub("\\.$", "", input), "."))
+    res <- c(res, paste0(gsub("\\.$", "", input$text), "."))
   }
 
   if (!identical(code_context[["after"]], character(0))) {

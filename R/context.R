@@ -10,7 +10,7 @@ fetch_code_context <- function(context) {
 }
 
 backtick_possibly <- function(x) {
-  if (length(x) == 0) {
+  if (length(x) == 0 || identical(x, "")) {
     return(character(0))
   } else {
     c("```", x, "```")

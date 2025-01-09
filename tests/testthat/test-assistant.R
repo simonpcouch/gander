@@ -76,7 +76,7 @@ test_that("construct_system_prompt works", {
 
 test_that("construct_turn_impl formats message with file extension", {
   result <- construct_turn_impl(
-    input = "plot it.",
+    input = list(text = "plot it."),
     selection = "",
     code_context = list(before = "mtcars", after = character(0)),
     env_context = character(0),
@@ -88,7 +88,7 @@ test_that("construct_turn_impl formats message with file extension", {
 
 test_that("construct_turn_impl formats input with punctuation", {
   result <- construct_turn_impl(
-    input = "plot it",
+    input = list(text = "plot it"),
     selection = "",
     code_context = list(before = "mtcars", after = character(0)),
     env_context = character(0),

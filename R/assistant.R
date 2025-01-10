@@ -66,15 +66,51 @@ new_chat <- function(
 construct_system_prompt <- function(context, input) {
   ext <- file_extension(context$path)
 
-  res <- "You are a helpful but terse R data scientist. "
+  has_selection <- !identical(context$selection[[1]]$text, "")
+  interface <- input$interface
+
+  res <-
+    cli::format_inline(c(
+      "You are a helpful but terse R data scientist tasked with ",
+       "{interface_to_gerund(interface)} code. You will be provided with some ",
+       "code context, then some instructions in the form 'Now, [INSTRUCTIONS]', ",
+       if (has_selection) {
+         c(
+           "a selection of code",
+           if (!identical(ext, "r")) {" (and possibly backticks and/or exposition)"},
+           ", "
+         )
+       },
+       "possibly some additional code context, and then some context ",
+       "on the current R environment."
+    ))
+
   if (identical(ext, "r")) {
-    res <- c(res, "Respond only with valid R code: no exposition, no backticks. ")
-  } else {
     res <- c(
       res,
-      paste0(
-        "When asked for code, provide only the requested code, no exposition nor ",
-        "backticks, unless explicitly asked. "
+      "",
+      "Respond _only_ with valid R code: no exposition, no backticks. "
+    )
+  } else if (has_selection & identical(interface, "Replace")) {
+    # not an R file but we're replacing a selection.
+    # have to nail the response format!
+    res <- c(
+      res,
+      cli::format_inline(
+        "The format of the selection will determine the format of your response. ",
+         "Is the contents of the selection entirely composed of R code? If so, ",
+         "reply only with R code. Is the selection surrounded with backticks? ",
+         "If so, include backticks in your reply. If not, reply only with the ",
+         "R code and no backticks."
+      )
+    )
+  } else {
+    # not necessarily an R file and interface could be Prefix or Suffix
+    res <- c(
+      res,
+      cli::format_inline(
+        "When asked for code, provide only the requested code, no exposition nor
+         backticks, unless explicitly asked. "
       )
     )
   }
@@ -85,7 +121,16 @@ construct_system_prompt <- function(context, input) {
     get_gander_style()
   )
 
-  paste(res, collapse = "")
+  paste(res, collapse = "\n")
+}
+
+interface_to_gerund <- function(interface) {
+  switch(
+    interface,
+    Replace = "updating",
+    Prefix = "prefixing",
+    Suffix = "suffixing"
+  )
 }
 
 construct_turn <- function(input, context) {
@@ -109,8 +154,9 @@ construct_turn_impl <- function(input, selection, code_context, env_context, ext
   res <- c(res, "", code_context[["before"]], "")
 
   if (!identical(selection, "")) {
-    res <- c(res, paste0("Now, ", input$text, ": "))
-    res <- c(res, "", selection, "")
+    res <- c(res, paste0("Now, ", input$text, " in the following selection: "))
+    res <- c(res, "", "<selection>", selection, "</selection>", "")
+    res <- discourage_backticks(res, selection, input$interface)
   } else {
     res <- c(res, paste0(gsub("\\.$", "", input$text), "."))
   }
@@ -126,4 +172,20 @@ construct_turn_impl <- function(input, selection, code_context, env_context, ext
   }
 
   paste0(res, collapse = "\n")
+}
+
+discourage_backticks <- function(res, selection, interface) {
+  if (isTRUE(identical(interface, "Replace") &
+             !grepl("```", selection, fixed = TRUE))) {
+    res <- c(
+      res,
+      "",
+      paste0(
+        "Do not include backticks in your response and reply only with the ",
+        "updated version of this selection."
+      )
+    )
+  }
+
+  res
 }

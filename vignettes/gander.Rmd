@@ -19,8 +19,8 @@ gander is a high performance and low friction chat experience for data scientist
 ```{r}
 #| label: gander-demo
 #| echo: false
-knitr::include_url("https://github.com/user-attachments/assets/17b57310-290f-4fd7-9e00-759b8b9b76ae
-", height = "400px")
+#| fig-alt: "A screencast of an RStudio session. A script called example.R is open in the editor with lines library(ggplot2), data(stackoverflow), and stackoverflow. After highlighting, I trigger the addin and ask to plot the data in plain language, at which code to plot the data using ggplot2 is streamed from an LLM into the source file that uses the correct column names and a minimal style. From there, I iteratively call the addin to refine the output."
+knitr::include_graphics("https://github.com/user-attachments/assets/4aead453-c2f2-446b-8e81-9154fd3baab0")
 ```
 
 This interface excels beyond a typical LLM chat in two notable ways:

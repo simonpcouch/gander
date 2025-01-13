@@ -266,11 +266,12 @@ You can adjust this with <code><a href="../reference/gander_options.html">?gande
 respect to style, gander has detected that we’re working in a
 <code>.R</code> file and thus writes “Respond only with valid R code” in
 the system prompt. Finally, gander inspects the code selection and
-describes variables that are in both the selection and the global
-environment. In this case, that’s only the <code>stackoverflow</code>
-data. Altogether, this allows for the model to tailor its response to
-the user’s development environment without the user needing to supply
-any context themselves.</p>
+describes variables from the global environment if they’re mentioned
+either in the selection or in the text inputted in the addin. In this
+case, that’s only the <code>stackoverflow</code> data. Altogether, this
+allows for the model to tailor its response to the user’s development
+environment without the user needing to supply any context
+themselves.</p>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside>

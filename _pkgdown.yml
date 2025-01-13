@@ -2,3 +2,10 @@ url: https://simonpcouch.github.io/gander/
 template:
   bootstrap: 5
 
+reference:
+  - title: "Reference"
+    desc: >
+      _Most gander users won't need to interface with any package functions directly._
+      _See the [Getting Started vignette](https://simonpcouch.github.io/gander/articles/gander.html) for an intro to using the package._
+    contents:
+      - starts_with("")

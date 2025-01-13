@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# gander <a href="https://simonpcouch.github.io/gander/"><img src="man/figures/logo.png" align="right" height="138" alt="gander website" /></a>
+# gander <a href="https://simonpcouch.github.io/gander/"><img src="man/figures/logo.png" align="right" height="240" alt="gander website" /></a>
 
 <!-- badges: start -->
 

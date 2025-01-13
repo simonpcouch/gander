@@ -92,32 +92,19 @@ construct_system_prompt <- function(context, input) {
       "Respond _only_ with valid R code: no exposition, no backticks. "
     )
   } else if (has_selection & identical(interface, "Replace")) {
-    # not an R file but we're replacing a selection.
-    # have to nail the response format!
     res <- c(
       res,
-      cli::format_inline(
-        "The format of the selection will determine the format of your response. ",
-         "Is the contents of the selection entirely composed of R code? If so, ",
-         "reply only with R code. Is the selection surrounded with backticks? ",
-         "If so, include backticks in your reply. If not, reply only with the ",
-         "R code and no backticks."
-      )
-    )
-  } else {
-    # not necessarily an R file and interface could be Prefix or Suffix
-    res <- c(
-      res,
-      cli::format_inline(
-        "When asked for code, provide only the requested code, no exposition nor
-         backticks, unless explicitly asked. "
-      )
+      readLines(system.file("snippets/markdown_response_format.md", package = "gander"))
     )
   }
 
   res <- c(
     res,
     "Always provide a minimal solution and refrain from unnecessary additions. ",
+    paste0(
+      "Your responses will be directly inserted into the document, so include",
+      " ONLY content that should appear in the final document. "
+    ),
     get_gander_style()
   )
 
@@ -154,9 +141,8 @@ construct_turn_impl <- function(input, selection, code_context, env_context, ext
   res <- c(res, "", code_context[["before"]], "")
 
   if (!identical(selection, "")) {
-    res <- c(res, paste0("Now, ", input$text, " in the following selection: "))
-    res <- c(res, "", "<selection>", selection, "</selection>", "")
-    res <- discourage_backticks(res, selection, input$interface)
+    res <- c(res, paste0("Now, ", input$text, ": "))
+    res <- c(res, "", "<selection>", paste0("   ", selection), "</selection>", "")
   } else {
     res <- c(res, paste0(gsub("\\.$", "", input$text), "."))
   }
@@ -172,20 +158,4 @@ construct_turn_impl <- function(input, selection, code_context, env_context, ext
   }
 
   paste0(res, collapse = "\n")
-}
-
-discourage_backticks <- function(res, selection, interface) {
-  if (isTRUE(identical(interface, "Replace") &
-             !grepl("```", selection, fixed = TRUE))) {
-    res <- c(
-      res,
-      "",
-      paste0(
-        "Do not include backticks in your response and reply only with the ",
-        "updated version of this selection."
-      )
-    )
-  }
-
-  res
 }

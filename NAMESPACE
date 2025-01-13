@@ -2,8 +2,6 @@
 
 export(gander_addin)
 export(gander_peek)
-export(gander_retry)
-export(gander_undo)
 import(rlang)
 importFrom(ellmer,content_image_file)
 importFrom(glue,glue)

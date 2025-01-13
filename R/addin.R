@@ -48,10 +48,6 @@ gander_addin <- function() {
   if (is_positron()) {
     .ps.ui.executeCommand("workbench.action.focusActiveEditorGroup")
   }
-  
-  cli::cli_inform(
-    "Use {.run gander::gander_undo()} or {.run gander::gander_retry()} if needed."
-  )
 
   invisible(assistant)
 }

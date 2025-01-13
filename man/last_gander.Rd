@@ -3,24 +3,15 @@
 \name{last_gander}
 \alias{last_gander}
 \alias{gander_peek}
-\alias{gander_undo}
-\alias{gander_retry}
 \title{Interface with the previous gander}
 \usage{
 gander_peek()
-
-gander_undo()
-
-gander_retry()
+}
+\value{
+The ellmer \code{Chat} object from the last assistant interaction,
+or \code{NULL} if no previous interaction exists.
 }
 \description{
-These functions interface with the most recent call to the
-gander assistant:
-\itemize{
-\item \code{gander_peek()} returns the ellmer \code{Chat} object (so you can see what
-happened under-the-hood).
-\item \code{gander_undo()} reverts the gander assistant's edits.
-\item \code{gander_retry()} submits the same input to the model, replacing the
-previous gander with new input.
-}
+\code{gander_peek()} returns the ellmer \code{Chat} object from the most recent call
+to the gander assistant (so you can see what happened under-the-hood).
 }

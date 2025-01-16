@@ -32,7 +32,8 @@ will automatically find the context it needs, though:
   interface with your R session to describe your computational
   environment.
 
-> \[!IMPORTANT\]  
+> **Important**
+>
 > For now, gander is particularly effective in `.R` files but struggles
 > to provide appropriately formatted responses in `.Qmd` and related
 > file formats.

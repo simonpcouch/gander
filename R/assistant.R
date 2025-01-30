@@ -5,20 +5,19 @@
 #'
 #' @section Choosing models:
 #'
-#' gander uses the `.gander_fn` and `.gander_args` options to configure which
-#' model powers the addin. `.gander_fn` is the name of an ellmer `chat_*()`
-#' function as a string, and `.gander_args` is a list of arguments to pass to
-#' that function. For example, to use OpenAI's GPT-4o-mini, you might write:
+#' gander uses the `.gander_chat` option to configure which model powers the
+#' addin. `.gander_chat` is a function that returns an ellmer Chat object.
+#' For example, to use OpenAI's GPT-4o-mini, you might write
 #'
-#' ```r
-#' options(
-#'   .gander_fn = "chat_openai",
-#'   .gander_args = list(model = "gpt-4o-mini")
-#' )
+#' ```
+#' options(.gander_chat = function() chat_claude())
 #' ```
 #'
-#' Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to always
-#' use the same model every time you start an R session.
+#' Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to
+#' always use the same model every time you start an R session.
+#'
+#' The gander package used to use options `.gander_fn` and `.gander_args`,
+#' but those are deprecated in favor of `.gander_chat`.
 #'
 #' @section Style/taste:
 #'
@@ -38,6 +37,7 @@
 #' @name gander_options
 #' @aliases .gander_fn
 #' @aliases .gander_args
+#' @aliases .gander_chat
 #' @aliases .gander_style
 NULL
 
@@ -52,15 +52,35 @@ initialize_assistant <- function(context, input) {
 }
 
 new_chat <- function(
-    fn = getOption(".gander_fn", default = "chat_claude"),
-    ...,
-    .ns = "ellmer"
+    .gander_chat = getOption(".gander_chat")
 ) {
-  args <- list(...)
-  default_args <- getOption(".gander_args", default = list())
-  args <- modifyList(default_args, args)
+  # first, check for old options
+  .gander_fn <- getOption(".gander_fn")
+  .gander_args <- getOption(".gander_args")
+  if (!is.null(.gander_fn) && is.null(.gander_chat)) {
+    new_option <- translate_gander_option(.gander_fn, .gander_args)
+    cli::cli_abort(c(
+      "{.pkg gander} now uses the option {cli::col_blue('.gander_chat')} instead
+       of {cli::col_blue('.gander_fn')} and {cli::col_blue('.gander_args')}.",
+      "i" = "Set {.code options(.gander_chat = {new_option})} instead."
+    ), call = NULL)
+  }
 
-  rlang::eval_bare(rlang::call2(fn, !!!args, .ns = .ns))
+  fetch_gander_chat(.gander_chat)
+}
+
+translate_gander_option <- function(.gander_fn, .gander_args) {
+  # two notes on why this is funky:
+  # * escapes brackets with doubling
+  # * substitutes in a call, which is enumerated unless deparsed
+  cli::format_inline(
+    "function() {{{deparse(rlang::call2(.gander_fn, !!!.gander_args))}}"
+  )
+}
+
+fetch_gander_chat <- function(.gander_chat) {
+  check_gander_chat(.gander_chat, call = NULL)
+  .gander_chat()
 }
 
 construct_system_prompt <- function(context, input) {

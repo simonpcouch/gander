@@ -4,6 +4,7 @@
 \alias{gander_options}
 \alias{.gander_fn}
 \alias{.gander_args}
+\alias{.gander_chat}
 \alias{.gander_style}
 \title{Options used by the gander package}
 \description{
@@ -12,19 +13,18 @@ The gander package makes use of a few notable user-facing options.
 \section{Choosing models}{
 
 
-gander uses the \code{.gander_fn} and \code{.gander_args} options to configure which
-model powers the addin. \code{.gander_fn} is the name of an ellmer \verb{chat_*()}
-function as a string, and \code{.gander_args} is a list of arguments to pass to
-that function. For example, to use OpenAI's GPT-4o-mini, you might write:
+gander uses the \code{.gander_chat} option to configure which model powers the
+addin. \code{.gander_chat} is a function that returns an ellmer Chat object.
+For example, to use OpenAI's GPT-4o-mini, you might write
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{options(
-  .gander_fn = "chat_openai",
-  .gander_args = list(model = "gpt-4o-mini")
-)
+\if{html}{\out{<div class="sourceCode">}}\preformatted{options(.gander_chat = function() chat_claude())
 }\if{html}{\out{</div>}}
 
-Paste that code in your \code{.Rprofile} via \code{usethis::edit_r_profile()} to always
-use the same model every time you start an R session.
+Paste that code in your \code{.Rprofile} via \code{usethis::edit_r_profile()} to
+always use the same model every time you start an R session.
+
+The gander package used to use options \code{.gander_fn} and \code{.gander_args},
+but those are deprecated in favor of \code{.gander_chat}.
 }
 
 \section{Style/taste}{

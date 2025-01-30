@@ -39,3 +39,36 @@ get_gander_style <- function() {
 
   default_gander_style()
 }
+
+# check functions --------------------------------------------------------------
+check_gander_chat <- function(x) {
+  # adapted from check_function, but errors a bit more informatively
+  if (is.null(x)) {
+    cli::cli_abort(
+      c(
+        "gander requires configuring an ellmer Chat with the `.gander_chat` option.",
+        "i" = "Set e.g.
+        {.code options(.gander_chat = function() {{ellmer::chat_claude()}})}
+        in your {.file ~/.Rprofile}.",
+        "i" = "See \"Choosing a model\" in
+        {.code vignette(\"gander\", package = \"gander\")} to learn more."
+      ),
+      call = NULL
+    )
+  }
+
+  res <- x()
+
+  if (!inherits(res, "Chat")) {
+    cli::cli_abort(
+      c(
+        "The option {.code .gander_chat} must be a function that returns
+         an ellmer Chat object.",
+        "The function returned {.obj_type_friendly {res}} instead."
+      ),
+      call = NULL
+    )
+  }
+
+  invisible(NULL)
+}

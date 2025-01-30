@@ -1,52 +1,28 @@
-test_that("new_chat() uses claude by default", {
-  withr::local_options(
-    .gander_fn = NULL,
-    .gander_args = NULL
-  )
-
-  testthat::with_mocked_bindings(
-    result <- new_chat(),
-    eval_bare = function(call, ...) call,
-    .package = "rlang"
-  )
-
-  expect_equal(call_name(result), "chat_claude")
-  expect_equal(call_ns(result), "ellmer")
-})
-
-test_that("new_chat() uses custom function and args", {
+test_that("new_chat fails informatively when old options are present", {
   withr::local_options(
     .gander_fn = "chat_openai",
-    .gander_args = list(model = "gpt-4o")
+    .gander_args = list(model = "gpt-4o"),
+    .gander_chat = NULL
   )
 
-  testthat::with_mocked_bindings(
-    result <- new_chat(api_args = list(temperature = 0.7)),
-    eval_bare = function(call, ...) call,
-    .package = "rlang"
-  )
+  expect_snapshot(new_chat(), error = TRUE)
 
-  result_args <- call_args(result)
-  expect_equal(result_args$model, "gpt-4o")
-  expect_equal(result_args$api_args$temperature, 0.7)
-  expect_equal(call_name(result), "chat_openai")
-  expect_equal(call_ns(result), "ellmer")
+  # still errors well with no (optional) .gander_args
+  withr::local_options(.gander_args = NULL)
+  expect_snapshot(new_chat(), error = TRUE)
 })
 
-test_that("new_chat() supplied args override default args", {
-  withr::local_options(
-    .gander_args = list(temperature = 0.7)
-  )
+test_that("fetch_gander_chat errors informatively with bad `.gander_chat`", {
+  skip_if(identical(Sys.getenv("OPENAI_API_KEY"), ""))
+  withr::local_options(.gander_fn = NULL, .gander_args = NULL, )
 
-  testthat::with_mocked_bindings(
-    result <- new_chat(temperature = 0.9),
-    eval_bare = function(call, ...) call,
-    .package = "rlang"
-  )
+  # .gander_chat is the Chat itself
+  expect_snapshot(new_chat(.gander_chat = ellmer::chat_openai()), error = TRUE)
 
-  result_args <- call_args(result)
-  expect_equal(result_args$temperature, 0.9)
+  # .gander_chat is a function that returns the wrong type of thing
+  expect_snapshot(new_chat(.gander_chat = function() {"boop"}), error = TRUE)
 })
+
 
 test_that("construct_system_prompt works", {
   # r files
@@ -139,4 +115,3 @@ test_that("construct_turn_impl includes env context when present", {
 
   expect_snapshot(cat(result))
 })
-

@@ -52,3 +52,16 @@ test_that("get_gander_style validates option value", {
   expect_snapshot(get_gander_style(), error = TRUE)
 })
 
+test_that("check_gander_chat errors informatively with bad `.gander_chat`", {
+  skip_if(identical(Sys.getenv("OPENAI_API_KEY"), ""))
+  withr::local_options(.gander_fn = NULL, .gander_args = NULL, )
+
+  # .gander_chat is the Chat itself
+  expect_snapshot(new_chat(.gander_chat = ellmer::chat_openai()), error = TRUE)
+
+  # .gander_chat is a function that returns the wrong type of thing
+  expect_snapshot(new_chat(.gander_chat = function() {"boop"}), error = TRUE)
+
+  # no .gander_chat at all
+  expect_snapshot(new_chat(.gander_chat = NULL), error = TRUE)
+})

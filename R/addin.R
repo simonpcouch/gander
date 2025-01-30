@@ -13,6 +13,9 @@
 gander_addin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
 
+  # before opening up the app, check that the model will initialize successfully
+  chat <- new_chat()
+
   # suppress "Listening on..." message and rethrow errors with new context
   try_fetch(
     suppressMessages(input <- gander_addin_impl(
@@ -29,7 +32,7 @@ gander_addin <- function() {
     cli::cli_abort("Please type something to receive a response.", call = NULL)
   }
 
-  assistant <- initialize_assistant(context = context, input = input)
+  assistant <- initialize_assistant(context = context, input = input, chat = chat)
   turn <- construct_turn(input = input, context = context)
 
   edits <-

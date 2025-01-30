@@ -41,9 +41,7 @@
 #' @aliases .gander_style
 NULL
 
-initialize_assistant <- function(context, input) {
-  chat <- new_chat()
-
+initialize_assistant <- function(context, input, chat) {
   system_prompt <- construct_system_prompt(context, input)
 
   chat$set_system_prompt(system_prompt)
@@ -79,7 +77,7 @@ translate_gander_option <- function(.gander_fn, .gander_args) {
 }
 
 fetch_gander_chat <- function(.gander_chat) {
-  check_gander_chat(.gander_chat, call = NULL)
+  check_gander_chat(.gander_chat)
   .gander_chat()
 }
 

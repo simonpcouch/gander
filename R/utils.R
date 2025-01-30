@@ -46,9 +46,10 @@ check_gander_chat <- function(x) {
   if (is.null(x)) {
     cli::cli_abort(
       c(
-        "gander requires configuring an ellmer Chat with the `.gander_chat` option.",
+        "gander requires configuring an ellmer Chat with the
+        {cli::col_blue('.gander_chat')} option.",
         "i" = "Set e.g.
-        {.code options(.gander_chat = function() {{ellmer::chat_claude()}})}
+        {.code {cli::col_green('options(.gander_chat = function() ellmer::chat_claude())')}}
         in your {.file ~/.Rprofile}.",
         "i" = "See \"Choosing a model\" in
         {.code vignette(\"gander\", package = \"gander\")} to learn more."
@@ -57,13 +58,28 @@ check_gander_chat <- function(x) {
     )
   }
 
+  if (!inherits(x, "function")) {
+    if (inherits(x, "Chat")) {
+      cli::cli_abort(
+        c(
+          "The {cli::col_blue('.gander_chat')} option must be a function that
+           returns a Chat, not the Chat object itself.",
+          "i" = "e.g. use {.code function(x) chat_*()} rather than {.code chat_*()}."
+        ),
+        call = NULL
+      )
+    }
+
+    check_function(x)
+  }
+
   res <- x()
 
   if (!inherits(res, "Chat")) {
     cli::cli_abort(
       c(
-        "The option {.code .gander_chat} must be a function that returns
-         an ellmer Chat object.",
+        "The option {cli::col_blue('.gander_chat')} must be a function that
+         returns an ellmer Chat object.",
         "The function returned {.obj_type_friendly {res}} instead."
       ),
       call = NULL

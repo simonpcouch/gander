@@ -10,7 +10,7 @@
 #' For example, to use OpenAI's GPT-4o-mini, you might write
 #'
 #' ```
-#' options(.gander_chat = function() chat_claude())
+#' options(.gander_chat = function() ellmer::chat_claude())
 #' ```
 #'
 #' Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to

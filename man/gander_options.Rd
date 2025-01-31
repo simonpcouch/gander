@@ -17,7 +17,7 @@ gander uses the \code{.gander_chat} option to configure which model powers the
 addin. \code{.gander_chat} is a function that returns an ellmer Chat object.
 For example, to use OpenAI's GPT-4o-mini, you might write
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{options(.gander_chat = function() chat_claude())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{options(.gander_chat = function() ellmer::chat_claude())
 }\if{html}{\out{</div>}}
 
 Paste that code in your \code{.Rprofile} via \code{usethis::edit_r_profile()} to

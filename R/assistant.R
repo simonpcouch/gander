@@ -88,7 +88,7 @@ fetch_gander_chat <- function(x) {
         {cli::col_blue('.gander_chat')} option.",
         "i" = "Set e.g.
         {.code {cli::col_green('options(.gander_chat = function() ellmer::chat_claude())')}}
-        in your {.file ~/.Rprofile}.",
+        in your {.file ~/.Rprofile} and restart R.",
         "i" = "See \"Choosing a model\" in
         {.code vignette(\"gander\", package = \"gander\")} to learn more."
       ),

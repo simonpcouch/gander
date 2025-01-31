@@ -38,7 +38,7 @@
       .res <- new_chat(.gander_chat = NULL)
     Message
       ! gander requires configuring an ellmer Chat with the .gander_chat option.
-      i Set e.g. `options(.gander_chat = function() ellmer::chat_claude())` in your '~/.Rprofile'.
+      i Set e.g. `options(.gander_chat = function() ellmer::chat_claude())` in your '~/.Rprofile' and restart R.
       i See "Choosing a model" in `vignette("gander", package = "gander")` to learn more.
 
 # construct_turn_impl formats message with file extension

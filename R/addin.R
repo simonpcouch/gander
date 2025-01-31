@@ -16,6 +16,10 @@ gander_addin <- function() {
   # before opening up the app, check that the model will initialize successfully
   chat <- new_chat()
 
+  if (is.null(chat)) {
+    return()
+  }
+
   # suppress "Listening on..." message and rethrow errors with new context
   try_fetch(
     suppressMessages(input <- gander_addin_impl(

@@ -57,11 +57,12 @@ new_chat <- function(
   .gander_args <- getOption(".gander_args")
   if (!is.null(.gander_fn) && is.null(.gander_chat)) {
     new_option <- translate_gander_option(.gander_fn, .gander_args)
-    cli::cli_abort(c(
-      "{.pkg gander} now uses the option {cli::col_blue('.gander_chat')} instead
+    cli::cli_inform(c(
+      "!" = "{.pkg gander} now uses the option {cli::col_blue('.gander_chat')} instead
        of {cli::col_blue('.gander_fn')} and {cli::col_blue('.gander_args')}.",
       "i" = "Set {.code options(.gander_chat = {new_option})} instead."
     ), call = NULL)
+    return(NULL)
   }
 
   fetch_gander_chat(.gander_chat)
@@ -76,9 +77,63 @@ translate_gander_option <- function(.gander_fn, .gander_args) {
   )
 }
 
-fetch_gander_chat <- function(.gander_chat) {
-  check_gander_chat(.gander_chat)
-  .gander_chat()
+# this function fails with messages and a NULL return value rather than errors
+# so that, when called from inside the addin, there's no dialog box raised by RStudio
+fetch_gander_chat <- function(x) {
+  # adapted from check_function, but errors a bit more informatively
+  if (is.null(x)) {
+    cli::cli_inform(
+      c(
+        "!" = "gander requires configuring an ellmer Chat with the
+        {cli::col_blue('.gander_chat')} option.",
+        "i" = "Set e.g.
+        {.code {cli::col_green('options(.gander_chat = function() ellmer::chat_claude())')}}
+        in your {.file ~/.Rprofile}.",
+        "i" = "See \"Choosing a model\" in
+        {.code vignette(\"gander\", package = \"gander\")} to learn more."
+      ),
+      call = NULL
+    )
+    return(NULL)
+  }
+
+  if (!inherits(x, "function")) {
+    if (inherits(x, "Chat")) {
+      cli::cli_inform(
+        c(
+          "!" = "The {cli::col_blue('.gander_chat')} option must be a function that
+           returns a Chat, not the Chat object itself.",
+          "i" = "e.g. use {.code function(x) chat_*()} rather than {.code chat_*()}."
+        ),
+        call = NULL
+      )
+    } else {
+      cli::cli_inform(
+        c(
+          "!" = "The {cli::col_blue('.gander_chat')} option must be a function that
+           returns a Chat, not {.obj_type_friendly {x}}."
+        ),
+        call = NULL
+      )
+    }
+
+    return(NULL)
+  }
+
+  res <- x()
+
+  if (!inherits(res, "Chat")) {
+    cli::cli_inform(
+      c(
+        "!" = "The option {cli::col_blue('.gander_chat')} must be a function that
+         returns an ellmer Chat object.",
+        "The function returned {.obj_type_friendly {res}} instead."
+      ),
+      call = NULL
+    )
+  }
+
+  res
 }
 
 construct_system_prompt <- function(context, input) {

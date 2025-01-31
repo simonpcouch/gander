@@ -5,11 +5,31 @@ test_that("new_chat fails informatively when old options are present", {
     .gander_chat = NULL
   )
 
-  expect_snapshot(new_chat(), error = TRUE)
+  expect_snapshot(.res <- new_chat())
 
   # still errors well with no (optional) .gander_args
   withr::local_options(.gander_args = NULL)
-  expect_snapshot(new_chat(), error = TRUE)
+  expect_snapshot(.res <- new_chat())
+})
+
+test_that("fetch_gander_chat fails informatively with bad `.gander_chat`", {
+  skip_if(identical(Sys.getenv("OPENAI_API_KEY"), ""))
+  withr::local_options(.gander_fn = NULL, .gander_args = NULL, )
+
+  # .gander_chat is the Chat itself
+  expect_snapshot(
+    .res <- new_chat(.gander_chat = ellmer::chat_openai(model = "gpt-4o"))
+  )
+
+  # .gander_chat is a function that returns the wrong type of thing
+  expect_snapshot(
+    .res <- new_chat(.gander_chat = function() {"boop"})
+  )
+
+  # no .gander_chat at all
+  expect_snapshot(
+    .res <- new_chat(.gander_chat = NULL)
+  )
 })
 
 test_that("construct_system_prompt works", {
@@ -103,3 +123,4 @@ test_that("construct_turn_impl includes env context when present", {
 
   expect_snapshot(cat(result))
 })
+

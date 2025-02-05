@@ -51,4 +51,3 @@ test_that("get_gander_style validates option value", {
   withr::local_options(.gander_style = c("a", "b"))
   expect_snapshot(get_gander_style(), error = TRUE)
 })
-

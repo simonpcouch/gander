@@ -1,3 +1,36 @@
+# new_chat fails informatively when old options are present
+
+    Code
+      .res <- new_chat()
+    Message
+      ! gander now uses the option .gander_chat instead of .gander_fn and .gander_args.
+      i Set `options(.gander_chat = chat_openai(model = "gpt-4o"))` instead.
+
+---
+
+    Code
+      .res <- new_chat()
+    Message
+      ! gander now uses the option .gander_chat instead of .gander_fn and .gander_args.
+      i Set `options(.gander_chat = chat_openai())` instead.
+
+# fetch_gander_chat fails informatively with bad `.gander_chat`
+
+    Code
+      .res <- new_chat(.gander_chat = "boop")
+    Message
+      ! The option .gander_chat must be an ellmer Chat object, not a string.
+      i See "Choosing a model" in `vignette("gander", package = "gander")` to learn more.
+
+---
+
+    Code
+      .res <- new_chat(.gander_chat = NULL)
+    Message
+      ! gander requires configuring an ellmer Chat with the .gander_chat option.
+      i Set e.g. `options(.gander_chat = ellmer::chat_claude())` in your '~/.Rprofile' and restart R.
+      i See "Choosing a model" in `vignette("gander", package = "gander")` to learn more.
+
 # construct_turn_impl formats message with file extension
 
     Code

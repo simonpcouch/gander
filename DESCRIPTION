@@ -1,6 +1,6 @@
 Package: gander
 Title: High performance, low friction LLM chat for data scientists
-Version: 0.0.0.9000
+Version: 0.0.0.9001
 Authors@R: 
     person("Simon", "Couch", , "simon.couch@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5676-5107"))

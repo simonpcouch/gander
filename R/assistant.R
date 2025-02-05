@@ -102,7 +102,7 @@ fetch_gander_chat <- function(x) {
     return(NULL)
   }
 
-  x
+  x$clone()
 }
 
 construct_system_prompt <- function(context, input) {

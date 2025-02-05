@@ -51,9 +51,8 @@ Then, ensure that you have an
 variable set, and you’re ready to go. If you’d like to use an LLM other
 than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s GPT-4o or a local
 ollama model—and then set the `.gander_chat` option in your `.Rprofile`,
-like
-`options(.gander_chat = function() ellmer::chat_openai(model = "gpt-4o"))`
-to use OpenAI’s GPT-4o.
+like `options(.gander_chat = ellmer::chat_openai(model = "gpt-4o"))` to
+use OpenAI’s GPT-4o.
 
 The gander assistant is interfaced with the via the gander addin. For
 easiest access, we recommend registering the gander addin to a keyboard

@@ -6,11 +6,11 @@
 #' @section Choosing models:
 #'
 #' gander uses the `.gander_chat` option to configure which model powers the
-#' addin. `.gander_chat` is a function that returns an ellmer Chat object.
+#' addin. `.gander_chat` is an ellmer Chat object.
 #' For example, to use OpenAI's GPT-4o-mini, you might write
 #'
 #' ```
-#' options(.gander_chat = function() ellmer::chat_claude())
+#' options(.gander_chat = ellmer::chat_claude())
 #' ```
 #'
 #' Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to
@@ -56,25 +56,17 @@ new_chat <- function(
   .gander_fn <- getOption(".gander_fn")
   .gander_args <- getOption(".gander_args")
   if (!is.null(.gander_fn) && is.null(.gander_chat)) {
-    new_option <- translate_gander_option(.gander_fn, .gander_args)
     cli::cli_inform(c(
       "!" = "{.pkg gander} now uses the option {cli::col_blue('.gander_chat')} instead
        of {cli::col_blue('.gander_fn')} and {cli::col_blue('.gander_args')}.",
-      "i" = "Set {.code options(.gander_chat = {new_option})} instead."
+      "i" = "Set
+      {.code options(.gander_chat = {deparse(rlang::call2(.gander_fn, !!!.gander_args))})}
+      instead."
     ), call = NULL)
     return(NULL)
   }
 
   fetch_gander_chat(.gander_chat)
-}
-
-translate_gander_option <- function(.gander_fn, .gander_args) {
-  # two notes on why this is funky:
-  # * escapes brackets with doubling
-  # * substitutes in a call, which is enumerated unless deparsed
-  cli::format_inline(
-    "function() {{{deparse(rlang::call2(.gander_fn, !!!.gander_args))}}"
-  )
 }
 
 # this function fails with messages and a NULL return value rather than errors
@@ -87,7 +79,7 @@ fetch_gander_chat <- function(x) {
         "!" = "gander requires configuring an ellmer Chat with the
         {cli::col_blue('.gander_chat')} option.",
         "i" = "Set e.g.
-        {.code {cli::col_green('options(.gander_chat = function() ellmer::chat_claude())')}}
+        {.code {cli::col_green('options(.gander_chat = ellmer::chat_claude())')}}
         in your {.file ~/.Rprofile} and restart R.",
         "i" = "See \"Choosing a model\" in
         {.code vignette(\"gander\", package = \"gander\")} to learn more."
@@ -97,43 +89,20 @@ fetch_gander_chat <- function(x) {
     return(NULL)
   }
 
-  if (!inherits(x, "function")) {
-    if (inherits(x, "Chat")) {
-      cli::cli_inform(
-        c(
-          "!" = "The {cli::col_blue('.gander_chat')} option must be a function that
-           returns a Chat, not the Chat object itself.",
-          "i" = "e.g. use {.code function(x) chat_*()} rather than {.code chat_*()}."
-        ),
-        call = NULL
-      )
-    } else {
-      cli::cli_inform(
-        c(
-          "!" = "The {cli::col_blue('.gander_chat')} option must be a function that
-           returns a Chat, not {.obj_type_friendly {x}}."
-        ),
-        call = NULL
-      )
-    }
-
-    return(NULL)
-  }
-
-  res <- x()
-
-  if (!inherits(res, "Chat")) {
+  if (!inherits(x, "Chat")) {
     cli::cli_inform(
       c(
-        "!" = "The option {cli::col_blue('.gander_chat')} must be a function that
-         returns an ellmer Chat object.",
-        "The function returned {.obj_type_friendly {res}} instead."
+        "!" = "The option {cli::col_blue('.gander_chat')} must be an ellmer
+        Chat object, not {.obj_type_friendly {x}}.",
+        "i" = "See \"Choosing a model\" in
+        {.code vignette(\"gander\", package = \"gander\")} to learn more."
       ),
       call = NULL
     )
+    return(NULL)
   }
 
-  res
+  x
 }
 
 construct_system_prompt <- function(context, input) {

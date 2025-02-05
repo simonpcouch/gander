@@ -16,20 +16,17 @@ test_that("fetch_gander_chat fails informatively with bad `.gander_chat`", {
   skip_if(identical(Sys.getenv("OPENAI_API_KEY"), ""))
   withr::local_options(.gander_fn = NULL, .gander_args = NULL, )
 
-  # .gander_chat is the Chat itself
+  # .gander_chat is the wrong type of thing
   expect_snapshot(
-    .res <- new_chat(.gander_chat = ellmer::chat_openai(model = "gpt-4o"))
+    .res <- new_chat(.gander_chat = "boop")
   )
-
-  # .gander_chat is a function that returns the wrong type of thing
-  expect_snapshot(
-    .res <- new_chat(.gander_chat = function() {"boop"})
-  )
+  expect_null(.res)
 
   # no .gander_chat at all
   expect_snapshot(
     .res <- new_chat(.gander_chat = NULL)
   )
+  expect_null(.res)
 })
 
 test_that("construct_system_prompt works", {

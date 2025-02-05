@@ -33,7 +33,7 @@ This interface excels beyond a typical LLM chat in two notable ways:
 
 The gander addin supports any model supported by [ellmer](https://ellmer.tidyverse.org/). When choosing a model for use with gander, you'll want to the use the most performant model possible that satisfies your privacy needs; gander automatically passes along your code and the objects in your R environment to your chosen model, so it's especially important to consider data privacy when using LLMs with gander.
 
-gander uses the `.gander_chat` option to configure which model powers the addin. `.gander_chat` is an ellmer Chat object. For example, to use OpenAI's GPT-4o-mini, you might write `options(.gander_chat = ellmer::chat_claude())`. Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to always use the same model every time you start an R session.
+gander uses the `.gander_chat` option to configure which model powers the addin; just set the option to whatever your usual ellmer setup is. For example, to use Anthropic's Claude, you might write `options(.gander_chat = ellmer::chat_claude())`. Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to always use the same model every time you start an R session.
 
 If you're using ellmer inside a organization, you'll be limited to what your IT department allows, which is likely to be one provided by a big cloud provider, e.g. `chat_azure()`, `chat_bedrock()`, `chat_databricks()`, or `chat_snowflake()`. If you're using ellmer for your own exploration, you'll have a lot more freedom, so we have a few recommendations to help you get started:
 

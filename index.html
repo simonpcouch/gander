@@ -29,7 +29,7 @@
 
     <a class="navbar-brand me-2" href="index.html">gander</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -40,6 +40,7 @@
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="articles/gander.html">Get started</a></li>
 <li class="nav-item"><a class="nav-link" href="reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="news/index.html">Changelog</a></li>
       </ul>
 <ul class="navbar-nav">
 <li class="nav-item"><form class="form-inline" role="search">
@@ -79,7 +80,7 @@
 <p>You can install gander like so:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">pak</span><span class="fu">::</span><span class="fu"><a href="https://pak.r-lib.org/reference/pak.html" class="external-link">pak</a></span><span class="op">(</span><span class="st">"simonpcouch/gander"</span><span class="op">)</span></span></code></pre></div>
-<p>Then, ensure that you have an <a href="https://console.anthropic.com/" class="external-link"><code>ANTHROPIC_API_KEY</code></a> environment variable set, and you’re ready to go. If you’d like to use an LLM other than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s GPT-4o or a local ollama model—and then set the <code>.gander_fn</code> and <code>.gander_args</code> options in your <code>.Rprofile</code>, like <code>options(.gander_fn = "chat_openai")</code> to use OpenAI’s GPT-4o or <code>options(.gander_fn = "chat_openai", .gander_args = list(model = "gpt-4o-mini"))</code> to use their GPT-4o-mini model.</p>
+<p>Then, ensure that you have an <a href="https://console.anthropic.com/" class="external-link"><code>ANTHROPIC_API_KEY</code></a> environment variable set, and you’re ready to go. If you’d like to use an LLM other than Anthropic’s Claude 3.5 Sonnet—like OpenAI’s GPT-4o or a local ollama model—and then set the <code>.gander_chat</code> option in your <code>.Rprofile</code>, like <code>options(.gander_chat = ellmer::chat_openai(model = "gpt-4o"))</code> to use OpenAI’s GPT-4o.</p>
 <p>The gander assistant is interfaced with the via the gander addin. For easiest access, we recommend registering the gander addin to a keyboard shortcut.</p>
 <p><strong>In RStudio</strong>, navigate to <code>Tools &gt; Modify Keyboard Shortcuts &gt; Search "gander"</code>—we suggest <code>Ctrl+Alt+G</code> (or <code>Ctrl+Cmd+G</code> on macOS).</p>
 <p><strong>In Positron</strong>, you’ll need to open the command palette, run “Open Keyboard Shortcuts (JSON)”, and paste the following into your <code>keybindings.json</code>:</p>

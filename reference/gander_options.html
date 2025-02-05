@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">gander</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.0.0.9001</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -17,6 +17,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto"><li class="nav-item"><a class="nav-link" href="../articles/gander.html">Get started</a></li>
 <li class="active nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
+<li class="nav-item"><a class="nav-link" href="../news/index.html">Changelog</a></li>
       </ul><ul class="navbar-nav"><li class="nav-item"><form class="form-inline" role="search">
  <input class="form-control" type="search" name="search-input" id="search-input" autocomplete="off" aria-label="Search site" placeholder="Search for" data-search-index="../search.json"></form></li>
 <li class="nav-item"><a class="external-link nav-link" href="https://github.com/simonpcouch/gander/" aria-label="GitHub"><span class="fa fab fa-github fa-lg"></span></a></li>
@@ -42,16 +43,14 @@
 
 
 
-<p>gander uses the <code>.gander_fn</code> and <code>.gander_args</code> options to configure which
-model powers the addin. <code>.gander_fn</code> is the name of an ellmer <code>chat_*()</code>
-function as a string, and <code>.gander_args</code> is a list of arguments to pass to
-that function. For example, to use OpenAI's GPT-4o-mini, you might write:</p>
-<p></p><div class="sourceCode r"><pre><code><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
-<span>  .gander_fn <span class="op">=</span> <span class="st">"chat_openai"</span>,</span>
-<span>  .gander_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>model <span class="op">=</span> <span class="st">"gpt-4o-mini"</span><span class="op">)</span></span>
-<span><span class="op">)</span></span></code></pre><p></p></div>
-<p>Paste that code in your <code>.Rprofile</code> via <code>usethis::edit_r_profile()</code> to always
-use the same model every time you start an R session.</p>
+<p>gander uses the <code>.gander_chat</code> option to configure which model powers the
+addin. <code>.gander_chat</code> is an ellmer Chat object.
+For example, to use OpenAI's GPT-4o-mini, you might write</p>
+<p></p><div class="sourceCode"><pre><code><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">options</span>(<span class="at">.gander_chat =</span> ellmer<span class="sc">::</span><span class="fu">chat_claude</span>())</span></code></pre><p></p></div>
+<p>Paste that code in your <code>.Rprofile</code> via <code>usethis::edit_r_profile()</code> to
+always use the same model every time you start an R session.</p>
+<p>The gander package used to use options <code>.gander_fn</code> and <code>.gander_args</code>,
+but those are deprecated in favor of <code>.gander_chat</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="style-taste">Style/taste<a class="anchor" aria-label="anchor" href="#style-taste"></a></h2>

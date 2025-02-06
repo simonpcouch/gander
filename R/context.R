@@ -9,7 +9,13 @@ fetch_code_context <- function(context) {
 
   before <- contents[seq_len(end_before)]
   after <- contents[seq(start_after, length(contents))]
-  list(before = backtick_possibly(before), after = backtick_possibly(after))
+  list(
+    before = backtick_possibly(before), 
+    after = backtick_possibly(after),
+    selection = backtick_possibly(
+      contents[seq(selection[[1]]$range$start[1], selection[[1]]$range$end[1])]
+    )
+  )
 }
 
 backtick_possibly <- function(x) {

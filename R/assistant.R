@@ -141,7 +141,6 @@ construct_turn <- function(
 
   construct_turn_impl(
     user_prompt = user_prompt,
-    selection = selection,
     code_context = code_context,
     env_context = env_context,
     ext = file_extension(context$path)
@@ -149,22 +148,25 @@ construct_turn <- function(
 }
 
 # all inputs are just character vectors
-construct_turn_impl <- function(user_prompt, selection, code_context, env_context, ext) {
+construct_turn_impl <- function(user_prompt, code_context, env_context, ext) {
   res <- c()
 
   code_before <- code_context[["before"]]
   code_after <- code_context[["after"]]
+  selection <- code_context[["selection"]]
 
   if (length(code_before) > 0 && any(nzchar(code_before))) {
     res <- paste0("Up to this point, the contents of my ", ext, " file reads: ")
-    res <- c(res, "", code_before, "")
+    res <- c(res, "", code_before)
   }
 
+  user_prompt <- sub("\\.$", "", user_prompt)
+
   if (!identical(selection, "")) {
-    res <- c(res, paste0("Now, ", user_prompt, ": "))
-    res <- c(res, "", selection, "")
+    res <- c(res, "", paste0("Now, ", user_prompt, ": "))
+    res <- c(res, "", selection)
   } else {
-    res <- c(res, paste0(gsub("\\.$", "", user_prompt), "."))
+    res <- c(res, "", paste0(user_prompt, "."))
   }
 
   if (length(code_after) > 0 && any(nzchar(code_after))) {
@@ -174,7 +176,7 @@ construct_turn_impl <- function(user_prompt, selection, code_context, env_contex
 
   if (!identical(env_context, character(0))) {
     res <- c(res, "", "Here's some information about the objects in my R environment: ")
-    res <- c(res, "", env_context, "")
+    res <- c(res, "", env_context)
   }
 
   paste0(res, collapse = "\n")

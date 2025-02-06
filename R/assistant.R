@@ -150,6 +150,15 @@ construct_turn <- function(
 
 # all inputs are just character vectors
 construct_turn_impl <- function(user_prompt, selection, code_context, env_context, ext) {
+  res <- c()
+
+  code_before <- code_context[["before"]]
+  code_after <- code_context[["after"]]
+
+  if (length(code_before) > 0 && any(nzchar(code_before))) {
+    res <- paste0("Up to this point, the contents of my ", ext, " file reads: ")
+    res <- c(res, "", code_before, "")
+  }
 
   if (!identical(selection, "")) {
     res <- c(res, paste0("Now, ", user_prompt, ": "))
@@ -158,9 +167,9 @@ construct_turn_impl <- function(user_prompt, selection, code_context, env_contex
     res <- c(res, paste0(gsub("\\.$", "", user_prompt), "."))
   }
 
-  if (!identical(code_context[["after"]], character(0))) {
+  if (length(code_after) > 0 && any(nzchar(code_after))) {
     res <- c(res, "", "For context, the rest of the file reads: ", "")
-    res <- c(res, code_context[["after"]])
+    res <- c(res, code_after)
   }
 
   if (!identical(env_context, character(0))) {

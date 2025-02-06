@@ -130,15 +130,17 @@ construct_system_prompt <- function(context, input) {
   paste(res, collapse = "")
 }
 
-construct_turn <- function(input, context) {
+construct_turn <- function(
+  user_prompt,
+  context = rstudioapi::getActiveDocumentContext()
+) {
   selection <- rstudioapi::primary_selection(context)[["text"]]
 
   code_context <- fetch_code_context(context)
-  env_context <- fetch_env_context(selection, input$text, env = global_env())
+  env_context <- fetch_env_context(selection, user_prompt, env = global_env())
 
   construct_turn_impl(
-    input = input,
-    selection = selection,
+    user_prompt = user_prompt,
     code_context = code_context,
     env_context = env_context,
     ext = file_extension(context$path)
@@ -146,25 +148,35 @@ construct_turn <- function(input, context) {
 }
 
 # all inputs are just character vectors
-construct_turn_impl <- function(input, selection, code_context, env_context, ext) {
-  res <- paste0("Up to this point, the contents of my ", ext, " file reads: ")
-  res <- c(res, "", code_context[["before"]], "")
+construct_turn_impl <- function(user_prompt, code_context, env_context, ext) {
+  res <- c()
 
-  if (!identical(selection, "")) {
-    res <- c(res, paste0("Now, ", input$text, ": "))
-    res <- c(res, "", selection, "")
-  } else {
-    res <- c(res, paste0(gsub("\\.$", "", input$text), "."))
+  code_before <- code_context[["before"]]
+  code_after <- code_context[["after"]]
+  selection <- code_context[["selection"]]
+
+  if (length(code_before) > 0 && any(nzchar(code_before))) {
+    res <- paste0("Up to this point, the contents of my ", ext, " file reads: ")
+    res <- c(res, "", code_before)
   }
 
-  if (!identical(code_context[["after"]], character(0))) {
+  user_prompt <- sub("\\.$", "", user_prompt)
+
+  if (!identical(selection, "")) {
+    res <- c(res, "", paste0("Now, ", user_prompt, ": "))
+    res <- c(res, "", selection)
+  } else {
+    res <- c(res, "", paste0(user_prompt, "."))
+  }
+
+  if (length(code_after) > 0 && any(nzchar(code_after))) {
     res <- c(res, "", "For context, the rest of the file reads: ", "")
-    res <- c(res, code_context[["after"]])
+    res <- c(res, code_after)
   }
 
   if (!identical(env_context, character(0))) {
     res <- c(res, "", "Here's some information about the objects in my R environment: ")
-    res <- c(res, "", env_context, "")
+    res <- c(res, "", env_context)
   }
 
   paste0(res, collapse = "\n")

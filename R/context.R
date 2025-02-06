@@ -4,9 +4,18 @@ fetch_code_context <- function(context) {
   contents <- context$contents
   selection <- context$selection
 
-  before <- contents[seq_len(selection[[1]]$range$start[1] - 1)]
-  after <- contents[seq(selection[[1]]$range$end[1] + 1, length(contents))]
-  list(before = backtick_possibly(before), after = backtick_possibly(after))
+  end_before <- selection[[1]]$range$start[1] - 1
+  start_after <- min(selection[[1]]$range$end[1] + 1, length(contents))
+
+  before <- contents[seq_len(end_before)]
+  after <- contents[seq(start_after, length(contents))]
+  list(
+    before = backtick_possibly(before), 
+    after = backtick_possibly(after),
+    selection = backtick_possibly(
+      contents[seq(selection[[1]]$range$start[1], selection[[1]]$range$end[1])]
+    )
+  )
 }
 
 backtick_possibly <- function(x) {

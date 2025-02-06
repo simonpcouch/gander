@@ -130,14 +130,17 @@ construct_system_prompt <- function(context, input) {
   paste(res, collapse = "")
 }
 
-construct_turn <- function(input, context) {
+construct_turn <- function(
+  user_prompt,
+  context = rstudioapi::getActiveDocumentContext()
+) {
   selection <- rstudioapi::primary_selection(context)[["text"]]
 
   code_context <- fetch_code_context(context)
-  env_context <- fetch_env_context(selection, input$text, env = global_env())
+  env_context <- fetch_env_context(selection, user_prompt, env = global_env())
 
   construct_turn_impl(
-    input = input,
+    user_prompt = user_prompt,
     selection = selection,
     code_context = code_context,
     env_context = env_context,
@@ -146,15 +149,13 @@ construct_turn <- function(input, context) {
 }
 
 # all inputs are just character vectors
-construct_turn_impl <- function(input, selection, code_context, env_context, ext) {
-  res <- paste0("Up to this point, the contents of my ", ext, " file reads: ")
-  res <- c(res, "", code_context[["before"]], "")
+construct_turn_impl <- function(user_prompt, selection, code_context, env_context, ext) {
 
   if (!identical(selection, "")) {
-    res <- c(res, paste0("Now, ", input$text, ": "))
+    res <- c(res, paste0("Now, ", user_prompt, ": "))
     res <- c(res, "", selection, "")
   } else {
-    res <- c(res, paste0(gsub("\\.$", "", input$text), "."))
+    res <- c(res, paste0(gsub("\\.$", "", user_prompt), "."))
   }
 
   if (!identical(code_context[["after"]], character(0))) {

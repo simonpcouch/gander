@@ -37,7 +37,7 @@ gander_addin <- function() {
   }
 
   assistant <- initialize_assistant(context = context, input = input, chat = chat)
-  turn <- construct_turn(input = input, context = context)
+  turn <- construct_turn(user_prompt = input$text, context = context)
 
   edits <-
     streamy::stream(

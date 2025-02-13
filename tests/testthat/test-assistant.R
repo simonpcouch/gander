@@ -29,6 +29,30 @@ test_that("fetch_gander_chat fails informatively with bad `.gander_chat`", {
   expect_null(.res)
 })
 
+test_that("fetch_gander_dims handles `.gander_dims` appropriately", {
+  # default case, no option set
+  withr::local_options(.gander_dims = NULL)
+  expect_equal(fetch_gander_dims(), default_gander_dims)
+
+  # wrong type
+  withr::local_options(.gander_dims = "boop")
+  expect_snapshot(.res <- fetch_gander_dims())
+  expect_equal(.res, NULL)
+
+  # wrong length
+  withr::local_options(.gander_dims = 5)
+  expect_snapshot(.res <- fetch_gander_dims())
+  expect_equal(.res, NULL)
+
+  # Inf is ok
+  withr::local_options(.gander_dims = c(5, Inf))
+  expect_equal(fetch_gander_dims(), c(5, Inf))
+
+  # both Inf is ok
+  withr::local_options(.gander_dims = c(Inf, Inf))
+  expect_equal(fetch_gander_dims(), c(Inf, Inf))
+})
+
 test_that("construct_system_prompt works", {
   # r files
   context <- list(path = "script.r")

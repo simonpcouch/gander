@@ -5,6 +5,7 @@
 \alias{.gander_fn}
 \alias{.gander_args}
 \alias{.gander_chat}
+\alias{.gander_dims}
 \alias{.gander_style}
 \title{Options used by the gander package}
 \description{
@@ -41,5 +42,28 @@ Paste that code in your
 \code{.Rprofile} via \code{usethis::edit_r_profile()} to always use the same style (or
 even always begin with some base set of knowledge about frameworks you
 work with often) every time you start an R session.
+}
+
+\section{Data context}{
+
+
+By default, gander will show the first 5 rows and 100 columns of every
+relevant data frame, allowing for models to pick up on the names, types, and
+distributions of the variables it may work with while also keeping the number
+of tokens submitted per chat to a minimum. The option \code{.gander_dims} allows
+you to adjust how many rows and columns to supply to gander addin.
+\itemize{
+\item For richer context but increasing token usage, increase the number of rows
+and columns. For example, to supply the first 50 rows and all columns of
+datasets supplied to the model, you could use
+\code{options(.gander_dims = c(50, Inf))}.
+\item To decrease token usage, decrease the number of rows and columns, e.g.
+\code{options(.gander_dims = c(0, 10))} to just show the names and types of the
+first 10 columns. One could make the argument that setting the number of rows
+to 0 is privacy-preserving, but do note that the model may pick up on the
+values of specific cells based on code context alone.
+}
+
+Set that option in your \verb{~/.Rprofile} to always use that setting.
 }
 

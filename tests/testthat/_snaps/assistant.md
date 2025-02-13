@@ -31,6 +31,22 @@
       i Set e.g. `options(.gander_chat = ellmer::chat_claude())` in your '~/.Rprofile' and restart R.
       i See "Choosing a model" in `vignette("gander", package = "gander")` to learn more.
 
+# fetch_gander_dims handles `.gander_dims` appropriately
+
+    Code
+      .res <- fetch_gander_dims()
+    Message
+      ! The option .gander_dims must be a 2-length integer vector, e.g. `c(5L, 100L)`, not a string.
+      i See `?.gander_dims` to learn more.
+
+---
+
+    Code
+      .res <- fetch_gander_dims()
+    Message
+      ! The option .gander_dims must be a 2-length integer vector, e.g. `c(5L, 100L)`, not a number.
+      i See `?.gander_dims` to learn more.
+
 # construct_turn_impl formats message with file extension
 
     Code

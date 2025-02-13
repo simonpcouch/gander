@@ -27,7 +27,6 @@ Imports:
     glue (>= 1.8.0),
     ellmer (>= 0.1.0),
     miniUI (>= 0.1.1.1),
-    purrr,
     rlang (>= 1.1.4),
     rstudioapi (>= 0.17.1),
     shiny (>= 1.9.1),

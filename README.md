@@ -51,7 +51,7 @@ Then, you’ll need to hook gander up with an [ellmer
 chat](https://ellmer.tidyverse.org/). gander uses the `.gander_chat`
 option to configure which model powers the addin; just set the option to
 whatever your usual ellmer setup is. For example, we recommend
-Anthropic’s Claude Soonet 3.5, which you can use via
+Anthropic’s Claude Sonnet 3.5, which you can use via
 `options(.gander_chat = ellmer::chat_claude())` once you’ve configured
 an `ANTHROPIC_API_KEY`. Paste that code in your `.Rprofile` via
 `usethis::edit_r_profile()` to always use the same model every time you

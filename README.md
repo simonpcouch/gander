@@ -44,6 +44,12 @@ will automatically find the context it needs, though:
 You can install gander like so:
 
 ``` r
+install.packages("gander")
+```
+
+To install the developmental version:
+
+``` r
 pak::pak("simonpcouch/gander")
 ```
 

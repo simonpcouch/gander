@@ -60,13 +60,6 @@ gander_addin <- function() {
     input = input, assistant = assistant, contents = contents
   )
 
-  if (is_positron()) {
-    tryCatch(
-      .ps.ui.executeCommand("workbench.action.focusActiveEditorGroup"),
-      error = function(cnd) cnd
-    )
-  }
-
   invisible(assistant)
 }
 

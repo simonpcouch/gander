@@ -12,7 +12,6 @@ utils::globalVariables(
     "file.edit",
     "help",
     "modifyList",
-    ".ps.ui.executeCommand",
     "str"
   )
 )

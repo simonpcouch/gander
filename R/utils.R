@@ -29,6 +29,8 @@ default_gander_style <- function() {
   )
 }
 
+default_gander_dims <- c(5L, 100L)
+
 get_gander_style <- function() {
   res <- getOption(".gander_style")
 

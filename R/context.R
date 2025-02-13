@@ -63,8 +63,9 @@ describe_variable <- function(x, x_name) {
   # to limit the number of tokens taken up by data frames, only print the
   # first few rows and columns of data frames
   if (inherits(x, "data.frame")) {
-    n_row <- min(5, nrow(x))
-    n_col <- min(20, ncol(x))
+    dims <- fetch_gander_dims()
+    n_row <- min(dims[1], nrow(x))
+    n_col <- min(dims[2], ncol(x))
     x <- x[seq_len(n_row), seq_len(n_col), drop = FALSE]
     x_name <- c(
       cli::format_inline("# Just the first {n_row} row{?s} and {n_col} column{?s}:"),

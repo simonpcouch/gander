@@ -33,11 +33,32 @@
 #' `.Rprofile` via `usethis::edit_r_profile()` to always use the same style (or
 #' even always begin with some base set of knowledge about frameworks you
 #' work with often) every time you start an R session.
+#' 
+#' @section Data context: 
+#' 
+#' By default, gander will show the first 5 rows and 100 columns of every 
+#' relevant data frame, allowing for models to pick up on the names, types, and
+#' distributions of the variables it may work with while also keeping the number
+#' of tokens submitted per chat to a minimum. The option `.gander_dims` allows 
+#' you to adjust how many rows and columns to supply to gander addin.
+#' 
+#' * For richer context but increasing token usage, increase the number of rows 
+#'   and columns. For example, to supply the first 50 rows and all columns of 
+#'   datasets supplied to the model, you could use 
+#'   `options(.gander_dims = c(50, Inf))`.
+#' * To decrease token usage, decrease the number of rows and columns, e.g.
+#'   `options(.gander_dims = c(0, 10))` to just show the names and types of the
+#'   first 10 columns. One could make the argument that setting the number of rows
+#'   to 0 is privacy-preserving, but do note that the model may pick up on the
+#'   values of specific cells based on code context alone.
+#' 
+#' Set that option in your `~/.Rprofile` to always use that setting.
 #'
 #' @name gander_options
 #' @aliases .gander_fn
 #' @aliases .gander_args
 #' @aliases .gander_chat
+#' @aliases .gander_dims
 #' @aliases .gander_style
 NULL
 
@@ -52,7 +73,7 @@ initialize_assistant <- function(context, input, chat) {
 new_chat <- function(
     .gander_chat = getOption(".gander_chat")
 ) {
-  # first, check for old options
+  # first, check that the ellmer chat itself will initialize successfully
   .gander_fn <- getOption(".gander_fn")
   .gander_args <- getOption(".gander_args")
   if (!is.null(.gander_fn) && is.null(.gander_chat)) {
@@ -66,7 +87,17 @@ new_chat <- function(
     return(NULL)
   }
 
-  fetch_gander_chat(.gander_chat)
+  res <- fetch_gander_chat(.gander_chat)
+
+  # then, check that the model will be able to successfully assemble a prompt
+  # based on user-provider options
+  .gander_dims <- fetch_gander_dims()
+  if (is.null(.gander_dims)) {
+    return(NULL)
+  }
+
+  # ...before returning:
+  res
 }
 
 # this function fails with messages and a NULL return value rather than errors
@@ -103,6 +134,29 @@ fetch_gander_chat <- function(x) {
   }
 
   x$clone()
+}
+
+fetch_gander_dims <- function(silent) {
+  .gander_dims <- getOption(".gander_dims")
+
+  if (is.null(.gander_dims)) {
+    return(default_gander_dims)
+  }
+
+  if (length(.gander_dims) != 2L || !is_integerish(.gander_dims)) {
+    cli::cli_inform(
+      c(
+        "!" = "The option {cli::col_blue('.gander_dims')} must be a 2-length
+               integer vector, e.g. {.code c(5L, 100L)}, not 
+               {.obj_type_friendly { .gander_dims}}.",
+        "i" = "See {.topic .gander_dims} to learn more."
+      ),
+      call = NULL
+    )
+    return(NULL)
+  }
+
+  return(.gander_dims)
 }
 
 construct_system_prompt <- function(context, input) {

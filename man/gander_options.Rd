@@ -67,3 +67,25 @@ values of specific cells based on code context alone.
 Set that option in your \verb{~/.Rprofile} to always use that setting.
 }
 
+\examples{
+# Running the following will adjust R options, so don't run by default:
+\dontrun{
+# Describe the first 100 rows and every column in relevant data
+frames rather than the first 5 rows and 100 columns (this can
+# increase token usage greatly):
+options(.gander_dims = c(100, Inf))
+
+# Only describe relevant data frame columns and their types, but don't
+# provide any rows:
+options(.gander_dims = c(0, Inf))
+
+# Override default tidyverse style to tell the model to prefer another style:
+options(.gander_style = "Use base R.")
+
+# Configure gander to use its recommended model, Anthropic's Claude Sonnet
+# 3.5. Set this option in your `~/.Rprofile` to always use this setting.
+# Note that this requires an `ANTHROPIC_API_KEY` envvar:
+options(.gander_chat = ellmer::chat_claude())
+}
+
+}

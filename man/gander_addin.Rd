@@ -16,3 +16,11 @@ The gander addin is intended to be called using the RStudio addin rather
 than explicitly by the user. See \code{vignette("gander", package = "gander")}
 to learn more about using the gander addin.
 }
+\examples{
+\dontrun{
+# Requires an interactive session, access to the RStudio API,
+# and an active connection to an LLM API.
+gander_addin()
+}
+
+}

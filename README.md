@@ -13,10 +13,11 @@ status](https://www.r-pkg.org/badges/version/gander)](https://CRAN.R-project.org
 <!-- badges: end -->
 
 gander is a higher-performance and lower-friction chat experience for
-data scientists in RStudio and Positron. The package brings
-[ellmer](https://ellmer.tidyverse.org) chats into your project sessions,
-automatically incorporating relevant context and streaming their
-responses directly into your documents.
+data scientists in RStudio and Positron–sort of like completions with
+Copilot, but it knows how to talk to the objects in your R environment.
+The package brings [ellmer](https://ellmer.tidyverse.org) chats into
+your project sessions, automatically incorporating relevant context and
+streaming their responses directly into your documents.
 
 **Why not just chat?** In many ways, working with gander is just like
 using a chat interface online or via

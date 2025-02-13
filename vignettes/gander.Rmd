@@ -14,7 +14,7 @@ knitr::opts_chunk$set(
 )
 ```
 
-gander is a high performance and low friction chat experience for data scientists in RStudio and Positron. The package supplies an addin that can be registered to a keybinding. Once that's done, just trigger the addin while you're working on documents and type a request; along with your request, the addin will automatically inject context about the document you're working in and the objects in your R environment.
+gander is a high performance and low friction chat experience for data scientists in RStudio and Positron--sort of like completions with Copilot, but it knows how to talk to the objects in your R environment. The package supplies an addin that can be registered to a keybinding. Once that's done, just trigger the addin while you're working on documents and type a request; along with your request, the addin will automatically inject context about the document you're working in and the objects in your R environment.
 
 ```{r}
 #| label: gander-demo

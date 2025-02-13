@@ -4,11 +4,11 @@
 \name{gander-package}
 \alias{gander}
 \alias{gander-package}
-\title{gander: High performance, low friction LLM chat for data scientists}
+\title{gander: High Performance, Low Friction LLM Chat}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-The package introduces a high performance, low friction LLM chat experience for data scientists. ellmer chats are integrated directly into your RStudio and Positron sessions, automatically incorporating relevant context such as surrounding lines of code, variable summaries (like data frame columns and types), function documentation, and images. After triggering the package addin, type your request and the assistant will stream its response directly into your documents.
+Introduces a 'Copilot'-like completion experience, but it knows how to talk to the objects in your R environment. 'ellmer' chats are integrated directly into your 'RStudio' and 'Positron' sessions, automatically incorporating relevant context such as surrounding lines of code, variable summaries (like data frame columns and types), function documentation, and images. After triggering the package addin, type your request and the assistant will stream its response directly into your documents.
 }
 \seealso{
 Useful links:
@@ -21,6 +21,11 @@ Useful links:
 }
 \author{
 \strong{Maintainer}: Simon Couch \email{simon.couch@posit.co} (\href{https://orcid.org/0000-0001-5676-5107}{ORCID})
+
+Other contributors:
+\itemize{
+  \item Posit Software, PBC [copyright holder, funder]
+}
 
 }
 \keyword{internal}

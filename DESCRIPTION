@@ -1,5 +1,5 @@
 Package: gander
-Title: High Performance, Low Friction LLM Chat
+Title: High Performance, Low Friction Large Language Model Chat
 Version: 0.0.0.9001
 Authors@R: c(
     person("Simon", "Couch", , "simon.couch@posit.co", role = c("aut", "cre"),
@@ -10,9 +10,9 @@ Description: Introduces a 'Copilot'-like completion experience, but it knows how
     to talk to the objects in your R environment. 'ellmer' chats are integrated 
     directly into your 'RStudio' and 'Positron' sessions, automatically 
     incorporating relevant context from surrounding lines of code and your
-    global environment (like data frame columns and types). After triggering the 
-    package addin, type your request and the assistant will stream its 
-    response directly into your documents.
+    global environment (like data frame columns and types). Open the package 
+    dialog box with a keyboard shortcut, type your request, and the assistant 
+    will stream its response directly into your documents.
 License: MIT + file LICENSE
 Config/testthat/edition: 3
 Encoding: UTF-8

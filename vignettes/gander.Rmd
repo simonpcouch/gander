@@ -71,7 +71,7 @@ You select `stackoverflow`, trigger the addin, and type `plot salary vs. years c
 
 From the surrounding contents in the file, we can answer **1a)**; the user likely wants to use ggplot2 to do so. We can answer **1b)** by inspecting the file extension—since this is an `.R` file, the model should respond only with code, omitting exposition and backticks. We can answer **2)** using the user's R environment; if they've run that `data("stackoverflow", package = "modeldata")` line, then the `stackoverflow` object will live in their environment and we can print it out to learn more about it. The gander addin will preemptively answer all of these questions for the model by including context from each of these sources. 
 
-To demonstrate, we can run this `stackoverflow` example ourselves and then call `gander::gander_peek()` to peek at everything gander actually sent to the model. When I do so:
+To demonstrate, we can run this `stackoverflow` example ourselves and then call `gander_peek()` to peek at everything gander actually sent to the model. Under the hood, gander creates an [ellmer chat](https://ellmer.tidyverse.org/reference/Chat.html) and provides it a bunch of context---`gander_peek()` returns that chat object from your most recent interaction with gander as-is. So, when I do so:
 
 ```{r}
 #| eval: false

@@ -10,14 +10,18 @@ stash_last_gander <- function(input, assistant, contents) {
 #'
 #' @description
 #' `gander_peek()` returns the ellmer `Chat` object from the most recent call
-#' to the gander assistant (so you can see what happened under-the-hood).
+#' to the gander assistant so that you can see what happened under-the-hood.
+#'
+#' Note that gander initializes a new chat every time you invoke the addin,
+#' so the token count and conversation history only describes the most recent
+#' interaction with the package.
 #'
 #' @returns
 #' The ellmer `Chat` object from the last assistant interaction,
 #' or `NULL` if no previous interaction exists.
 #'
 #' @export
-#' @name last_gander
+#' @name gander_peek
 gander_peek <- function() {
   if (env_has(gander_env, "last_gander")) {
     return(env_get(gander_env, "last_gander")[["assistant"]])

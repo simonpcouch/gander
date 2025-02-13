@@ -196,10 +196,13 @@ can print it out to learn more about it. The gander addin will
 preemptively answer all of these questions for the model by including
 context from each of these sources.</p>
 <p>To demonstrate, we can run this <code>stackoverflow</code> example
-ourselves and then call <code><a href="../reference/last_gander.html">gander::gander_peek()</a></code> to peek at
-everything gander actually sent to the model. When I do so:</p>
+ourselves and then call <code><a href="../reference/gander_peek.html">gander_peek()</a></code> to peek at everything
+gander actually sent to the model. Under the hood, gander creates an <a href="https://ellmer.tidyverse.org/reference/Chat.html" class="external-link">ellmer chat</a>
+and provides it a bunch of context—<code><a href="../reference/gander_peek.html">gander_peek()</a></code> returns
+that chat object from your most recent interaction with gander as-is.
+So, when I do so:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">gander</span><span class="fu">::</span><span class="fu"><a href="../reference/last_gander.html">gander_peek</a></span><span class="op">(</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu">gander</span><span class="fu">::</span><span class="fu"><a href="../reference/gander_peek.html">gander_peek</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Chat turns=3 tokens=1077/52&gt;</span></span>
 <span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt; ── system ─────────────────────────────────────────────────────────────────────</span></span>

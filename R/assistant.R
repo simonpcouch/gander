@@ -33,26 +33,39 @@
 #' `.Rprofile` via `usethis::edit_r_profile()` to always use the same style (or
 #' even always begin with some base set of knowledge about frameworks you
 #' work with often) every time you start an R session.
-#' 
-#' @section Data context: 
-#' 
-#' By default, gander will show the first 5 rows and 100 columns of every 
+#'
+#' @section Data context:
+#'
+#' By default, gander will show the first 5 rows and 100 columns of every
 #' relevant data frame, allowing for models to pick up on the names, types, and
 #' distributions of the variables it may work with while also keeping the number
-#' of tokens submitted per chat to a minimum. The option `.gander_dims` allows 
-#' you to adjust how many rows and columns to supply to gander addin.
-#' 
-#' * For richer context but increasing token usage, increase the number of rows 
-#'   and columns. For example, to supply the first 50 rows and all columns of 
-#'   datasets supplied to the model, you could use 
-#'   `options(.gander_dims = c(50, Inf))`.
-#' * To decrease token usage, decrease the number of rows and columns, e.g.
-#'   `options(.gander_dims = c(0, 10))` to just show the names and types of the
-#'   first 10 columns. One could make the argument that setting the number of rows
-#'   to 0 is privacy-preserving, but do note that the model may pick up on the
-#'   values of specific cells based on code context alone.
-#' 
-#' Set that option in your `~/.Rprofile` to always use that setting.
+#' of tokens submitted per chat to a minimum. The option `.gander_dims` allows
+#' you to adjust how data frames are presented to the model in two ways:
+#'
+#' 1. Row-based preview (default):
+#'    * Specify as a 2-length integer vector `c(rows, columns)`
+#'    * For richer context but increasing token usage, increase the number of rows
+#'      and columns. For example, to supply the first 50 rows and all columns of
+#'      datasets supplied to the model, you could use
+#'      `options(.gander_dims = c(50, Inf))`.
+#'    * To decrease token usage, decrease the number of rows and columns, e.g.
+#'      `options(.gander_dims = c(0, 10))` to just show the names and types of the
+#'      first 10 columns.
+#'
+#' 2. Summary-based preview:
+#'    * Specify as `c("summary", columns)` where columns is an integer limit
+#'    * Instead of showing rows, displays a statistical summary of each column
+#'    * For example, `options(.gander_dims = c("summary", 100))` shows summaries
+#'      of the first 100 columns
+#'    * Useful for getting a quick overview of variable distributions while
+#'      keeping token usage moderate
+#'
+#' One could make the argument that setting the number of rows to 0 or using the
+#' summary approach is privacy-preserving, but do note that the model may pick up
+#' on the values of specific cells based on code context alone.
+#'
+#' Set the `.gander_dims` option in your `~/.Rprofile` to persist your preferred
+#' setting across R sessions.
 #'
 #' @name gander_options
 #' @aliases .gander_fn
@@ -143,11 +156,29 @@ fetch_gander_dims <- function(silent) {
     return(default_gander_dims)
   }
 
-  if (length(.gander_dims) != 2L || !is_integerish(.gander_dims)) {
+  # Special case: if first element is "summary"
+  if (is.character(.gander_dims) && length(.gander_dims) == 2L &&
+      identical(.gander_dims[1], "summary")) {
+
+    if (is.na(as.integer(.gander_dims[2]))) {
+      cli::cli_inform(
+        c(
+          "!" = "When using 'summary' in {cli::col_blue('.gander_dims')}, the second element
+                 must be a value that can be transformed to an integer by as.integer. Now, 100
+                 is used as default.",
+          "i" = "See {.topic .gander_dims} to learn more."
+        ),
+        call = NULL
+      )
+      return(c(.gander_dims[1], 100))
+    } else {
+      return(c(.gander_dims[1], as.integer(.gander_dims[2])))
+    }
+  } else if (length(.gander_dims) != 2L || !is_integerish(.gander_dims)) {
     cli::cli_inform(
       c(
         "!" = "The option {cli::col_blue('.gander_dims')} must be a 2-length
-               integer vector, e.g. {.code c(5L, 100L)}, not 
+               integer vector, e.g. {.code c(5L, 100L)}, not
                {.obj_type_friendly { .gander_dims}}.",
         "i" = "See {.topic .gander_dims} to learn more."
       ),

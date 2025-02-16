@@ -10,7 +10,7 @@ fetch_code_context <- function(context) {
   before <- contents[seq_len(end_before)]
   after <- contents[seq(start_after, length(contents))]
   list(
-    before = backtick_possibly(before), 
+    before = backtick_possibly(before),
     after = backtick_possibly(after),
     selection = backtick_possibly(
       contents[seq(selection[[1]]$range$start[1], selection[[1]]$range$end[1])]
@@ -61,16 +61,67 @@ describe_variables <- function(variables, env) {
 
 describe_variable <- function(x, x_name) {
   # to limit the number of tokens taken up by data frames, only print the
-  # first few rows and columns of data frames
+  # summary or the first few rows for the given number of columns of data frames
   if (inherits(x, "data.frame")) {
     dims <- fetch_gander_dims()
-    n_row <- min(dims[1], nrow(x))
-    n_col <- min(dims[2], ncol(x))
-    x <- x[seq_len(n_row), seq_len(n_col), drop = FALSE]
-    x_name <- c(
-      cli::format_inline("# Just the first {n_row} row{?s} and {n_col} column{?s}:"),
-      x_name
-    )
+
+    if (is.character(dims) && identical(dims[1], "summary")) {
+      n_col <- min(as.integer(dims[2]), ncol(x))
+      x <- x[, seq_len(n_col), drop = FALSE]
+
+      summaries <- character(0)
+      for(col in names(x)) {
+        if(is.numeric(x[[col]])) {
+          col_summ <- summary(x[[col]])
+          summ_values <- sprintf("%.4f", unname(col_summ))
+          summ_str <- paste(summ_values, collapse = "  ")
+        } else {
+          # For categorical: count unique values
+          col_summ <- table(x[[col]])
+          # Filter for values appearing 5 or more times
+          frequent_vals <- col_summ[col_summ >= 5]
+          n_unique <- length(unique(x[[col]]))
+          n_shown <- length(frequent_vals)
+
+          if(n_shown == 0) {
+            # If no values appear 5+ times
+            summ_str <- sprintf("(%d unique values, all appear < 5 times)", n_unique)
+          } else if(n_shown <= 10) {
+            # Show all frequent values and note remaining
+            n_remaining <- n_unique - n_shown
+            summ_str <- paste0(
+              paste(paste(names(frequent_vals), frequent_vals, sep = ": "), collapse = "  "),
+              if(n_remaining > 0) sprintf("  (...%d values appear < 5 times)", n_remaining) else ""
+            )
+          } else {
+            # If more than 10 frequent categories, show top 5
+            frequent_vals <- sort(frequent_vals, decreasing = TRUE)[1:5]
+            n_remaining <- n_unique - 5
+            summ_str <- paste0(
+              paste(paste(names(frequent_vals), frequent_vals, sep = ": "), collapse = "  "),
+              sprintf("  (...%d more values, some appear < 5 times)", n_remaining)
+            )
+          }
+        }
+        summaries <- c(summaries,
+                       paste0("#> ", col, ": ", summ_str))
+      }
+
+      return(c(
+        cli::format_inline("# Summary of first {n_col} column{?s}:"),
+        x_name,
+        summaries
+      ))
+    } else {
+
+      n_row <- min(dims[1], nrow(x))
+      n_col <- min(dims[2], ncol(x))
+      x <- x[seq_len(n_row), seq_len(n_col), drop = FALSE]
+      x_name <- c(
+        cli::format_inline("# Just the first {n_row} row{?s} and {n_col} column{?s}:"),
+        x_name
+      )
+    }
   }
 
   # todo: large lists may still take up quite a few tokens here. should we just

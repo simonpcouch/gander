@@ -71,7 +71,7 @@ Set that option in your \verb{~/.Rprofile} to always use that setting.
 # Running the following will adjust R options, so don't run by default:
 \dontrun{
 # Describe the first 100 rows and every column in relevant data
-frames rather than the first 5 rows and 100 columns (this can
+# frames rather than the first 5 rows and 100 columns (this can
 # increase token usage greatly):
 options(.gander_dims = c(100, Inf))
 

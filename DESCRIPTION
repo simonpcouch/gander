@@ -1,6 +1,6 @@
 Package: gander
 Title: High Performance, Low Friction Large Language Model Chat
-Version: 0.0.0.9001
+Version: 0.1.0
 Authors@R: c(
     person("Simon", "Couch", , "simon.couch@posit.co", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-5676-5107")),

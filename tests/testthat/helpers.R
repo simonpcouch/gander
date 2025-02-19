@@ -39,3 +39,7 @@ mocked_empty_selection <- function() {
     class = "document_context"
   )
 }
+
+mocked_chat <- function() {
+  readRDS(system.file("chat/chat.rds", package = "gander"))
+}

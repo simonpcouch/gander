@@ -21,6 +21,16 @@ stash_last_gander <- function(input, assistant, contents) {
 #' or `NULL` if no previous interaction exists.
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' # First, run the addin to generate a response.
+#' gander_addin()
+#'
+#' # Then, use this function to examine what happened under-the-hood:
+#' gander_peek()
+#' }
+#'
 #' @name gander_peek
 gander_peek <- function() {
   if (env_has(gander_env, "last_gander")) {

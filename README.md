@@ -7,8 +7,6 @@
 
 [![Lifecycle:
 experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![CRAN
-status](https://www.r-pkg.org/badges/version/gander)](https://CRAN.R-project.org/package=gander)
 [![R-CMD-check](https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/simonpcouch/gander/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
@@ -42,6 +40,12 @@ will automatically find the context it needs, though:
 ## Installation
 
 You can install gander like so:
+
+``` r
+install.packages("gander")
+```
+
+To install the developmental version:
 
 ``` r
 pak::pak("simonpcouch/gander")

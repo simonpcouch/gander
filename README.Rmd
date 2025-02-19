@@ -37,6 +37,12 @@ gander is a higher-performance and lower-friction chat experience for data scien
 You can install gander like so:
 
 ``` r
+install.packages("gander")
+```
+
+To install the developmental version:
+
+``` r
 pak::pak("simonpcouch/gander")
 ```
 

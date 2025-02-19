@@ -10,6 +10,14 @@
 #' no text is entered in the dialog.
 #'
 #' @export
+#'
+#' @examples
+#' \dontrun{
+#' # Requires an interactive session, access to the RStudio API,
+#' # and an active connection to an LLM API.
+#' gander_addin()
+#' }
+#'
 gander_addin <- function() {
   context <- rstudioapi::getActiveDocumentContext()
 
@@ -51,10 +59,6 @@ gander_addin <- function() {
   stash_last_gander(
     input = input, assistant = assistant, contents = contents
   )
-
-  if (is_positron()) {
-    .ps.ui.executeCommand("workbench.action.focusActiveEditorGroup")
-  }
 
   invisible(assistant)
 }

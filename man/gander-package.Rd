@@ -4,11 +4,11 @@
 \name{gander-package}
 \alias{gander}
 \alias{gander-package}
-\title{gander: High Performance, Low Friction LLM Chat}
+\title{gander: High Performance, Low Friction Large Language Model Chat}
 \description{
 \if{html}{\figure{logo.png}{options: style='float: right' alt='logo' width='120'}}
 
-Introduces a 'Copilot'-like completion experience, but it knows how to talk to the objects in your R environment. 'ellmer' chats are integrated directly into your 'RStudio' and 'Positron' sessions, automatically incorporating relevant context such as surrounding lines of code, variable summaries (like data frame columns and types), function documentation, and images. After triggering the package addin, type your request and the assistant will stream its response directly into your documents.
+Introduces a 'Copilot'-like completion experience, but it knows how to talk to the objects in your R environment. 'ellmer' chats are integrated directly into your 'RStudio' and 'Positron' sessions, automatically incorporating relevant context from surrounding lines of code and your global environment (like data frame columns and types). Open the package dialog box with a keyboard shortcut, type your request, and the assistant will stream its response directly into your documents.
 }
 \seealso{
 Useful links:

@@ -18,3 +18,13 @@ Note that gander initializes a new chat every time you invoke the addin,
 so the token count and conversation history only describes the most recent
 interaction with the package.
 }
+\examples{
+\dontrun{
+# First, run the addin to generate a response.
+gander_addin()
+
+# Then, use this function to examine what happened under-the-hood:
+gander_peek()
+}
+
+}

@@ -30,10 +30,17 @@ gander_addin <- function() {
 
   # suppress "Listening on..." message and rethrow errors with new context
   try_fetch(
-    suppressMessages(input <- gander_addin_impl(
-      has_selection = !identical(rstudioapi::primary_selection(context)$text, "")
-    )),
-    error = function(cnd) {cli::cli_abort(conditionMessage(cnd), call = NULL)}
+    suppressMessages(
+      input <- gander_addin_impl(
+        has_selection = !identical(
+          rstudioapi::primary_selection(context)$text,
+          ""
+        )
+      )
+    ),
+    error = function(cnd) {
+      cli::cli_abort(conditionMessage(cnd), call = NULL)
+    }
   )
 
   if (is.null(input)) {
@@ -44,7 +51,11 @@ gander_addin <- function() {
     cli::cli_abort("Please type something to receive a response.", call = NULL)
   }
 
-  assistant <- initialize_assistant(context = context, input = input, chat = chat)
+  assistant <- initialize_assistant(
+    context = context,
+    input = input,
+    chat = chat
+  )
   turn <- construct_turn(user_prompt = input$text, context = context)
 
   edits <-
@@ -57,7 +68,9 @@ gander_addin <- function() {
   contents <- list(before = context$selection, after = edits)
 
   stash_last_gander(
-    input = input, assistant = assistant, contents = contents
+    input = input,
+    assistant = assistant,
+    contents = contents
   )
 
   invisible(assistant)
@@ -66,9 +79,13 @@ gander_addin <- function() {
 gander_addin_impl <- function(has_selection) {
   minimum_context <- ifelse(has_selection, "Selection", "None")
   ui_elements <- list(
-    shiny::textInput("text", "Enter text:",
-                     placeholder = "Type your text here"),
-    shiny::tags$script(shiny::HTML("
+    shiny::textInput(
+      "text",
+      "Enter text:",
+      placeholder = "Type your text here"
+    ),
+    shiny::tags$script(shiny::HTML(
+      "
       $(document).on('keyup', function(e) {
         if(e.key == 'Enter'){
           Shiny.setInputValue('done', true, {priority: 'event'});
@@ -77,7 +94,8 @@ gander_addin_impl <- function(has_selection) {
       $(document).ready(function() {
         $('#text').focus();
       });
-    "))
+    "
+    ))
   )
 
   if (has_selection) {
@@ -113,6 +131,10 @@ gander_addin_impl <- function(has_selection) {
     })
   }
 
-  viewer <- shiny::dialogViewer("Press Enter to submit", width = 300, height = 200)
+  viewer <- shiny::dialogViewer(
+    "Press Enter to submit",
+    width = 300,
+    height = 200
+  )
   shiny::runGadget(ui, server, viewer = viewer)
 }

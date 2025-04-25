@@ -31,7 +31,11 @@ get_gander_style <- function() {
   res <- getOption(".gander_style")
 
   if (!is.null(res)) {
-    check_string(res, arg = 'getOption(".gander_style")', call = call2("gander_addin"))
+    check_string(
+      res,
+      arg = 'getOption(".gander_style")',
+      call = call2("gander_addin")
+    )
     return(res)
   }
 

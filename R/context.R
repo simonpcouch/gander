@@ -10,7 +10,7 @@ fetch_code_context <- function(context) {
   before <- contents[seq_len(end_before)]
   after <- contents[seq(start_after, length(contents))]
   list(
-    before = backtick_possibly(before), 
+    before = backtick_possibly(before),
     after = backtick_possibly(after),
     selection = backtick_possibly(
       contents[seq(selection[[1]]$range$start[1], selection[[1]]$range$end[1])]
@@ -32,8 +32,9 @@ fetch_env_context <- function(selection, input, env) {
 
   # is the object name present in the selection or mentioned in the input?
   mentioned <- obj_names[
-    obj_names %in% selected_variables(selection) |
-    unname(vapply(obj_names, grepl, logical(1), x = input))
+    obj_names %in%
+      selected_variables(selection) |
+      unname(vapply(obj_names, grepl, logical(1), x = input))
   ]
 
   res <- describe_variables(mentioned, env)
@@ -68,7 +69,9 @@ describe_variable <- function(x, x_name) {
     n_col <- min(dims[2], ncol(x))
     x <- x[seq_len(n_row), seq_len(n_col), drop = FALSE]
     x_name <- c(
-      cli::format_inline("# Just the first {n_row} row{?s} and {n_col} column{?s}:"),
+      cli::format_inline(
+        "# Just the first {n_row} row{?s} and {n_col} column{?s}:"
+      ),
       x_name
     )
   }
@@ -101,13 +104,17 @@ selected_variables <- function(selection) {
 
   query <- treesitter::query(language, query_source)
   captures <- treesitter::query_captures(query, root)
-  identifiers <- unique(vapply(captures$node, treesitter::node_text, character(1)))
+  identifiers <- unique(vapply(
+    captures$node,
+    treesitter::node_text,
+    character(1)
+  ))
 
   unique(identifiers)
 }
 
 is_syntactically_valid <- function(root) {
   !treesitter::node_has_error(root) &&
-  !treesitter::node_is_error(root) &&
-  !treesitter::node_is_missing(root)
+    !treesitter::node_is_error(root) &&
+    !treesitter::node_is_missing(root)
 }

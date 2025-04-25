@@ -92,19 +92,22 @@ initialize_assistant <- function(context, input, chat) {
 }
 
 new_chat <- function(
-    .gander_chat = getOption(".gander_chat")
+  .gander_chat = getOption(".gander_chat")
 ) {
   # first, check that the ellmer chat itself will initialize successfully
   .gander_fn <- getOption(".gander_fn")
   .gander_args <- getOption(".gander_args")
   if (!is.null(.gander_fn) && is.null(.gander_chat)) {
-    cli::cli_inform(c(
-      "!" = "{.pkg gander} now uses the option {cli::col_blue('.gander_chat')} instead
+    cli::cli_inform(
+      c(
+        "!" = "{.pkg gander} now uses the option {cli::col_blue('.gander_chat')} instead
        of {cli::col_blue('.gander_fn')} and {cli::col_blue('.gander_args')}.",
-      "i" = "Set
+        "i" = "Set
       {.code options(.gander_chat = {deparse(rlang::call2(.gander_fn, !!!.gander_args))})}
       instead."
-    ), call = NULL)
+      ),
+      call = NULL
+    )
     return(NULL)
   }
 
@@ -185,7 +188,10 @@ construct_system_prompt <- function(context, input) {
 
   res <- "You are a helpful but terse R data scientist. "
   if (identical(ext, "r")) {
-    res <- c(res, "Respond only with valid R code: no exposition, no backticks. ")
+    res <- c(
+      res,
+      "Respond only with valid R code: no exposition, no backticks. "
+    )
   } else {
     res <- c(
       res,
@@ -250,7 +256,11 @@ construct_turn_impl <- function(user_prompt, code_context, env_context, ext) {
   }
 
   if (!identical(env_context, character(0))) {
-    res <- c(res, "", "Here's some information about the objects in my R environment: ")
+    res <- c(
+      res,
+      "",
+      "Here's some information about the objects in my R environment: "
+    )
     res <- c(res, "", env_context)
   }
 

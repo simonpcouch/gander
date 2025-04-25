@@ -9,3 +9,5 @@ inst/figs/
 ^docs$
 ^pkgdown$
 .env
+^[\.]?air\.toml$
+^\.vscode$

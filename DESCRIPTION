@@ -30,7 +30,7 @@ Imports:
     rlang (>= 1.1.4),
     rstudioapi (>= 0.17.1),
     shiny (>= 1.9.1),
-    streamy,
+    streamy (>= 0.1.0.9000),
     treesitter,
     treesitter.r
 Suggests: 
@@ -40,4 +40,6 @@ Suggests:
     testthat (>= 3.0.0),
     tibble,
     withr
+Remotes:
+    simonpcouch/streamy
 VignetteBuilder: knitr

@@ -103,8 +103,8 @@ LLMs with gander.</p>
 <p>gander uses the <code>.gander_chat</code> option to configure which
 model powers the addin; just set the option to whatever your usual
 ellmer setup is. For example, to use Anthropic’s Claude, you might write
-<code>options(.gander_chat = ellmer::chat_claude())</code>. Paste that
-code in your <code>.Rprofile</code> via
+<code>options(.gander_chat = ellmer::chat_anthropic())</code>. Paste
+that code in your <code>.Rprofile</code> via
 <code>usethis::edit_r_profile()</code> to always use the same model
 every time you start an R session.</p>
 <p>If you’re using ellmer inside a organization, you’ll be limited to
@@ -115,12 +115,12 @@ big cloud provider, e.g. <code>chat_azure()</code>,
 exploration, you’ll have a lot more freedom, so we have a few
 recommendations to help you get started:</p>
 <ul>
-<li><p>As of early 2025, Anthropic’s <strong>Claude Sonnet 3.5</strong>
+<li><p>As of early 2025, Anthropic’s <strong>Claude Sonnet 3.7</strong>
 is a very powerful model for code assistance and is the model I’ve used
 while developing the package. If you want to use Claude, you’ll need to
 register an <a href="https://console.anthropic.com/" class="external-link">API key</a> to the
 environment variable <code>ANTHROPIC_API_KEY</code> and then set
-<code>options(.gander_chat = ellmer::chat_claude())</code>.</p></li>
+<code>options(.gander_chat = ellmer::chat_anthropic())</code>.</p></li>
 <li><p>Regarding OpenAI’s models, <code>chat_openai()</code> defaults to
 <strong>GPT-4o</strong>, but you can use
 <code>model = "gpt-4o-mini"</code> for a cheaper, lower-quality model,

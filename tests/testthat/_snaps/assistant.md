@@ -111,3 +111,4 @@
       Here's some information about the objects in my R environment: 
       
       obj details
+

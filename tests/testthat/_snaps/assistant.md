@@ -28,7 +28,7 @@
       .res <- new_chat(.gander_chat = NULL)
     Message
       ! gander requires configuring an ellmer Chat with the .gander_chat option.
-      i Set e.g. `options(.gander_chat = ellmer::chat_claude())` in your '~/.Rprofile' and restart R.
+      i Set e.g. `options(.gander_chat = ellmer::chat_anthropic())` in your '~/.Rprofile' and restart R.
       i See "Choosing a model" in `vignette("gander", package = "gander")` to learn more.
 
 # fetch_gander_dims handles `.gander_dims` appropriately
@@ -111,4 +111,3 @@
       Here's some information about the objects in my R environment: 
       
       obj details
-

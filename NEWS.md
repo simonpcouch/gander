@@ -11,7 +11,7 @@ release of the package to CRAN:
 
 * The configuration options `.gander_fn` and `.gander_args` have been 
   transitioned to one option, `.gander_chat`. That option takes an ellmer Chat, e.g. 
-  `options(.gander_chat = ellmer::chat_claude())`.
+  `options(.gander_chat = ellmer::chat_anthropic())`.
   If you've configured an ellmer model using the previous options, you'll get
   an error that automatically translates to the new code you need to use.
   

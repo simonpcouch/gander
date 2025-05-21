@@ -18,7 +18,7 @@ gander uses the \code{.gander_chat} option to configure which model powers the
 addin. \code{.gander_chat} is an ellmer Chat object.
 For example, to use OpenAI's GPT-4o-mini, you might write
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{options(.gander_chat = ellmer::chat_claude())
+\if{html}{\out{<div class="sourceCode">}}\preformatted{options(.gander_chat = ellmer::chat_anthropic())
 }\if{html}{\out{</div>}}
 
 Paste that code in your \code{.Rprofile} via \code{usethis::edit_r_profile()} to
@@ -83,9 +83,9 @@ options(.gander_dims = c(0, Inf))
 options(.gander_style = "Use base R.")
 
 # Configure gander to use its recommended model, Anthropic's Claude Sonnet
-# 3.5. Set this option in your `~/.Rprofile` to always use this setting.
+# 3.7. Set this option in your `~/.Rprofile` to always use this setting.
 # Note that this requires an `ANTHROPIC_API_KEY` envvar:
-options(.gander_chat = ellmer::chat_claude())
+options(.gander_chat = ellmer::chat_anthropic())
 }
 
 }

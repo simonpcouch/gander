@@ -10,7 +10,7 @@
 #' For example, to use OpenAI's GPT-4o-mini, you might write
 #'
 #' ```
-#' options(.gander_chat = ellmer::chat_claude())
+#' options(.gander_chat = ellmer::chat_anthropic())
 #' ```
 #'
 #' Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to
@@ -70,9 +70,9 @@
 #' options(.gander_style = "Use base R.")
 #'
 #' # Configure gander to use its recommended model, Anthropic's Claude Sonnet
-#' # 3.5. Set this option in your `~/.Rprofile` to always use this setting.
+#' # 3.7. Set this option in your `~/.Rprofile` to always use this setting.
 #' # Note that this requires an `ANTHROPIC_API_KEY` envvar:
-#' options(.gander_chat = ellmer::chat_claude())
+#' options(.gander_chat = ellmer::chat_anthropic())
 #' }
 #'
 #' @name gander_options
@@ -134,7 +134,7 @@ fetch_gander_chat <- function(x) {
         "!" = "gander requires configuring an ellmer Chat with the
         {cli::col_blue('.gander_chat')} option.",
         "i" = "Set e.g.
-        {.code {cli::col_green('options(.gander_chat = ellmer::chat_claude())')}}
+        {.code {cli::col_green('options(.gander_chat = ellmer::chat_anthropic())')}}
         in your {.file ~/.Rprofile} and restart R.",
         "i" = "See \"Choosing a model\" in
         {.code vignette(\"gander\", package = \"gander\")} to learn more."

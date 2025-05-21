@@ -25,7 +25,7 @@ Depends:
 Imports: 
     cli (>= 3.6.3),
     glue (>= 1.8.0),
-    ellmer (>= 0.1.0),
+    ellmer (>= 0.2.0),
     miniUI (>= 0.1.1.1),
     rlang (>= 1.1.4),
     rstudioapi (>= 0.17.1),

@@ -8,7 +8,8 @@ fetch_code_context <- function(context) {
 
   list(
     file_contents = backtick_possibly(contents),
-    selection = backtick_possibly(selection_text)
+    selection = backtick_possibly(selection_text),
+    selection_raw = selection_text
   )
 }
 

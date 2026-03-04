@@ -159,7 +159,8 @@ test_that("construct_turn_impl includes selection when present", {
     user_prompt = "plot this",
     code_context = list(
       file_contents = c("`````", "x <- 1", "mtcars", "`````"),
-      selection = c("`````", "mtcars", "`````")
+      selection = c("`````", "mtcars", "`````"),
+      selection_raw = "mtcars"
     ),
     env_context = character(0)
   )
@@ -191,4 +192,48 @@ test_that("construct_turn_impl includes env context when present", {
   )
 
   expect_snapshot(cat(result))
+})
+
+test_that("construct_turn_impl appends no-backtick reminder when selection has no backticks", {
+  result <- construct_turn_impl(
+    user_prompt = "refactor this",
+    code_context = list(
+      file_contents = c("`````", "x <- 1", "`````"),
+      selection = c("`````", "x <- 1", "`````"),
+      selection_raw = "x <- 1"
+    ),
+    env_context = character(0)
+  )
+
+  expect_match(result, "Do not include backticks")
+})
+
+test_that("construct_turn_impl explains five-backtick fences when selection contains backticks", {
+  result <- construct_turn_impl(
+    user_prompt = "edit this chunk",
+    code_context = list(
+      file_contents = c("`````", "```{r}", "x <- 1", "```", "`````"),
+      selection = c("`````", "```{r}", "x <- 1", "```", "`````"),
+      selection_raw = "```{r}\nx <- 1\n```"
+    ),
+    env_context = character(0)
+  )
+
+  expect_match(result, "five-backtick fences")
+  expect_match(result, "should not include the five-backtick fences")
+  expect_no_match(result, "Do not include backticks or code fences")
+})
+
+test_that("construct_turn_impl omits no-backtick reminder when no selection", {
+  result <- construct_turn_impl(
+    user_prompt = "add a plot",
+    code_context = list(
+      file_contents = c("`````", "mtcars", "`````"),
+      selection = character(0),
+      selection_raw = ""
+    ),
+    env_context = character(0)
+  )
+
+  expect_no_match(result, "Do not include backticks")
 })

@@ -12,6 +12,8 @@
   This should broadly result in stronger understanding of user requests
   and stronger adherence to system instructions (#67).
 
+* Improved performance in Quarto documents (#30).
+
 # gander 0.1.0
 
 * Initial CRAN submission.

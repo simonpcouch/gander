@@ -98,6 +98,8 @@
       `````
       mtcars
       `````
+      
+      Do not include backticks or code fences in your response.
 
 # construct_turn_impl with no file contents
 

@@ -261,6 +261,7 @@ construct_turn_impl <- function(user_prompt, code_context, env_context) {
 
   file_contents <- code_context[["file_contents"]]
   selection <- code_context[["selection"]]
+  selection_raw <- code_context[["selection_raw"]] %||% ""
 
   if (length(file_contents) > 0) {
     res <- c("The user is currently working in this file:", "")
@@ -289,6 +290,23 @@ construct_turn_impl <- function(user_prompt, code_context, env_context) {
       ""
     )
     res <- c(res, env_context)
+  }
+
+  if (nzchar(selection_raw)) {
+    if (grepl("`", selection_raw, fixed = TRUE)) {
+      res <- c(
+        res, "",
+        paste0(
+          "The five-backtick fences above are delimiters used to frame the ",
+          "content in this prompt. Any backticks inside the fenced blocks are ",
+          "part of the actual file contents. Your response should include ",
+          "backticks exactly as they appear in the selection but should not ",
+          "include the five-backtick fences themselves."
+        )
+      )
+    } else {
+      res <- c(res, "", "Do not include backticks or code fences in your response.")
+    }
   }
 
   paste0(res, collapse = "\n")

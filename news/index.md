@@ -10,6 +10,11 @@
 - Updated recommended models to Claude Sonnet 4.6, GPT-4.1, and Gemini 3
   Flash.
 
+- Rewrote prompt structure to more clearly communicate the agent’s task.
+  This should broadly result in stronger understanding of user requests
+  and stronger adherence to system instructions
+  ([\#67](https://github.com/simonpcouch/gander/issues/67)).
+
 ## gander 0.1.0
 
 CRAN release: 2025-02-19

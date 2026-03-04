@@ -103,8 +103,8 @@ LLMs with gander.</p>
 <p>gander uses the <code>.gander_chat</code> option to configure which
 model powers the addin; just set the option to whatever your usual
 ellmer setup is. For example, to use Anthropic’s Claude, you might write
-<code>options(.gander_chat = ellmer::chat_anthropic())</code>. Paste
-that code in your <code>.Rprofile</code> via
+<code>options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))</code>.
+Paste that code in your <code>.Rprofile</code> via
 <code>usethis::edit_r_profile()</code> to always use the same model
 every time you start an R session.</p>
 <p>If you’re using ellmer inside a organization, you’ll be limited to
@@ -115,30 +115,44 @@ big cloud provider, e.g. <code>chat_azure()</code>,
 exploration, you’ll have a lot more freedom, so we have a few
 recommendations to help you get started:</p>
 <ul>
-<li><p>As of early 2025, Anthropic’s <strong>Claude Sonnet 3.7</strong>
+<li><p>As of early 2026, Anthropic’s <strong>Claude Sonnet 4.6</strong>
 is a very powerful model for code assistance and is the model I’ve used
-while developing the package. If you want to use Claude, you’ll need to
-register an <a href="https://console.anthropic.com/" class="external-link">API key</a> to the
-environment variable <code>ANTHROPIC_API_KEY</code> and then set
-<code>options(.gander_chat = ellmer::chat_anthropic())</code>.</p></li>
-<li><p>Regarding OpenAI’s models, <code>chat_openai()</code> defaults to
-<strong>GPT-4o</strong>, but you can use
-<code>model = "gpt-4o-mini"</code> for a cheaper, lower-quality model,
-or <code>model = "o1-mini"</code> for more complex reasoning; to use an
-OpenAI model, you’ll need to set the options
-<code>options(.gander_chat = ellmer::chat_openai(model = "gpt-4o"))</code>
-and register your OpenAI API key with the <code>OPENAI_API_KEY</code>
-environment variable.</p></li>
-<li><p>You can use a <strong>local model</strong> with
+while developing the package. It’s fast, inexpensive, and strong at code
+tasks. If you want to use Claude, you’ll need to register an <a href="https://console.anthropic.com/" class="external-link">API key</a> to the environment
+variable <code>ANTHROPIC_API_KEY</code> and then set
+<code>options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))</code>.</p></li>
+<li><p>OpenAI’s <strong>GPT-4.1</strong> is another strong option at
+$2/$8 per million input/output tokens. To use it, register your OpenAI
+API key with the <code>OPENAI_API_KEY</code> environment variable and
+set
+<code>options(.gander_chat = ellmer::chat_openai(model = "gpt-4.1"))</code>.</p></li>
+<li>
+<p>Google’s <strong>Gemini 3 Flash</strong> is a fast, capable
+model. To use it, register a <a href="https://aistudio.google.com/apikey" class="external-link">Google AI Studio API key</a>
+to the environment variable <code>GOOGLE_API_KEY</code> and set:</p>
+<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
+<span>  .gander_chat <span class="op">=</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html" class="external-link">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>    model <span class="op">=</span> <span class="st">"gemini-3-flash-preview"</span>,</span>
+<span>    api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>      generationConfig <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
+<span>        thinkingConfig <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>thinkingLevel <span class="op">=</span> <span class="st">"minimal"</span><span class="op">)</span></span>
+<span>      <span class="op">)</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Setting <code>thinkingLevel = "minimal"</code> is important for
+latency—without it, the default dynamic thinking roughly doubles
+response time with no quality benefit for simple code transformation
+tasks.</p>
+</li>
+<li><p>You can also use a <strong>local model</strong> with
 <code>chat_ollama()</code>, which uses <a href="https://ollama.com" class="external-link">Ollama</a> and allows you to run models on
 your own computer. While the biggest models you can run locally aren’t
 as good as the state of the art hosted models, they don’t share your
 data and are effectively free. To use an ollama model, run the model
 locally and then set
-<code>options(.gander_chat = ellmer::chat_ollama(model = "model-name"))</code>.
-Instead of <code>model-name</code>, you’d substitute in the name of the
-model that appears when you run <code>ollama list</code> at the
-console.</p></li>
+<code>options(.gander_chat = ellmer::chat_ollama(model = "model-name"))</code>.</p></li>
 </ul>
 </div>
 <div class="section level2">
@@ -161,7 +175,7 @@ environment to the model.</li>
 </ul>
 <p>For example, imagine you’re working in a .R file that looks like
 this:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://ggplot2.tidyverse.org" class="external-link">ggplot2</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html" class="external-link">data</a></span><span class="op">(</span><span class="st">"stackoverflow"</span>, package <span class="op">=</span> <span class="st">"modeldata"</span><span class="op">)</span></span>
@@ -202,7 +216,7 @@ gander actually sent to the model. Under the hood, gander creates an <a href="ht
 and provides it a bunch of context—<code><a href="../reference/gander_peek.html">gander_peek()</a></code> returns
 that chat object from your most recent interaction with gander as-is.
 So, when I do so:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">gander</span><span class="fu">::</span><span class="fu"><a href="../reference/gander_peek.html">gander_peek</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;Chat turns=3 tokens=1077/52&gt;</span></span>
 <span><span class="co">#&gt; </span></span>

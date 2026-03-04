@@ -2,6 +2,9 @@
 
 ## gander (development version)
 
+- Updated recommended models to Claude Sonnet 4.6, GPT-4.1, and Gemini 3
+  Flash.
+
 ## gander 0.1.0
 
 CRAN release: 2025-02-19

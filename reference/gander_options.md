@@ -52,7 +52,7 @@ to gander addin.
   the first 10 columns. One could make the argument that setting the
   number of rows to 0 is privacy-preserving, but do note that the model
   may pick up on the values of specific cells based on code context
-  alone.
+  alone. To learn more, see <https://posit.co/blog/trust-llm-tools/>.
 
 Set that option in your `~/.Rprofile` to always use that setting. The
 legacy option `.gander_dims` is also supported.

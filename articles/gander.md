@@ -43,7 +43,9 @@ with gander, you’ll want to the use the most performant model possible
 that satisfies your privacy needs; gander automatically passes along
 your code and the objects in your R environment to your chosen model, so
 it’s especially important to consider data privacy when using LLMs with
-gander.
+gander. To learn more about how we think about LLM tools and privacy,
+see the Posit blog post [Privacy and AI
+Assistants](https://posit.co/blog/trust-llm-tools/).
 
 gander uses the `gander.chat` option to configure which model powers the
 addin; just set the option to whatever your usual ellmer setup is. For

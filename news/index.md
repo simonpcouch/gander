@@ -15,6 +15,9 @@
   and stronger adherence to system instructions
   ([\#67](https://github.com/simonpcouch/gander/issues/67)).
 
+- Improved performance in Quarto documents
+  ([\#30](https://github.com/simonpcouch/gander/issues/30)).
+
 ## gander 0.1.0
 
 CRAN release: 2025-02-19

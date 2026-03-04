@@ -99,7 +99,9 @@ get_gander_dims <- function() {
 }
 
 initialize_assistant <- function(context, input, chat) {
-  system_prompt <- construct_system_prompt(context, input)
+  selection <- rstudioapi::primary_selection(context)[["text"]]
+  has_selection <- !identical(selection, "")
+  system_prompt <- construct_system_prompt(context, input, has_selection)
 
   chat$set_system_prompt(system_prompt)
 
@@ -198,7 +200,7 @@ fetch_gander_dims <- function(silent) {
   return(.gander_dims)
 }
 
-construct_system_prompt <- function(context, input) {
+construct_system_prompt <- function(context, input, has_selection = FALSE) {
   ext <- file_extension(context$path)
 
   res <- "You are a helpful but terse R data scientist. "
@@ -223,6 +225,17 @@ construct_system_prompt <- function(context, input) {
     get_gander_style()
   )
 
+  if (has_selection) {
+    res <- c(
+      res,
+      paste0(
+        "\n\nYour task is to apply the user's request to their selected text. ",
+        "Return only the replacement text for the selection—",
+        "no surrounding context, no explanation, no backticks."
+      )
+    )
+  }
+
   paste(res, collapse = "")
 }
 
@@ -238,45 +251,44 @@ construct_turn <- function(
   construct_turn_impl(
     user_prompt = user_prompt,
     code_context = code_context,
-    env_context = env_context,
-    ext = file_extension(context$path)
+    env_context = env_context
   )
 }
 
 # all inputs are just character vectors
-construct_turn_impl <- function(user_prompt, code_context, env_context, ext) {
+construct_turn_impl <- function(user_prompt, code_context, env_context) {
   res <- c()
 
-  code_before <- code_context[["before"]]
-  code_after <- code_context[["after"]]
+  file_contents <- code_context[["file_contents"]]
   selection <- code_context[["selection"]]
 
-  if (length(code_before) > 0 && any(nzchar(code_before))) {
-    res <- paste0("Up to this point, the contents of my ", ext, " file reads: ")
-    res <- c(res, "", code_before)
+  if (length(file_contents) > 0) {
+    res <- c("The user is currently working in this file:", "")
+    res <- c(res, file_contents)
   }
 
   user_prompt <- sub("\\.$", "", user_prompt)
 
-  if (!identical(selection, "")) {
-    res <- c(res, "", paste0("Now, ", user_prompt, ": "))
-    res <- c(res, "", selection)
-  } else {
-    res <- c(res, "", paste0(user_prompt, "."))
-  }
+  res <- c(res, "", "The user made the following request:", "")
+  res <- c(res, paste0("> ", user_prompt))
 
-  if (length(code_after) > 0 && any(nzchar(code_after))) {
-    res <- c(res, "", "For context, the rest of the file reads: ", "")
-    res <- c(res, code_after)
+  if (length(selection) > 0) {
+    res <- c(
+      res, "",
+      "The user has made the following selection that they'd like to apply the request to:",
+      ""
+    )
+    res <- c(res, selection)
   }
 
   if (!identical(env_context, character(0))) {
     res <- c(
       res,
       "",
-      "Here's some information about the objects in my R environment: "
+      "Here's some information about the objects in the user's R environment:",
+      ""
     )
-    res <- c(res, "", env_context)
+    res <- c(res, env_context)
   }
 
   paste0(res, collapse = "\n")

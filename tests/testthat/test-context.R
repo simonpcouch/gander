@@ -28,8 +28,8 @@ test_that("describe_variable works", {
 
 test_that("backtick_possibly works", {
   expect_equal(backtick_possibly(character(0)), character(0))
-  expect_equal(backtick_possibly("x"), c("```", "x", "```"))
-  expect_equal(backtick_possibly(c("x", "y")), c("```", "x", "y", "```"))
+  expect_equal(backtick_possibly("x"), c("`````", "x", "`````"))
+  expect_equal(backtick_possibly(c("x", "y")), c("`````", "x", "y", "`````"))
 })
 
 test_that("selected_variables works for r code", {

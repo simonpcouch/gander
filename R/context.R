@@ -4,17 +4,11 @@ fetch_code_context <- function(context) {
   contents <- context$contents
   selection <- context$selection
 
-  end_before <- selection[[1]]$range$start[1] - 1
-  start_after <- min(selection[[1]]$range$end[1] + 1, length(contents))
+  selection_text <- rstudioapi::primary_selection(context)[["text"]]
 
-  before <- contents[seq_len(end_before)]
-  after <- contents[seq(start_after, length(contents))]
   list(
-    before = backtick_possibly(before),
-    after = backtick_possibly(after),
-    selection = backtick_possibly(
-      contents[seq(selection[[1]]$range$start[1], selection[[1]]$range$end[1])]
-    )
+    file_contents = backtick_possibly(contents),
+    selection = backtick_possibly(selection_text)
   )
 }
 
@@ -22,7 +16,7 @@ backtick_possibly <- function(x) {
   if (length(x) == 0 || identical(x, "")) {
     return(character(0))
   } else {
-    c("```", x, "```")
+    c("`````", x, "`````")
   }
 }
 
@@ -43,7 +37,7 @@ fetch_env_context <- function(selection, input, env) {
     return(res)
   }
 
-  c("```", res, "```")
+  c("`````", res, "`````")
 }
 
 describe_variables <- function(variables, env) {

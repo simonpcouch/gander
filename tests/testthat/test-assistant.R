@@ -116,12 +116,26 @@ test_that("construct_system_prompt works", {
   expect_length(res, 1)
 })
 
-test_that("construct_turn_impl formats message with file extension", {
+test_that("construct_system_prompt appends task instruction when selection present", {
+  context <- list(path = "script.r")
+
+  res_no_sel <- construct_system_prompt(context, input = list(), has_selection = FALSE)
+  expect_no_match(res_no_sel, "apply the user's request")
+
+
+  res_sel <- construct_system_prompt(context, input = list(), has_selection = TRUE)
+  expect_match(res_sel, "apply the user's request to their selected text")
+  expect_match(res_sel, "Return only the replacement text")
+})
+
+test_that("construct_turn_impl formats message with file contents", {
   result <- construct_turn_impl(
     user_prompt = "plot it.",
-    code_context = list(before = "mtcars", after = "", selection = ""),
-    env_context = character(0),
-    ext = "R"
+    code_context = list(
+      file_contents = c("`````", "mtcars", "`````"),
+      selection = character(0)
+    ),
+    env_context = character(0)
   )
 
   expect_snapshot(cat(result))
@@ -130,48 +144,50 @@ test_that("construct_turn_impl formats message with file extension", {
 test_that("construct_turn_impl formats input with punctuation", {
   result <- construct_turn_impl(
     user_prompt = "plot it",
-    code_context = list(before = "mtcars", after = "", selection = ""),
-    env_context = character(0),
-    ext = "R"
+    code_context = list(
+      file_contents = c("`````", "mtcars", "`````"),
+      selection = character(0)
+    ),
+    env_context = character(0)
   )
 
   expect_snapshot(cat(result))
 })
 
 test_that("construct_turn_impl includes selection when present", {
-  testthat::local_mocked_bindings(file_extension = function(x) "r")
-
   result <- construct_turn_impl(
     user_prompt = "plot this",
-    code_context = list(before = "x <- 1", after = "", selection = "mtcars"),
-    env_context = character(0),
-    ext = "R"
+    code_context = list(
+      file_contents = c("`````", "x <- 1", "mtcars", "`````"),
+      selection = c("`````", "mtcars", "`````")
+    ),
+    env_context = character(0)
   )
 
   expect_snapshot(cat(result))
 })
 
-test_that("construct_turn_impl includes after context when present", {
-  testthat::local_mocked_bindings(file_extension = function(x) "r")
-
+test_that("construct_turn_impl with no file contents", {
   result <- construct_turn_impl(
     user_prompt = "plot this",
-    code_context = list(before = "x <- 1", after = "z <- 3", selection = ""),
-    env_context = character(0),
-    ext = "R"
+    code_context = list(
+      file_contents = character(0),
+      selection = character(0)
+    ),
+    env_context = character(0)
   )
 
   expect_snapshot(cat(result))
 })
 
 test_that("construct_turn_impl includes env context when present", {
-  testthat::local_mocked_bindings(file_extension = function(x) "r")
-
   result <- construct_turn_impl(
     user_prompt = "plot this",
-    code_context = list(before = "mtcars", after = "", selection = ""),
-    env_context = "obj details",
-    ext = "R"
+    code_context = list(
+      file_contents = c("`````", "mtcars", "`````"),
+      selection = character(0)
+    ),
+    env_context = "obj details"
   )
 
   expect_snapshot(cat(result))

@@ -47,68 +47,84 @@
       ! The option gander.dims must be a 2-length integer vector, e.g. `c(5L, 100L)`, not a number.
       i See `?gander.dims` to learn more.
 
-# construct_turn_impl formats message with file extension
+# construct_turn_impl formats message with file contents
 
     Code
       cat(result)
     Output
-      Up to this point, the contents of my R file reads: 
+      The user is currently working in this file:
       
+      `````
       mtcars
+      `````
       
-      plot it.
+      The user made the following request:
+      
+      > plot it
 
 # construct_turn_impl formats input with punctuation
 
     Code
       cat(result)
     Output
-      Up to this point, the contents of my R file reads: 
+      The user is currently working in this file:
       
+      `````
       mtcars
+      `````
       
-      plot it.
+      The user made the following request:
+      
+      > plot it
 
 # construct_turn_impl includes selection when present
 
     Code
       cat(result)
     Output
-      Up to this point, the contents of my R file reads: 
+      The user is currently working in this file:
       
+      `````
       x <- 1
-      
-      Now, plot this: 
-      
       mtcars
+      `````
+      
+      The user made the following request:
+      
+      > plot this
+      
+      The user has made the following selection that they'd like to apply the request to:
+      
+      `````
+      mtcars
+      `````
 
-# construct_turn_impl includes after context when present
+# construct_turn_impl with no file contents
 
     Code
       cat(result)
     Output
-      Up to this point, the contents of my R file reads: 
       
-      x <- 1
+      The user made the following request:
       
-      plot this.
-      
-      For context, the rest of the file reads: 
-      
-      z <- 3
+      > plot this
 
 # construct_turn_impl includes env context when present
 
     Code
       cat(result)
     Output
-      Up to this point, the contents of my R file reads: 
+      The user is currently working in this file:
       
+      `````
       mtcars
+      `````
       
-      plot this.
+      The user made the following request:
       
-      Here's some information about the objects in my R environment: 
+      > plot this
+      
+      Here's some information about the objects in the user's R environment:
       
       obj details
 

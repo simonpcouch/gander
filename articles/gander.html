@@ -100,10 +100,10 @@ possible that satisfies your privacy needs; gander automatically passes
 along your code and the objects in your R environment to your chosen
 model, so it’s especially important to consider data privacy when using
 LLMs with gander.</p>
-<p>gander uses the <code>.gander_chat</code> option to configure which
+<p>gander uses the <code>gander.chat</code> option to configure which
 model powers the addin; just set the option to whatever your usual
 ellmer setup is. For example, to use Anthropic’s Claude, you might write
-<code>options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))</code>.
+<code>options(gander.chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))</code>.
 Paste that code in your <code>.Rprofile</code> via
 <code>usethis::edit_r_profile()</code> to always use the same model
 every time you start an R session.</p>
@@ -120,19 +120,19 @@ is a very powerful model for code assistance and is the model I’ve used
 while developing the package. It’s fast, inexpensive, and strong at code
 tasks. If you want to use Claude, you’ll need to register an <a href="https://console.anthropic.com/" class="external-link">API key</a> to the environment
 variable <code>ANTHROPIC_API_KEY</code> and then set
-<code>options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))</code>.</p></li>
+<code>options(gander.chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))</code>.</p></li>
 <li><p>OpenAI’s <strong>GPT-4.1</strong> is another strong option at
 $2/$8 per million input/output tokens. To use it, register your OpenAI
 API key with the <code>OPENAI_API_KEY</code> environment variable and
 set
-<code>options(.gander_chat = ellmer::chat_openai(model = "gpt-4.1"))</code>.</p></li>
+<code>options(gander.chat = ellmer::chat_openai(model = "gpt-4.1"))</code>.</p></li>
 <li>
 <p>Google’s <strong>Gemini 3 Flash</strong> is a fast, capable
 model. To use it, register a <a href="https://aistudio.google.com/apikey" class="external-link">Google AI Studio API key</a>
 to the environment variable <code>GOOGLE_API_KEY</code> and set:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/options.html" class="external-link">options</a></span><span class="op">(</span></span>
-<span>  .gander_chat <span class="op">=</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html" class="external-link">chat_google_gemini</a></span><span class="op">(</span></span>
+<span>  gander.chat <span class="op">=</span> <span class="fu">ellmer</span><span class="fu">::</span><span class="fu"><a href="https://ellmer.tidyverse.org/reference/chat_google_gemini.html" class="external-link">chat_google_gemini</a></span><span class="op">(</span></span>
 <span>    model <span class="op">=</span> <span class="st">"gemini-3-flash-preview"</span>,</span>
 <span>    api_args <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
 <span>      generationConfig <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
@@ -152,7 +152,7 @@ your own computer. While the biggest models you can run locally aren’t
 as good as the state of the art hosted models, they don’t share your
 data and are effectively free. To use an ollama model, run the model
 locally and then set
-<code>options(.gander_chat = ellmer::chat_ollama(model = "model-name"))</code>.</p></li>
+<code>options(gander.chat = ellmer::chat_ollama(model = "model-name"))</code>.</p></li>
 </ul>
 </div>
 <div class="section level2">

@@ -45,10 +45,10 @@ your code and the objects in your R environment to your chosen model, so
 it’s especially important to consider data privacy when using LLMs with
 gander.
 
-gander uses the `.gander_chat` option to configure which model powers
-the addin; just set the option to whatever your usual ellmer setup is.
-For example, to use Anthropic’s Claude, you might write
-`options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))`.
+gander uses the `gander.chat` option to configure which model powers the
+addin; just set the option to whatever your usual ellmer setup is. For
+example, to use Anthropic’s Claude, you might write
+`options(gander.chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))`.
 Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to
 always use the same model every time you start an R session.
 
@@ -65,12 +65,12 @@ recommendations to help you get started:
   want to use Claude, you’ll need to register an [API
   key](https://console.anthropic.com/) to the environment variable
   `ANTHROPIC_API_KEY` and then set
-  `options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))`.
+  `options(gander.chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))`.
 
 - OpenAI’s **GPT-4.1** is another strong option at \$2/\$8 per million
   input/output tokens. To use it, register your OpenAI API key with the
   `OPENAI_API_KEY` environment variable and set
-  `options(.gander_chat = ellmer::chat_openai(model = "gpt-4.1"))`.
+  `options(gander.chat = ellmer::chat_openai(model = "gpt-4.1"))`.
 
 - Google’s **Gemini 3 Flash** is a fast, capable model. To use it,
   register a [Google AI Studio API
@@ -79,7 +79,7 @@ recommendations to help you get started:
 
   ``` r
   options(
-    .gander_chat = ellmer::chat_google_gemini(
+    gander.chat = ellmer::chat_google_gemini(
       model = "gemini-3-flash-preview",
       api_args = list(
         generationConfig = list(
@@ -100,7 +100,7 @@ recommendations to help you get started:
   as the state of the art hosted models, they don’t share your data and
   are effectively free. To use an ollama model, run the model locally
   and then set
-  `options(.gander_chat = ellmer::chat_ollama(model = "model-name"))`.
+  `options(gander.chat = ellmer::chat_ollama(model = "model-name"))`.
 
 ## What is gander actually doing?
 

@@ -4,7 +4,7 @@
       .res <- new_chat()
     Message
       ! gander now uses the option .gander_chat instead of .gander_fn and .gander_args.
-      i Set `options(.gander_chat = chat_openai(model = "gpt-4o"))` instead.
+      i Set `options(.gander_chat = chat_openai(model = "gpt-4.1"))` instead.
 
 ---
 
@@ -28,7 +28,7 @@
       .res <- new_chat(.gander_chat = NULL)
     Message
       ! gander requires configuring an ellmer Chat with the .gander_chat option.
-      i Set e.g. `options(.gander_chat = ellmer::chat_anthropic())` in your '~/.Rprofile' and restart R.
+      i Set e.g. `options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))` in your '~/.Rprofile' and restart R.
       i See "Choosing a model" in `vignette("gander", package = "gander")` to learn more.
 
 # fetch_gander_dims handles `.gander_dims` appropriately

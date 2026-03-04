@@ -1,7 +1,7 @@
 test_that("new_chat fails informatively when old options are present", {
   withr::local_options(
     .gander_fn = "chat_openai",
-    .gander_args = list(model = "gpt-4o"),
+    .gander_args = list(model = "gpt-4.1"),
     .gander_chat = NULL
   )
 

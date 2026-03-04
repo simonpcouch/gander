@@ -1,0 +1,226 @@
+# Getting started with gander
+
+gander is a high performance and low friction chat experience for data
+scientists in RStudio and Positron–sort of like completions with
+Copilot, but it knows how to talk to the objects in your R environment.
+The package supplies an addin that can be registered to a keybinding.
+Once that’s done, just trigger the addin while you’re working on
+documents and type a request; along with your request, the addin will
+automatically inject context about the document you’re working in and
+the objects in your R environment.
+
+![A screencast of an RStudio session. A script called example.R is open
+in the editor with lines library(ggplot2), data(stackoverflow), and
+stackoverflow. After highlighting, I trigger the addin and ask to plot
+the data in plain language, at which code to plot the data using ggplot2
+is streamed from an LLM into the source file that uses the correct
+column names and a minimal style. From there, I iteratively call the
+addin to refine the
+output.](https://github.com/user-attachments/assets/4aead453-c2f2-446b-8e81-9154fd3baab0)
+
+This interface excels beyond a typical LLM chat in two notable ways:
+
+- **Higher-performance**: Including information about your R environment
+  and relevant code ensures that the model has all of the context it
+  needs to supply an answer that’s as accurate as possible *and* aligns
+  with your taste and style preferences in that it can mirror the code
+  you’ve written already.
+
+- **Lower-friction**: gander eliminates the need to copy and paste
+  relevant code into the chat window and its result back into your
+  document. There’s also no need to type anything other than your
+  request, e.g. descriptions of the style you’d like the response to
+  take or bits of exposition like “Here’s some additional context:”.
+  Further, iterating on pieces of content is easier in that the model’s
+  output will automatically be selected after it’s streamed into your
+  document; to iterate on a response, just trigger the addin again.
+
+## Choosing a model
+
+The gander addin supports any model supported by
+[ellmer](https://ellmer.tidyverse.org/). When choosing a model for use
+with gander, you’ll want to the use the most performant model possible
+that satisfies your privacy needs; gander automatically passes along
+your code and the objects in your R environment to your chosen model, so
+it’s especially important to consider data privacy when using LLMs with
+gander.
+
+gander uses the `.gander_chat` option to configure which model powers
+the addin; just set the option to whatever your usual ellmer setup is.
+For example, to use Anthropic’s Claude, you might write
+`options(.gander_chat = ellmer::chat_anthropic())`. Paste that code in
+your `.Rprofile` via `usethis::edit_r_profile()` to always use the same
+model every time you start an R session.
+
+If you’re using ellmer inside a organization, you’ll be limited to what
+your IT department allows, which is likely to be one provided by a big
+cloud provider, e.g. `chat_azure()`, `chat_bedrock()`,
+`chat_databricks()`, or `chat_snowflake()`. If you’re using ellmer for
+your own exploration, you’ll have a lot more freedom, so we have a few
+recommendations to help you get started:
+
+- As of early 2025, Anthropic’s **Claude Sonnet 3.7** is a very powerful
+  model for code assistance and is the model I’ve used while developing
+  the package. If you want to use Claude, you’ll need to register an
+  [API key](https://console.anthropic.com/) to the environment variable
+  `ANTHROPIC_API_KEY` and then set
+  `options(.gander_chat = ellmer::chat_anthropic())`.
+
+- Regarding OpenAI’s models, `chat_openai()` defaults to **GPT-4o**, but
+  you can use `model = "gpt-4o-mini"` for a cheaper, lower-quality
+  model, or `model = "o1-mini"` for more complex reasoning; to use an
+  OpenAI model, you’ll need to set the options
+  `options(.gander_chat = ellmer::chat_openai(model = "gpt-4o"))` and
+  register your OpenAI API key with the `OPENAI_API_KEY` environment
+  variable.
+
+- You can use a **local model** with `chat_ollama()`, which uses
+  [Ollama](https://ollama.com) and allows you to run models on your own
+  computer. While the biggest models you can run locally aren’t as good
+  as the state of the art hosted models, they don’t share your data and
+  are effectively free. To use an ollama model, run the model locally
+  and then set
+  `options(.gander_chat = ellmer::chat_ollama(model = "model-name"))`.
+  Instead of `model-name`, you’d substitute in the name of the model
+  that appears when you run `ollama list` at the console.
+
+## What is gander actually doing?
+
+gander automatically incorporates two kinds of context about your
+analyses under the hood:
+
+- **Code context**: The assistant will automatically inform the model
+  about the type of file you’re working in and relevant lines of code
+  surrounding your cursor.
+- **Environment context**: The assistant also interfaces directly with
+  your global environment to describe the relevant data frames you have
+  loaded, including their column names and type. This allows you to
+  describe the analyses you’d like to carry out in plain language while
+  gander takes care of describing your computational environment to the
+  model.
+
+For example, imagine you’re working in a .R file that looks like this:
+
+``` r
+library(ggplot2)
+
+data("stackoverflow", package = "modeldata")
+
+stackoverflow
+```
+
+[stackoverflow](https://modeldata.tidymodels.org/reference/stackoverflow.html)
+is a data set containing results from the annual Stack Overflow
+Developer Survey.
+
+You select `stackoverflow`, trigger the addin, and type
+`plot salary vs. years coded`. To effectively respond to this input, a
+model would need to know a few additional things:
+
+1.  Code context:
+    1.  What framework does this user want to use to plot this data?
+    2.  In what style should the model respond? Notably, this is a `.R`
+        file, so any exposition would need to live inside of comments.
+2.  What does the data look like? Specifically, what are the column
+    names related to the salary and number of years coded?
+
+From the surrounding contents in the file, we can answer **1a)**; the
+user likely wants to use ggplot2 to do so. We can answer **1b)** by
+inspecting the file extension—since this is an `.R` file, the model
+should respond only with code, omitting exposition and backticks. We can
+answer **2)** using the user’s R environment; if they’ve run that
+`data("stackoverflow", package = "modeldata")` line, then the
+`stackoverflow` object will live in their environment and we can print
+it out to learn more about it. The gander addin will preemptively answer
+all of these questions for the model by including context from each of
+these sources.
+
+To demonstrate, we can run this `stackoverflow` example ourselves and
+then call
+[`gander_peek()`](https://simonpcouch.github.io/gander/reference/gander_peek.md)
+to peek at everything gander actually sent to the model. Under the hood,
+gander creates an [ellmer
+chat](https://ellmer.tidyverse.org/reference/Chat.html) and provides it
+a bunch of
+context—[`gander_peek()`](https://simonpcouch.github.io/gander/reference/gander_peek.md)
+returns that chat object from your most recent interaction with gander
+as-is. So, when I do so:
+
+``` r
+gander::gander_peek()
+#> <Chat turns=3 tokens=1077/52>
+#> 
+#> ── system ─────────────────────────────────────────────────────────────────────
+#> You are a helpful but terse R data scientist. Respond only with valid R code:
+#> no exposition, no backticks. Always provide a minimal solution and refrain
+#> from unnecessary additions. Use tidyverse style and, when relevant, tidyverse
+#> packages. For example, when asked to plot something, use ggplot2, or when
+#> asked to transform data, using dplyr and/or tidyr unless explicitly instructed
+#> otherwise.
+#> 
+#> ── user ───────────────────────────────────────────────────────────────────────
+#> Up to this point, the contents of my r file reads:
+#> 
+#> ``` 
+#> library(ggplot2)
+#> 
+#> data("stackoverflow", package = "modeldata")
+#> 
+#> ```
+#> 
+#> Now, plot salary vs. years coded in the following:
+#> 
+#> stackoverflow
+#> 
+#> Here's some information about the objects in my R environment:
+#> 
+#> ``` 
+#> stackoverflow 
+#> #> tibble [5,594 × 21] (S3: tbl_df/tbl/data.frame) 
+#> #> $ Country : Factor w/ 5 levels "Canada","Germany",..: 4 5 5 2 3 5 5 2 5 2 ... 
+#> #> $ Salary : num [1:5594] 100000 130000 175000 64516 6636 ... 
+#> #> $ YearsCodedJob: int [1:5594] 20 20 16 4 1 1 13 4 7 17 ... 
+#> #> $ OpenSource : num [1:5594] 0 1 0 0 0 0 0 1 1 1 ... 
+#> #> $ Hobby : num [1:5594] 1 1 1 0 1 1 1 0 1 1 ... 
+#> #> $ CompanySizeNumber : num [1:5594] 5000 1000 10000 1000 5000 20 20 5000 20 20 ... 
+#> #> $ Remote : Factor w/ 2 levels "Remote","Not remote": 1 1 2 2 2 2 2 2 2 2 ... 
+#> #> $ CareerSatisfaction : int [1:5594] 8 9 7 9 5 8 7 7 8 9 ... 
+#> #> $ Data_scientist : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Database_administrator : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Desktop_applications_developer : num [1:5594] 0 0 0 0 0 0 0 0 1 1 ... 
+#> #> $ Developer_with_stats_math_background: num [1:5594] 0 0 0 0 0 0 0 0 0 1 ... 
+#> #> $ DevOps : num [1:5594] 0 1 0 0 0 0 0 0 0 0 ... 
+#> #> $ Embedded_developer : num [1:5594] 1 1 0 0 0 0 0 0 0 0 ... 
+#> #> $ Graphic_designer : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Graphics_programming : num [1:5594] 0 0 0 0 0 0 0 0 0 0... 
+#> #> $ Machine_learning_specialist : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Mobile_developer : num [1:5594] 0 0 0 0 0 0 0 0 1 0 ... 
+#> #> $ Quality_assurance_engineer : num [1:5594] 0 1 0 0 0 0 0 0 0 0 ... 
+#> #> $ Systems_administrator : num [1:5594] 0 0 0 0 0 0 0 0 0 0 ... 
+#> #> $ Web_developer : num [1:5594] 0 1 1 1 1 1 1 1 0 0 ...
+#> ```
+#> 
+#> ── assistant ──────────────────────────────────────────────────────────────────
+#> ggplot(stackoverflow, aes(x = YearsCodedJob, y = Salary)) + 
+#>   geom_point() +
+#>   labs(x = "Years Coded", y = "Salary")
+```
+
+Even though the user selected only a variable name and typed 5 words,
+that request was automatically situated in enough context for the model
+to reply only in R code that uses ggplot2 and references column names
+that the user hasn’t supplied.
+
+First, gander knows the framework to use since the preceding lines in
+the file have been inlined into the user prompt. (By default, gander
+recommends that models lean on the tidyverse in their responses anyway.
+You can adjust this with
+[`?gander_options`](https://simonpcouch.github.io/gander/reference/gander_options.md).)
+Then, with respect to style, gander has detected that we’re working in a
+`.R` file and thus writes “Respond only with valid R code” in the system
+prompt. Finally, gander inspects the code selection and describes
+variables from the global environment if they’re mentioned either in the
+selection or in the text inputted in the addin. In this case, that’s
+only the `stackoverflow` data. Altogether, this allows for the model to
+tailor its response to the user’s development environment without the
+user needing to supply any context themselves.

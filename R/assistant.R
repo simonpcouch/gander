@@ -230,7 +230,7 @@ construct_system_prompt <- function(context, input, has_selection = FALSE) {
       res,
       paste0(
         "\n\nYour task is to apply the user's request to their selected text. ",
-        "Return only the replacement text for the selection—",
+        "Return only the replacement text for the selection--",
         "no surrounding context, no explanation, no backticks."
       )
     )

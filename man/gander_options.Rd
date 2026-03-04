@@ -66,7 +66,8 @@ datasets supplied to the model, you could use
 \code{options(gander.dims = c(0, 10))} to just show the names and types of the
 first 10 columns. One could make the argument that setting the number of rows
 to 0 is privacy-preserving, but do note that the model may pick up on the
-values of specific cells based on code context alone.
+values of specific cells based on code context alone. To learn more, see
+\url{https://posit.co/blog/trust-llm-tools/}.
 }
 
 Set that option in your \verb{~/.Rprofile} to always use that setting. The legacy

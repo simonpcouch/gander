@@ -11,3 +11,5 @@ inst/figs/
 .env
 ^[\.]?air\.toml$
 ^\.vscode$
+^\.positai$
+^\.claude$

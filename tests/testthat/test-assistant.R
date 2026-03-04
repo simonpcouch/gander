@@ -2,6 +2,7 @@ test_that("new_chat fails informatively when old options are present", {
   withr::local_options(
     .gander_fn = "chat_openai",
     .gander_args = list(model = "gpt-4.1"),
+    gander.chat = NULL,
     .gander_chat = NULL
   )
 
@@ -12,45 +13,81 @@ test_that("new_chat fails informatively when old options are present", {
   expect_snapshot(.res <- new_chat())
 })
 
-test_that("fetch_gander_chat fails informatively with bad `.gander_chat`", {
+test_that("fetch_gander_chat fails informatively with bad `gander.chat`", {
   skip_if(identical(Sys.getenv("OPENAI_API_KEY"), ""))
-  withr::local_options(.gander_fn = NULL, .gander_args = NULL, )
+  withr::local_options(.gander_fn = NULL, .gander_args = NULL)
 
-  # .gander_chat is the wrong type of thing
+  # gander.chat is the wrong type of thing
   expect_snapshot(
     .res <- new_chat(.gander_chat = "boop")
   )
   expect_null(.res)
 
-  # no .gander_chat at all
+  # no gander.chat at all
   expect_snapshot(
     .res <- new_chat(.gander_chat = NULL)
   )
   expect_null(.res)
 })
 
-test_that("fetch_gander_dims handles `.gander_dims` appropriately", {
+test_that("fetch_gander_dims handles `gander.dims` appropriately", {
   # default case, no option set
-  withr::local_options(.gander_dims = NULL)
+  withr::local_options(gander.dims = NULL, .gander_dims = NULL)
   expect_equal(fetch_gander_dims(), default_gander_dims)
 
   # wrong type
-  withr::local_options(.gander_dims = "boop")
+  withr::local_options(gander.dims = "boop", .gander_dims = NULL)
   expect_snapshot(.res <- fetch_gander_dims())
   expect_equal(.res, NULL)
 
   # wrong length
-  withr::local_options(.gander_dims = 5)
+  withr::local_options(gander.dims = 5, .gander_dims = NULL)
   expect_snapshot(.res <- fetch_gander_dims())
   expect_equal(.res, NULL)
 
   # Inf is ok
-  withr::local_options(.gander_dims = c(5, Inf))
+  withr::local_options(gander.dims = c(5, Inf), .gander_dims = NULL)
   expect_equal(fetch_gander_dims(), c(5, Inf))
 
   # both Inf is ok
-  withr::local_options(.gander_dims = c(Inf, Inf))
+  withr::local_options(gander.dims = c(Inf, Inf), .gander_dims = NULL)
   expect_equal(fetch_gander_dims(), c(Inf, Inf))
+})
+
+test_that("fetch_gander_dims works with legacy `.gander_dims` option", {
+  withr::local_options(gander.dims = NULL, .gander_dims = c(10, 50))
+  expect_equal(fetch_gander_dims(), c(10, 50))
+})
+
+test_that("get_gander_chat prefers gander.chat over .gander_chat", {
+  withr::local_options(gander.chat = NULL, .gander_chat = NULL)
+  expect_null(get_gander_chat())
+
+  mock_chat_old <- structure(list(id = "old"), class = "Chat")
+  mock_chat_new <- structure(list(id = "new"), class = "Chat")
+
+  withr::local_options(gander.chat = NULL, .gander_chat = mock_chat_old)
+  expect_identical(get_gander_chat(), mock_chat_old)
+
+  withr::local_options(gander.chat = mock_chat_new, .gander_chat = NULL)
+  expect_identical(get_gander_chat(), mock_chat_new)
+
+  withr::local_options(gander.chat = mock_chat_new, .gander_chat = mock_chat_old)
+  expect_identical(get_gander_chat(), mock_chat_new)
+})
+
+test_that("get_gander_dims prefers gander.dims over .gander_dims", {
+  withr::local_options(gander.dims = NULL, .gander_dims = NULL)
+  expect_null(get_gander_dims())
+
+  withr::local_options(gander.dims = NULL, .gander_dims = c(10, 50))
+  expect_equal(get_gander_dims(), c(10, 50))
+
+  withr::local_options(gander.dims = c(20, 200), .gander_dims = NULL)
+  expect_equal(get_gander_dims(), c(20, 200))
+
+  withr::local_options(gander.dims = c(20, 200), .gander_dims = c(10, 50))
+  expect_equal(get_gander_dims(), c(20, 200))
 })
 
 test_that("construct_system_prompt works", {

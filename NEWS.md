@@ -1,5 +1,10 @@
 # gander (development version)
 
+* Introduced `gander.chat`, `gander.style`, and `gander.dims` as the preferred
+  option names, following standard R package option naming conventions. The
+  legacy options `.gander_chat`, `.gander_style`, and `.gander_dims` continue
+  to work and will not be deprecated.
+
 * Updated recommended models to Claude Sonnet 4.6, GPT-4.1, and Gemini 3 
   Flash.
 

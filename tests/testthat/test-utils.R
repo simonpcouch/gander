@@ -24,19 +24,38 @@ test_that("default_gander_style returns expected text", {
 })
 
 test_that("get_gander_style returns default when no option set", {
-  withr::local_options(.gander_style = NULL)
+  withr::local_options(gander.style = NULL, .gander_style = NULL)
   expect_equal(get_gander_style(), default_gander_style())
 })
 
 test_that("get_gander_style returns option when set", {
-  withr::local_options(.gander_style = "Use base R style.")
+  withr::local_options(gander.style = "Use base R style.", .gander_style = NULL)
+  expect_equal(get_gander_style(), "Use base R style.")
+})
+
+test_that("get_gander_style works with legacy `.gander_style` option", {
+  withr::local_options(gander.style = NULL, .gander_style = "Use base R style.")
   expect_equal(get_gander_style(), "Use base R style.")
 })
 
 test_that("get_gander_style validates option value", {
-  withr::local_options(.gander_style = 1)
+  withr::local_options(gander.style = 1, .gander_style = NULL)
   expect_snapshot(get_gander_style(), error = TRUE)
 
-  withr::local_options(.gander_style = c("a", "b"))
+  withr::local_options(gander.style = c("a", "b"), .gander_style = NULL)
   expect_snapshot(get_gander_style(), error = TRUE)
+})
+
+test_that("get_gander_style prefers gander.style over .gander_style", {
+  withr::local_options(gander.style = NULL, .gander_style = NULL)
+  expect_equal(get_gander_style(), default_gander_style())
+
+  withr::local_options(gander.style = NULL, .gander_style = "Use base R.")
+  expect_equal(get_gander_style(), "Use base R.")
+
+  withr::local_options(gander.style = "Use tidyverse.", .gander_style = NULL)
+  expect_equal(get_gander_style(), "Use tidyverse.")
+
+  withr::local_options(gander.style = "Use tidyverse.", .gander_style = "Use base R.")
+  expect_equal(get_gander_style(), "Use tidyverse.")
 })

@@ -5,54 +5,57 @@
 #'
 #' @section Choosing models:
 #'
-#' gander uses the `.gander_chat` option to configure which model powers the
-#' addin. `.gander_chat` is an ellmer Chat object.
+#' gander uses the `gander.chat` option to configure which model powers the
+#' addin. `gander.chat` is an ellmer Chat object.
 #' For example, to use Anthropic's Claude Sonnet 4.6, you might write
 #'
 #' ```
-#' options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))
+#' options(gander.chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))
 #' ```
 #'
 #' Paste that code in your `.Rprofile` via `usethis::edit_r_profile()` to
 #' always use the same model every time you start an R session.
 #'
-#' The gander package used to use options `.gander_fn` and `.gander_args`,
-#' but those are deprecated in favor of `.gander_chat`.
+#' The legacy option `.gander_chat` is also supported. The gander package used
+#' to use options `.gander_fn` and `.gander_args`, but those are deprecated in
+#' favor of `gander.chat`.
 #'
 #' @section Style/taste:
 #'
 #' By default, gander responses use the following style
-#' conventions: "`r default_gander_style()`" Set the `.gander_style` option to
+#' conventions: "`r default_gander_style()`" Set the `gander.style` option to
 #' some other string to tailor responses to your own taste, e.g.:
 #'
 #' ```r
-#' options(.gander_style = "Use base R.")
+#' options(gander.style = "Use base R.")
 #' ```
 #'
 #' Paste that code in your
 #' `.Rprofile` via `usethis::edit_r_profile()` to always use the same style (or
 #' even always begin with some base set of knowledge about frameworks you
-#' work with often) every time you start an R session.
+#' work with often) every time you start an R session. The legacy option
+#' `.gander_style` is also supported.
 #'
 #' @section Data context:
 #'
 #' By default, gander will show the first 5 rows and 100 columns of every
 #' relevant data frame, allowing for models to pick up on the names, types, and
 #' distributions of the variables it may work with while also keeping the number
-#' of tokens submitted per chat to a minimum. The option `.gander_dims` allows
+#' of tokens submitted per chat to a minimum. The option `gander.dims` allows
 #' you to adjust how many rows and columns to supply to gander addin.
 #'
 #' * For richer context but increasing token usage, increase the number of rows
 #'   and columns. For example, to supply the first 50 rows and all columns of
 #'   datasets supplied to the model, you could use
-#'   `options(.gander_dims = c(50, Inf))`.
+#'   `options(gander.dims = c(50, Inf))`.
 #' * To decrease token usage, decrease the number of rows and columns, e.g.
-#'   `options(.gander_dims = c(0, 10))` to just show the names and types of the
+#'   `options(gander.dims = c(0, 10))` to just show the names and types of the
 #'   first 10 columns. One could make the argument that setting the number of rows
 #'   to 0 is privacy-preserving, but do note that the model may pick up on the
 #'   values of specific cells based on code context alone.
 #'
-#' Set that option in your `~/.Rprofile` to always use that setting.
+#' Set that option in your `~/.Rprofile` to always use that setting. The legacy
+#' option `.gander_dims` is also supported.
 #'
 #' @examples
 #' # Running the following will adjust R options, so don't run by default:
@@ -60,28 +63,39 @@
 #' # Describe the first 100 rows and every column in relevant data
 #' # frames rather than the first 5 rows and 100 columns (this can
 #' # increase token usage greatly):
-#' options(.gander_dims = c(100, Inf))
+#' options(gander.dims = c(100, Inf))
 #'
 #' # Only describe relevant data frame columns and their types, but don't
 #' # provide any rows:
-#' options(.gander_dims = c(0, Inf))
+#' options(gander.dims = c(0, Inf))
 #'
 #' # Override default tidyverse style to tell the model to prefer another style:
-#' options(.gander_style = "Use base R.")
+#' options(gander.style = "Use base R.")
 #'
 #' # Configure gander to use its recommended model, Anthropic's Claude Sonnet
 #' # 4.6. Set this option in your `~/.Rprofile` to always use this setting.
 #' # Note that this requires an `ANTHROPIC_API_KEY` envvar:
-#' options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))
+#' options(gander.chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))
 #' }
 #'
 #' @name gander_options
+#' @aliases gander.chat
+#' @aliases .gander_chat
 #' @aliases .gander_fn
 #' @aliases .gander_args
-#' @aliases .gander_chat
+#' @aliases gander.dims
 #' @aliases .gander_dims
+#' @aliases gander.style
 #' @aliases .gander_style
 NULL
+
+get_gander_chat <- function() {
+  getOption("gander.chat", getOption(".gander_chat"))
+}
+
+get_gander_dims <- function() {
+  getOption("gander.dims", getOption(".gander_dims"))
+}
 
 initialize_assistant <- function(context, input, chat) {
   system_prompt <- construct_system_prompt(context, input)
@@ -92,7 +106,7 @@ initialize_assistant <- function(context, input, chat) {
 }
 
 new_chat <- function(
-  .gander_chat = getOption(".gander_chat")
+  .gander_chat = get_gander_chat()
 ) {
   # first, check that the ellmer chat itself will initialize successfully
   .gander_fn <- getOption(".gander_fn")
@@ -100,10 +114,10 @@ new_chat <- function(
   if (!is.null(.gander_fn) && is.null(.gander_chat)) {
     cli::cli_inform(
       c(
-        "!" = "{.pkg gander} now uses the option {cli::col_blue('.gander_chat')} instead
+        "!" = "{.pkg gander} now uses the option {cli::col_blue('gander.chat')} instead
        of {cli::col_blue('.gander_fn')} and {cli::col_blue('.gander_args')}.",
         "i" = "Set
-      {.code options(.gander_chat = {deparse(rlang::call2(.gander_fn, !!!.gander_args))})}
+      {.code options(gander.chat = {deparse(rlang::call2(.gander_fn, !!!.gander_args))})}
       instead."
       ),
       call = NULL
@@ -132,9 +146,9 @@ fetch_gander_chat <- function(x) {
     cli::cli_inform(
       c(
         "!" = "gander requires configuring an ellmer Chat with the
-        {cli::col_blue('.gander_chat')} option.",
+        {cli::col_blue('gander.chat')} option.",
         "i" = "Set e.g.
-        {.code {cli::col_green('options(.gander_chat = ellmer::chat_claude(model = \"claude-sonnet-4-6\"))')}}
+        {.code {cli::col_green('options(gander.chat = ellmer::chat_claude(model = \"claude-sonnet-4-6\"))')}}
         in your {.file ~/.Rprofile} and restart R.",
         "i" = "See \"Choosing a model\" in
         {.code vignette(\"gander\", package = \"gander\")} to learn more."
@@ -147,7 +161,7 @@ fetch_gander_chat <- function(x) {
   if (!inherits(x, "Chat")) {
     cli::cli_inform(
       c(
-        "!" = "The option {cli::col_blue('.gander_chat')} must be an ellmer
+        "!" = "The option {cli::col_blue('gander.chat')} must be an ellmer
         Chat object, not {.obj_type_friendly {x}}.",
         "i" = "See \"Choosing a model\" in
         {.code vignette(\"gander\", package = \"gander\")} to learn more."
@@ -161,7 +175,7 @@ fetch_gander_chat <- function(x) {
 }
 
 fetch_gander_dims <- function(silent) {
-  .gander_dims <- getOption(".gander_dims")
+  .gander_dims <- get_gander_dims()
 
   if (is.null(.gander_dims)) {
     return(default_gander_dims)
@@ -170,10 +184,10 @@ fetch_gander_dims <- function(silent) {
   if (length(.gander_dims) != 2L || !is_integerish(.gander_dims)) {
     cli::cli_inform(
       c(
-        "!" = "The option {cli::col_blue('.gander_dims')} must be a 2-length
+        "!" = "The option {cli::col_blue('gander.dims')} must be a 2-length
                integer vector, e.g. {.code c(5L, 100L)}, not
                {.obj_type_friendly { .gander_dims}}.",
-        "i" = "See {.topic .gander_dims} to learn more."
+        "i" = "See {.topic gander.dims} to learn more."
       ),
       call = NULL
     )

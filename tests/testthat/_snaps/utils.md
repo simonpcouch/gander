@@ -4,7 +4,7 @@
       get_gander_style()
     Condition
       Error in `gander_addin()`:
-      ! `getOption(".gander_style")` must be a single string, not the number 1.
+      ! `getOption("gander.style")` must be a single string, not the number 1.
 
 ---
 
@@ -12,5 +12,5 @@
       get_gander_style()
     Condition
       Error in `gander_addin()`:
-      ! `getOption(".gander_style")` must be a single string, not a character vector.
+      ! `getOption("gander.style")` must be a single string, not a character vector.
 

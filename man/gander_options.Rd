@@ -2,10 +2,13 @@
 % Please edit documentation in R/assistant.R
 \name{gander_options}
 \alias{gander_options}
+\alias{gander.chat}
+\alias{.gander_chat}
 \alias{.gander_fn}
 \alias{.gander_args}
-\alias{.gander_chat}
+\alias{gander.dims}
 \alias{.gander_dims}
+\alias{gander.style}
 \alias{.gander_style}
 \title{Options used by the gander package}
 \description{
@@ -14,34 +17,36 @@ The gander package makes use of a few notable user-facing options.
 \section{Choosing models}{
 
 
-gander uses the \code{.gander_chat} option to configure which model powers the
-addin. \code{.gander_chat} is an ellmer Chat object.
+gander uses the \code{gander.chat} option to configure which model powers the
+addin. \code{gander.chat} is an ellmer Chat object.
 For example, to use Anthropic's Claude Sonnet 4.6, you might write
 
-\if{html}{\out{<div class="sourceCode">}}\preformatted{options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))
+\if{html}{\out{<div class="sourceCode">}}\preformatted{options(gander.chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))
 }\if{html}{\out{</div>}}
 
 Paste that code in your \code{.Rprofile} via \code{usethis::edit_r_profile()} to
 always use the same model every time you start an R session.
 
-The gander package used to use options \code{.gander_fn} and \code{.gander_args},
-but those are deprecated in favor of \code{.gander_chat}.
+The legacy option \code{.gander_chat} is also supported. The gander package used
+to use options \code{.gander_fn} and \code{.gander_args}, but those are deprecated in
+favor of \code{gander.chat}.
 }
 
 \section{Style/taste}{
 
 
 By default, gander responses use the following style
-conventions: "Use tidyverse style and, when relevant, tidyverse packages. For example, when asked to plot something, use ggplot2, or when asked to transform data, using dplyr and/or tidyr unless explicitly instructed otherwise. " Set the \code{.gander_style} option to
+conventions: "Use tidyverse style and, when relevant, tidyverse packages. For example, when asked to plot something, use ggplot2, or when asked to transform data, using dplyr and/or tidyr unless explicitly instructed otherwise. " Set the \code{gander.style} option to
 some other string to tailor responses to your own taste, e.g.:
 
-\if{html}{\out{<div class="sourceCode r">}}\preformatted{options(.gander_style = "Use base R.")
+\if{html}{\out{<div class="sourceCode r">}}\preformatted{options(gander.style = "Use base R.")
 }\if{html}{\out{</div>}}
 
 Paste that code in your
 \code{.Rprofile} via \code{usethis::edit_r_profile()} to always use the same style (or
 even always begin with some base set of knowledge about frameworks you
-work with often) every time you start an R session.
+work with often) every time you start an R session. The legacy option
+\code{.gander_style} is also supported.
 }
 
 \section{Data context}{
@@ -50,21 +55,22 @@ work with often) every time you start an R session.
 By default, gander will show the first 5 rows and 100 columns of every
 relevant data frame, allowing for models to pick up on the names, types, and
 distributions of the variables it may work with while also keeping the number
-of tokens submitted per chat to a minimum. The option \code{.gander_dims} allows
+of tokens submitted per chat to a minimum. The option \code{gander.dims} allows
 you to adjust how many rows and columns to supply to gander addin.
 \itemize{
 \item For richer context but increasing token usage, increase the number of rows
 and columns. For example, to supply the first 50 rows and all columns of
 datasets supplied to the model, you could use
-\code{options(.gander_dims = c(50, Inf))}.
+\code{options(gander.dims = c(50, Inf))}.
 \item To decrease token usage, decrease the number of rows and columns, e.g.
-\code{options(.gander_dims = c(0, 10))} to just show the names and types of the
+\code{options(gander.dims = c(0, 10))} to just show the names and types of the
 first 10 columns. One could make the argument that setting the number of rows
 to 0 is privacy-preserving, but do note that the model may pick up on the
 values of specific cells based on code context alone.
 }
 
-Set that option in your \verb{~/.Rprofile} to always use that setting.
+Set that option in your \verb{~/.Rprofile} to always use that setting. The legacy
+option \code{.gander_dims} is also supported.
 }
 
 \examples{
@@ -73,19 +79,19 @@ Set that option in your \verb{~/.Rprofile} to always use that setting.
 # Describe the first 100 rows and every column in relevant data
 # frames rather than the first 5 rows and 100 columns (this can
 # increase token usage greatly):
-options(.gander_dims = c(100, Inf))
+options(gander.dims = c(100, Inf))
 
 # Only describe relevant data frame columns and their types, but don't
 # provide any rows:
-options(.gander_dims = c(0, Inf))
+options(gander.dims = c(0, Inf))
 
 # Override default tidyverse style to tell the model to prefer another style:
-options(.gander_style = "Use base R.")
+options(gander.style = "Use base R.")
 
 # Configure gander to use its recommended model, Anthropic's Claude Sonnet
 # 4.6. Set this option in your `~/.Rprofile` to always use this setting.
 # Note that this requires an `ANTHROPIC_API_KEY` envvar:
-options(.gander_chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))
+options(gander.chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))
 }
 
 }

@@ -59,5 +59,5 @@ mocked_empty_selection <- function() {
 }
 
 mocked_chat <- function() {
-  readRDS(system.file("chat/chat.rds", package = "gander"))
+  ellmer::chat_openai_compatible("https://example.org", model = "test")
 }

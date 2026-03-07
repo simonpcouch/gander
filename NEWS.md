@@ -1,5 +1,8 @@
 # gander (development version)
 
+* Improved performance in Quarto documents. Requests made in Quarto 
+  documents should now be much less likely to break cell formatting (#30).
+
 * Introduced `gander.chat`, `gander.style`, and `gander.dims` as the preferred
   option names, following standard R package option naming conventions. The
   legacy options `.gander_chat`, `.gander_style`, and `.gander_dims` continue
@@ -11,8 +14,6 @@
 * Rewrote prompt structure to more clearly communicate the agent's task.
   This should broadly result in stronger understanding of user requests
   and stronger adherence to system instructions (#67).
-
-* Improved performance in Quarto documents (#30).
 
 # gander 0.1.0
 

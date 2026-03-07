@@ -42,16 +42,16 @@ pak::pak("simonpcouch/gander")
 ```
 
 Then, you’ll need to hook gander up with an [ellmer
-chat](https://ellmer.tidyverse.org/). gander uses the `.gander_chat`
+chat](https://ellmer.tidyverse.org/). gander uses the `gander.chat`
 option to configure which model powers the addin; just set the option to
 whatever your usual ellmer setup is. For example, we recommend
-Anthropic’s Claude Sonnet 3.7, which you can use via
-`options(.gander_chat = ellmer::chat_anthropic())` once you’ve
-configured an `ANTHROPIC_API_KEY`. Paste that code in your `.Rprofile`
-via `usethis::edit_r_profile()` to always use the same model every time
-you start an R session. gander supports any model supported by ellmer,
-so you can use Anthropic’s Claude, OpenAI’s GPT-4o, local ollama models,
-etc. See “Choosing a model” in
+Anthropic’s Claude Sonnet 4.6, which you can use via
+`options(gander.chat = ellmer::chat_claude(model = "claude-sonnet-4-6"))`
+once you’ve configured an `ANTHROPIC_API_KEY`. Paste that code in your
+`.Rprofile` via `usethis::edit_r_profile()` to always use the same model
+every time you start an R session. gander supports any model supported
+by ellmer, so you can use Anthropic’s Claude, OpenAI’s GPT-4.1, Google
+Gemini, local ollama models, etc. See “Choosing a model” in
 [`vignette("gander", package = "gander")`](https://simonpcouch.github.io/gander/articles/gander.md)
 to learn more.
 

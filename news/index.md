@@ -1,5 +1,7 @@
 # Changelog
 
+## gander (development version)
+
 ## gander 0.2.0
 
 CRAN release: 2026-03-08

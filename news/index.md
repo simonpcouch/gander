@@ -1,6 +1,8 @@
 # Changelog
 
-## gander (development version)
+## gander 0.2.0
+
+CRAN release: 2026-03-08
 
 - Improved performance in Quarto documents. Requests made in Quarto
   documents should now be much less likely to break cell formatting

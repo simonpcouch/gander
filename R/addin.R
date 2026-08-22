@@ -60,7 +60,7 @@ gander_addin <- function() {
 
   edits <-
     streamy::stream(
-      generator = assistant$stream(turn),
+      generator = assistant$stream(turn, stream = "content"),
       context = context,
       interface = tolower(input$interface)
     )

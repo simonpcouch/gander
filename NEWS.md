@@ -1,5 +1,8 @@
 # gander (development version)
 
+* Responses from reasoning models include only answer text in the document,
+  while reasoning content remains available in the underlying chat (#69).
+
 # gander 0.2.0
 
 * Improved performance in Quarto documents. Requests made in Quarto 
